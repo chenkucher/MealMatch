@@ -8,6 +8,7 @@ function NavBar(props) {
         <div className="navbar">
             <img src={logo} alt="Logo" className='logo'/>
             <div className="navbar-left">
+                <a href="/">Home</a>
                 <a href="/OrderNow">Order Now</a>
                 <a href="/Restaurants">Restaurants</a>
                 <a href="/SuperMarket">Super Market</a>
