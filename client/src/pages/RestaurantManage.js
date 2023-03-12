@@ -1,7 +1,6 @@
 import React from 'react';
-import Sidebar from './components/Sidebar';
+import Sidebar from '../pages/components/RestaurantManager/Sidebar';
 import '../styles/RestaurantManage.css'
-import logo from '../pages/helpers/logo.jpg';
 import NavBar from './components/NavBar';
 
 function RestaurantManage(props) {
@@ -41,9 +40,7 @@ function RestaurantManage(props) {
                 <div className='events-list'>
 
                 </div>
-
             </div>
-            
         </div>
 
 
