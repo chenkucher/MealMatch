@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/Sidebar.css';
+import '../../../styles/Sidebar.css';
 import { BiFoodMenu} from "react-icons/bi";
 import { AiFillDashboard,} from "react-icons/ai";
 import { FaWarehouse,FaHome } from "react-icons/fa";
@@ -19,7 +19,7 @@ function Sidebar() {
         </li>
         <li className='nav-line'>
           <AiFillDashboard className='nav-icon'/>
-          <Link to="/Dashboard" className='nav-link'>Dashboard</Link>
+          <Link to="/Statistic" className='nav-link'>Statistic</Link>
         </li>
         <li className='nav-line'>
           <MdFoodBank className='nav-icon'/>
@@ -27,11 +27,11 @@ function Sidebar() {
         </li>
         <li className='nav-line'>
           <BiFoodMenu className='nav-icon'/>
-          <Link to="/Menu" className='nav-link'>Menu</Link>
+          <Link to="/MenuManager" className='nav-link'>Menu</Link>
         </li>
         <li className='nav-line'>
           <FaWarehouse className='nav-icon'/>
-          <Link to="/Inventory" className='nav-link'>Inventory</Link>
+          <Link to="/Storage" className='nav-link'>Storage</Link>
         </li>
         <li className='nav-line'>
           <FiSettings className='nav-icon'/> 
