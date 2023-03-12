@@ -11,13 +11,13 @@ import Login from './RestaurantManagerPages/Login';
 import CustomerLogin from './CustomerLogin';
 import SignUp from './RestaurantManagerPages/SignUp';
 import CustomerSignUp from './CustomerSignUp';
-
+import Home from './Home';
 
 function Routers(props) {
     return (
         <Router>
              <Routes >
-                 <Route path="/" element={<RestaurantManage/>} />
+                 <Route path="/" element={<Home/>} />
                  <Route path="/RestaurantManage" element={<RestaurantManage/>} />
                  <Route path="/MenuManager" element={<MenuManager/>} />
                  <Route path="/Statistic" element={<Statistic/>} />

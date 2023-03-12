@@ -1,5 +1,4 @@
 import React from 'react';
-import MenuBar from '../components/RestaurantManager/MenuBar';
 import NavBar from '../components/NavBar';
 import Sidebar from '../components/RestaurantManager/Sidebar';
 import '../../styles/MenuManager.css'
