@@ -17,8 +17,9 @@ function Orders(props) {
                     <Sidebar/>
                 </div>
                 <div>
+                   
+                    <div className='orderTable'>
                     <h1>Orders Managment</h1>
-                    <div>
                         <OrderTable/>
                     </div>
 

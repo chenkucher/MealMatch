@@ -20,43 +20,7 @@ main{
 footer{
     height:15%
 }
-.dashboard{
-    width: 40%;
-    margin-left: 10%;
-    display: flex;
-    gap: 20%;
-    /* margin-top: 5%; */
-}
-.dashboard-sum{
-    border: 1px solid lightgray; /* add a thin border with a lightgray color */
-    border-radius: 3px;
-    height: 80%;
-    width: 100%;
-}
-.best-sum{
-    border: 1px solid lightgray; /* add a thin border with a lightgray color */
-    border-radius: 3px;
-    height: 80%;
-    width: 100%;
-
-}
-
-.dash-box{
-    width: 100%;
-}
-
-.last-events{
+.orderTable{
     margin-top: 3%;
-    margin-left: 22.5%;
-    height: 100%;
-
-}
-
-.events-list{
-    border: 1px solid lightgray;
-    border-radius: 3px;
-    height: 100%;
-    width: 80%;
-    height: 300px;
-
+    margin-left: 10%;
 }
