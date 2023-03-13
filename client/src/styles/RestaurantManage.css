@@ -2,7 +2,6 @@
     margin-top: 10%;
     margin-left:10%;
     width: 100%;
-
 }
 .container{
     height: 100%;
@@ -10,53 +9,67 @@
 
 header{
     height: 15%;
-    /* margin-top: 2%; */
 }
-main{
-    display: flex;
-    height: 70%;
-    /* justify-content: space-between; */
-}
-footer{
-    height:15%
-}
-.dashboard{
-    width: 40%;
-    margin-left: 10%;
-    display: flex;
-    gap: 20%;
-    /* margin-top: 5%; */
-}
-.dashboard-sum{
-    border: 1px solid lightgray; /* add a thin border with a lightgray color */
-    border-radius: 3px;
-    height: 80%;
-    width: 100%;
-}
-.best-sum{
-    border: 1px solid lightgray; /* add a thin border with a lightgray color */
-    border-radius: 3px;
-    height: 80%;
-    width: 100%;
 
+main{
+    height: 70%;
+    margin-right: 10%;
+}
+
+footer{
+    height:15%;
+}
+
+.dashboard {
+    width: 100%;
+    margin-left: 10%;
+    gap: 20%;
+}
+
+.dash-box {
+    width: 100%;
+    /* float: left; */
+}
+
+
+.dashboard-sum{
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    height: 80%;
+    width: 100%;
+    padding:20px;
+}
+
+.best-sum {
+    border: 1px solid lightgray;
+    border-radius: 3px;
+    height: 100%;
+    width: 60%;
+    padding:20px;
+
+    
 }
 
 .dash-box{
     width: 100%;
+    
 }
 
 .last-events{
     margin-top: 3%;
-    margin-left: 22.5%;
+    margin-right: 10%;
     height: 100%;
 
+}
+h1{
+    margin-left: 0%;
 }
 
 .events-list{
     border: 1px solid lightgray;
     border-radius: 3px;
-    height: 100%;
-    width: 80%;
     height: 300px;
-
+    width: 80%;
+    margin-bottom: 2%;
+    padding:20px
 }

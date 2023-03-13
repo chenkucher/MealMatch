@@ -1,0 +1,74 @@
+/* FutureOrdersChart component styles */
+.future-orders-chart {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .future-orders-chart h2 {
+    margin: 0;
+  }
+  
+  .future-orders-chart p {
+    margin: 0.5rem 0;
+  }
+  
+  /* BestSellingItemsTable component styles */
+  .best-selling-items-table {
+    margin-bottom: 2rem;
+  }
+  
+  .best-selling-items-table h2 {
+    margin: 0;
+  }
+  
+  .best-selling-items-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .best-selling-items-table table th,
+  .best-selling-items-table table td {
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  .best-selling-items-table table th {
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .best-selling-items-table table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  /* LastOrdersTable component styles */
+  .last-orders-table {
+    margin-bottom: 2rem;
+  }
+  
+  .last-orders-table h2 {
+    margin: 0;
+  }
+  
+  .last-orders-table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .last-orders-table table th,
+  .last-orders-table table td {
+    padding: 0.5rem;
+    text-align: left;
+  }
+  
+  .last-orders-table table th {
+    font-weight: bold;
+    border-bottom: 2px solid #ddd;
+  }
+  
+  .last-orders-table table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  

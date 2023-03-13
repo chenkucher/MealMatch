@@ -4,7 +4,7 @@ function OrderTable(props) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch('/orders')
+        fetch('http://127.0.0.1:5000/orders')
           .then((res) => res.json())
           .then((data) => setItems(data));
       }, []);
@@ -14,8 +14,9 @@ function OrderTable(props) {
                 <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Time</th>
                     <th>Name</th>
-                    <th>Description</th>
+                    <th>Details</th>
                     <th>Price</th>
                 </tr>
                 </thead>
@@ -23,8 +24,9 @@ function OrderTable(props) {
                 {items.map((item) => (
                     <tr key={item.id}>
                     <td>{item.id}</td>
+                    <td>{item.timestamp}</td>
                     <td>{item.name}</td>
-                    <td>{item.description}</td>
+                    <td>{item.details}</td>
                     <td>{item.price}</td>
                     </tr>
                 ))}

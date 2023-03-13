@@ -15,7 +15,7 @@ function Sidebar() {
         <p>Managment</p>
         <li className='nav-line'>
           <FaHome className='nav-icon'/>
-          <Link to="/" className='nav-link'>Home</Link>
+          <Link to="/RestaurantManage" className='nav-link'>Dashboard</Link>
         </li>
         <li className='nav-line'>
           <AiFillDashboard className='nav-icon'/>

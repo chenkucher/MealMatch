@@ -2,6 +2,9 @@ import React from 'react';
 import Sidebar from '../pages/components/RestaurantManager/Sidebar';
 import '../styles/RestaurantManage.css'
 import NavBar from './components/NavBar';
+import BestSellingItemsTable from './components/RestaurantManager/BestSellingItemsTable';
+import LastOrdersTable from './components/RestaurantManager/LastOrdersTable';
+import FutureOrdersChart from './components/RestaurantManager/FutureOrdersChart';
 
 function RestaurantManage(props) {
 
@@ -20,16 +23,16 @@ function RestaurantManage(props) {
 
                 <div className='dashboard'>
                     <div className='dash-box'>
-                        <h1>Dashboard</h1>
+                        <h1>Future Orders</h1>
                         <div className='dashboard-sum'>
-
+                            <FutureOrdersChart/>
                         </div>
                     </div>
 
                     <div className='dash-box'>
-                        <h1>Best Selling</h1>
+                        <h1>Best Orders</h1>
                         <div className='best-sum'>
-
+                            <BestSellingItemsTable/>
                         </div>
                     </div>
                 </div>
@@ -38,7 +41,7 @@ function RestaurantManage(props) {
             <div className='last-events'>
                 <h1>Last Events</h1>
                 <div className='events-list'>
-
+                    <LastOrdersTable/>
                 </div>
             </div>
         </div>
