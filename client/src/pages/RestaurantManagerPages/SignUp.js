@@ -13,7 +13,7 @@ function SellerSignupPage() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/SellerSignup', { email, password, confirm_password: confirmPassword });
+      const response = await axios.post('http://vmedu265.mtacloud.co.il/api/SellerSignup', { email, password, confirm_password: confirmPassword });
       console.log(response.data.message);
     } catch (error) {
       setError(error.response.data.message);
