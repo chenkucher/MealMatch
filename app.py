@@ -29,7 +29,7 @@ CORS(app)  # Enable CORS for all routes
 
 connection = mysql.connector.connect(
         host='vmedu265.mtacloud.co.il',
-        user='chen2',
+        user='chen',
         password='Ck96963',
         database='MealMatch'
     )
