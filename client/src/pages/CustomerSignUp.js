@@ -14,7 +14,7 @@ function CustomerSignUp() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/CustomerSignUp', { email, password, confirm_password: confirmPassword });
+      const response = await axios.post('http://http://vmedu265.mtacloud.co.il/:5000/api/CustomerSignUp', { email, password, confirm_password: confirmPassword });
       console.log(response.data.message);
     } catch (error) {
       setError(error.response.data.message);

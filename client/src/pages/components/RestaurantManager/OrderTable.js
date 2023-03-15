@@ -4,7 +4,7 @@ function OrderTable(props) {
     const [items, setItems] = useState([]);
 
     useEffect(() => {
-        fetch('http://127.0.0.1:5000/orders')
+        fetch('http://vmedu265.mtacloud.co.il/api/orders')
           .then((res) => res.json())
           .then((data) => setItems(data));
       }, []);

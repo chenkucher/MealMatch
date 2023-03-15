@@ -6,7 +6,7 @@ function BestSellingItemsTable() {
 
   useEffect(() => {
     // Fetch data from the server
-    fetch('http://127.0.0.1:5000/api/best-selling-items')
+    fetch('http://vmedu265.mtacloud.co.il/api/best-selling-items')
       .then((response) => response.json())
       .then((data) => setItems(data))
       .catch((error) => console.error(error));
