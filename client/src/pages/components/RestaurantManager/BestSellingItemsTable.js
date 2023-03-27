@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import '../../../styles/StatisticsComponents.css'
+
+import styles from '../../../styles/StatisticsComponents.module.css';
 
 function BestSellingItemsTable() {
   const [items, setItems] = useState([]);
@@ -13,7 +14,7 @@ function BestSellingItemsTable() {
   }, []);
 
   return (
-    <div className="best-selling-items-table">
+    <div className={styles.best_selling_items_table}>
       {/* <h2>Best Selling Items</h2> */}
       <table>
         <thead>

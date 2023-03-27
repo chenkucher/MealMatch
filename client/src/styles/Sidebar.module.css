@@ -1,0 +1,29 @@
+
+.sidebar_nav{ 
+    list-style: none; 
+    width: 100%;
+}
+
+.nav_line{
+    margin-top: 1%; 
+    padding: 1%;
+    display: flex;
+    gap: 1%;
+
+}
+
+.nav_icon{
+    margin-top: 1%;
+    width: 5%;
+
+}
+.nav_link{
+    text-decoration: none;
+    color: black;
+    width: auto;
+}
+  
+.nav_link:hover{
+
+    color: red;
+}
