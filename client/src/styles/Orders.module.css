@@ -1,0 +1,36 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+header{
+    height: 15%;
+    /* margin-top: 2%; */
+}
+.main{
+    margin-top: 2%;
+    height: 60%;
+    display: flex;
+    /* justify-content: space-evenly; */
+    gap:5%
+}
+footer{
+    height:15%
+}
+.section_side{
+    /* border: solid; */
+    width: 20%;
+    margin-left:5%
+
+}
+.section_middle{
+    /* border: solid; */
+    height: 100%;
+    width: 50%;
+
+}
+
+.orderTable{
+    overflow: auto;
+    max-height: 500px;
+}

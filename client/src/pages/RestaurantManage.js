@@ -1,56 +1,73 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate,useParams } from 'react-router-dom';
 import Sidebar from '../pages/components/RestaurantManager/Sidebar';
-import '../styles/RestaurantManage.css'
+import styles from '../styles/RestaurantManage.module.css';
 import NavBar from './components/NavBar';
 import BestSellingItemsTable from './components/RestaurantManager/BestSellingItemsTable';
 import LastOrdersTable from './components/RestaurantManager/LastOrdersTable';
 import FutureOrdersChart from './components/RestaurantManager/FutureOrdersChart';
 
 function RestaurantManage(props) {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const { restaurantId } = useParams();
+  const navigate = useNavigate();
 
-    return (
-        <div className='container'>
+  useEffect(() => {
+    axios.get("http://vmedu265.mtacloud.co.il/api/SellerLogin").then((response) => {
+      console.log(response);
+      setLoggedIn(response.data.loggedIn);
+      if (response.data.loggedIn===false) {
+        // Redirect to login page if not logged in
+        navigate('/Login');
+      }
+      else if (response.data.loggedIn===true && response.data.userId!=restaurantId) {
+        // Redirect to login page if not logged in
+        navigate('/Login');
+      }
+    });
 
-            <header>
-                <NavBar/>
-            </header>
+  }, []);
 
-            
-            <main>
-                <div>
-                    <Sidebar />
-                </div>
 
-                <div className='dashboard'>
-                    <div className='dash-box'>
-                        <h1>Future Orders</h1>
-                        <div className='dashboard-sum'>
-                            <FutureOrdersChart/>
-                        </div>
-                    </div>
+  return (
+    <div className={styles.container}>
+      <header>
+        <NavBar loggedIn={loggedIn} />
+      </header>
 
-                    <div className='dash-box'>
-                        <h1>Best Orders</h1>
-                        <div className='best-sum'>
-                            <BestSellingItemsTable/>
-                        </div>
-                    </div>
-                </div>
-            </main>
+      <main className={styles.main}>
+        <section className={styles.section_side}>
+          <Sidebar loggedIn={loggedIn}/>
+        </section>
 
-            <div className='last-events'>
-                <h1>Last Events</h1>
-                <div className='events-list'>
-                    <LastOrdersTable/>
-                </div>
+        <section className={styles.section_middle}>
+          <div className={styles.dashboardz}>
+            <div className={styles.future}>
+              <h1>Future Orders</h1>
+              <div className={styles.dashboard_sum}>
+                {/* <FutureOrdersChart /> */}
+              </div>
             </div>
-        </div>
 
+            <div className={styles.best}>
+              <h1>Best Orders</h1>
+              <div className={styles.best_sum}>
+                {/* <BestSellingItemsTable /> */}
+              </div>
+            </div>
+          </div>
 
-       
-
-
-    );
+          <div className={styles.last_events}>
+            <h1>Last Events</h1>
+            <div className={styles.events_list}>
+              <LastOrdersTable />
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
 }
 
 export default RestaurantManage;

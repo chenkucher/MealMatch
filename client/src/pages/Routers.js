@@ -11,6 +11,7 @@ import Login from './RestaurantManagerPages/Login';
 import CustomerLogin from './CustomerLogin';
 import SignUp from './RestaurantManagerPages/SignUp';
 import CustomerSignUp from './CustomerSignUp';
+import ConfirmEmailPage from '../pages/ConfirmEmailPage';
 import Home from './Home';
 
 function Routers(props) {
@@ -18,19 +19,18 @@ function Routers(props) {
         <Router>
              <Routes >
                  <Route path="/" element={<Home/>} />
-                 <Route path="/RestaurantManage" element={<RestaurantManage/>} />
-                 <Route path="/MenuManager" element={<MenuManager/>} />
-                 <Route path="/Statistic" element={<Statistic/>} />
-                 <Route path="/Storage" element={<Storage/>} />
-                 <Route path="/Orders" element={<Orders/>} />
-                 <Route path="/Settings" element={<Settings/>} />
+                 <Route path="/RestaurantManage/:restaurantId" element={<RestaurantManage />} />
+                 <Route path="/confirmEmail/:tokenId" element={<ConfirmEmailPage/>} />
+                 <Route path="/MenuManager/:restaurantId" element={<MenuManager/>} />
+                 <Route path="/Statistic/:restaurantId" element={<Statistic/>} />
+                 <Route path="/Storage/:restaurantId" element={<Storage/>} />
+                 <Route path="/Orders/:restaurantId" element={<Orders/>} />
+                 <Route path="/Settings/:restaurantId" element={<Settings/>} />
                  <Route path="/Login" element={<Login/>} />
                  <Route path="/CustomerLogin" element={<CustomerLogin/>} />
                  <Route path="/SignUp" element={<SignUp/>} />
                  <Route path="/CustomerSignUp" element={<CustomerSignUp/>} />
 
-
-                 
              </Routes>
         </Router>
     );

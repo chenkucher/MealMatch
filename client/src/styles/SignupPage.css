@@ -67,3 +67,132 @@
   header{
     width: 100%;
   }
+
+.signup-success {
+  margin-top: 10%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50%;
+  background-color: #F9FAFB;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  border-radius: 8px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.signup-success h2 {
+  font-size: 36px;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.signup-success p {
+  font-size: 18px;
+  line-height: 24px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* .signup-success .resend-link {
+  color: #1E40AF;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.signup-success .resend-link:hover {
+  color: #1E40AF;
+  text-decoration: none;
+} */
+
+.signup-success .timer {
+  font-size: 16px;
+  line-height: 20px;
+  margin-top: 24px;
+}
+
+  .signup-info {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 14px;
+  }
+  
+  .signup-info p {
+    margin-bottom: 5px;
+  }
+  
+  .resend-link {
+    background-color: transparent;
+    background-color: #308df0;
+    padding: 2px;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    /* text-decoration: underline; */
+    cursor: pointer;
+  }
+  .resend-link:hover {
+    color: white;
+    background-color: #0413dc;
+    text-decoration: none;
+  }
+  .signup-info button:hover {
+    text-decoration: none;
+  }
+  
+  .timer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .timer p {
+    margin-bottom: 10px;
+  }
+  
+  .countdown-timer {
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .timer-minutes,
+  .timer-seconds {
+    display: inline-block;
+    margin: 0 5px;
+  }
+  
+  .timer-minutes:after,
+  .timer-seconds:after {
+    content: ':';
+  }
+  .alert {
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px;
+    background-color: #4caf50;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 9999;
+  }
+  
+  .alrtError {
+    background-color: #f44336;
+  }
+  .close {
+    position: absolute;
+    top: -3px;
+    right: 2px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+  }
+  
