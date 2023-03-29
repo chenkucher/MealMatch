@@ -30,7 +30,7 @@ function SellerSignupPage() {
   const handleResend = async () => {
     try {
       const response = await axios.post(
-        `http://vmedu265.mtacloud.co.il/api/SellerResendEmail/${email}`
+        `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerResendEmail/${email}`
       );
       if (response.data.message === 'Email sent') {
         const alertDiv = document.createElement('div');
@@ -86,7 +86,7 @@ function SellerSignupPage() {
         confirm_password: confirmPassword,
       };
 
-      const response = await axios.post('http://vmedu265.mtacloud.co.il/api/SellerSignup', requestData, {
+      const response = await axios.post('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerSignup', requestData, {
         headers: {
           'Content-Type': 'application/json',
         },

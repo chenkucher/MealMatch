@@ -20,7 +20,7 @@ app.use(express.json());
 
 // Enable CORS for all routes
 const corsOptions = {
-  origin: 'http://vmedu265.mtacloud.co.il:3000',
+  origin: 'http://ec2-52-90-146-52.compute-1.amazonaws.com:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 };
@@ -42,7 +42,7 @@ app.use(session({
 
 // Create a MySQL database connection
 const dbConnection = mysql.createConnection({
-  host: 'vmedu265.mtacloud.co.il',
+  host: 'ec2-52-90-146-52.compute-1.amazonaws.com',
   user: 'chen2',
   password: 'Ck96963',
   database: 'MealMatch'
@@ -63,7 +63,7 @@ const server = http.createServer(app);
 // Create a Socket.IO instance and attach it to the HTTP server
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://vmedu265.mtacloud.co.il",
+    origin: "http://ec2-52-90-146-52.compute-1.amazonaws.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -203,7 +203,8 @@ app.get('/api/confirm-email/:token', async (req, res) => {
 
       console.log(tokenResult);
       if (tokenResult.length === 0) {
-        return res.status(400).json({ message: 'Invalid or expired token.' });
+        return res.redirect(`/InvalidTokenPage`);
+        
       }
 
       // Update the user record in the database to mark their email as confirmed
@@ -218,7 +219,7 @@ app.get('/api/confirm-email/:token', async (req, res) => {
 
         // Redirect the user to the home page and start a user session
         req.session.restaurantId = userId;
-        return res.redirect('/');
+        return res.redirect(`/RestaurantManage/${userId}`);
       });
     });
   } catch (error) {
@@ -296,7 +297,7 @@ app.post('/api/SellerSignup', (req, res) => {
           return res.status(500).json({ message: 'An error occurred while processing your request.' });
         }
 
-        const confirmationLink = `http://vmedu265.mtacloud.co.il/api/confirm-email/${token}`;
+        const confirmationLink = `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/confirm-email/${token}`;
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -507,12 +508,14 @@ app.post('/api/CustomerSignup', function(req, res) {
     }
   
     const dbConnection = mysql.createConnection({
-      host: 'vmedu265.mtacloud.co.il',
-      user: 'chen2',
+      host: 'ec2-52-90-146-52.compute-1.amazonaws.com',
+      user: 'chen',
       password: 'Ck96963',
       database: 'MealMatch'
     });
-  
+    
+
+
     dbConnection.connect(function(err) {
       if (err) throw err;
       console.log('Connected!');
@@ -593,23 +596,42 @@ app.post('/api/restaurant/MenuAdd/:restaurantId', (req, res) => {
     }
   });
 });
+//update image as a part of MenuAdd
+app.put('/api/restaurant/ImageSet/:itemId', (req, res) => {
+  const newItemId = req.params.itemId;
+  const imageUrl = req.body.item_image;
+
+  const sql = 'UPDATE `restaurant_menu_items` SET item_image = ? WHERE item_id = ?';
+  dbConnection.query(sql, [imageUrl, newItemId], (error, results, fields) => {
+    if (error) {
+      console.error('Error updating item image:', error);
+      res.status(500).send('Error updating item image');
+    } else {
+      console.log(`Item image updated successfully for item ID ${newItemId}`);
+      res.status(200).send('Item image updated successfully');
+    }
+  });
+});
+
+
 
 
 // Update an existing item in the menu
 app.put('/api/restaurant/MenuSet/:id', (req, res) => {
   const itemId = req.params.id;
-  const { item_name, item_description, item_price, item_status, item_category } = req.body;
+  const { item_name, item_description, item_price, item_status, item_category, item_image } = req.body;
 
   // Update the menu item in the database
-  const sql = 'UPDATE `restaurant_menu_items` SET item_name = ?, item_description = ?, item_price = ?, item_status = ?, item_category = ? WHERE item_id = ?';
-  dbConnection.query(sql, [item_name, item_description, item_price, item_status, item_category, itemId], (error, results, fields) => {
+  const sql = 'UPDATE `restaurant_menu_items` SET item_name = ?, item_description = ?, item_price = ?, item_status = ?, item_category = ? , item_image = ? WHERE item_id = ?';
+  dbConnection.query(sql, [item_name, item_description, item_price, item_status, item_category ,item_image, itemId], (error, results, fields) => {
     if (error) {
       console.error('Error updating menu item:', error);
       res.status(500).send('Error updating menu item');
     } else {
       io.emit('menu-item-added', results);
       console.log(`Menu item ${itemId} updated successfully`);
-      res.status(200).send('Menu item updated successfully');
+      return res.json({ message: 'Menu item updated successfully.'});
+      // res.status(200).send('Menu item updated successfully');
     }
   });
 });

@@ -8,7 +8,7 @@ function LastOrdersTable() {
   const { restaurantId } = useParams();
 
   useEffect(() => {
-    const socket = socketIOClient('http://vmedu265.mtacloud.co.il:5000');
+    const socket = socketIOClient('http://ec2-52-90-146-52.compute-1.amazonaws.com:5000');
     socket.on('newOrder', (data) => {
       setOrders((prevItems) => [...prevItems, data]);
     });
@@ -19,13 +19,13 @@ function LastOrdersTable() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://vmedu265.mtacloud.co.il/api/restaurant/Orders/${restaurantId}`)
+    fetch(`http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/Orders/${restaurantId}`)
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, [restaurantId]);
 
   useEffect(() => {
-    fetch(`http://vmedu265.mtacloud.co.il/api/restaurant/Orders/${restaurantId}`)
+    fetch(`http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/Orders/${restaurantId}`)
       .then((res) => res.json())
       .then((data) => setOrders(data));
   }, [orders]);
