@@ -6,7 +6,7 @@ function NavBar(props) {
   const isLoggedIn = props.loggedIn;
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://vmedu265.mtacloud.co.il/api/SellerLogout', {
+      const response = await fetch('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerLogout', {
         method: 'GET',
         credentials: 'include'
       });

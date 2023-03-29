@@ -22,7 +22,7 @@ function OrderTable(props) {
 
     // Send an update to the server
    // Update the order status in the database
-    fetch(`http://vmedu265.mtacloud.co.il/api/restaurant/Orders/${selectedItem}`, {
+    fetch(`http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/Orders/${selectedItem}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -36,7 +36,7 @@ function OrderTable(props) {
   };
 
   useEffect(() => {
-    const socket = socketIOClient('http://vmedu265.mtacloud.co.il:5000');
+    const socket = socketIOClient('http://ec2-52-90-146-52.compute-1.amazonaws.com:5000');
     socket.on('newOrder', (data) => {
       setItems((prevItems) => [...prevItems, data]);
     });
@@ -47,7 +47,7 @@ function OrderTable(props) {
   }, []);
 
   useEffect(() => {
-    fetch(`http://vmedu265.mtacloud.co.il/api/restaurant/Orders/${restaurantId}`)
+    fetch(`http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/Orders/${restaurantId}`)
       .then((res) => res.json())
       .then((data) => setItems(data));
   }, [restaurantId]);

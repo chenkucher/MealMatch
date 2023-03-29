@@ -12,6 +12,7 @@ import CustomerLogin from './CustomerLogin';
 import SignUp from './RestaurantManagerPages/SignUp';
 import CustomerSignUp from './CustomerSignUp';
 import ConfirmEmailPage from '../pages/ConfirmEmailPage';
+import InvalidTokenPage from '../pages/components/InvalidTokenPage';
 import Home from './Home';
 
 function Routers(props) {
@@ -30,6 +31,7 @@ function Routers(props) {
                  <Route path="/CustomerLogin" element={<CustomerLogin/>} />
                  <Route path="/SignUp" element={<SignUp/>} />
                  <Route path="/CustomerSignUp" element={<CustomerSignUp/>} />
+                 <Route path="/InvalidTokenPage" element={<InvalidTokenPage/>} />
 
              </Routes>
         </Router>

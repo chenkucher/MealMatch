@@ -9,7 +9,7 @@ function FutureOrdersChart() {
 
   useEffect(() => {
     // Fetch initial data from the server
-    fetch(`http://vmedu265.mtacloud.co.il/api/restaurant/Orders/next3hours/${restaurantId}`)
+    fetch(`http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/Orders/next3hours/${restaurantId}`)
       .then((response) => response.json())
       .then((data) => setOrders(data))
       .catch((error) => console.error(error));
