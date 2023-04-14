@@ -1,0 +1,358 @@
+[
+  {
+    "prompt": "I feel like having Mexican food today.",
+    "completion": "Great! I'll show you a list of Mexican restaurants nearby."
+  },
+  {
+    "prompt": "I want to schedule my order for today at 12:30 pm.",
+    "completion": "Sure, I've set your order time for today at 12:30 pm. What would you like to order?"
+  },
+  {
+    "prompt": "I really enjoy chicken fajitas.",
+    "completion": "Chicken fajitas sound delicious. How many servings would you like to order?"
+  },
+  {
+    "prompt": "I'm vegetarian.",
+    "completion": "Got it. I'll only recommend vegetarian dishes and restaurants for you."
+  },
+  {
+    "prompt": "Yes, please change the chicken fajitas to vegetable fajitas.",
+    "completion": "I've updated your order to vegetable fajitas. Is there anything else you'd like to change?"
+  },
+  {
+    "prompt": "No, that's all. Thank you!",
+    "completion": "You're welcome! Your order has been confirmed. If you need any assistance later, feel free to ask."
+  },
+  {
+    "prompt": "The meal is for 4 people.",
+    "completion": "Alright, I'll make sure the order is enough for 4 people. Let me know if you'd like to add anything else."
+  },
+  {
+    "prompt": "Yes, please add two orders of guacamole and four bottles of sparkling water.",
+    "completion": "I've added two orders of guacamole and four bottles of sparkling water to your order. Anything else you'd like to include?"
+  },
+  {
+    "prompt": "Please make sure the fajitas are not too spicy.",
+    "completion": "I've added a note to your order requesting that the fajitas be made less spicy. If you have any other preferences, please let me know."
+  },
+  {
+    "prompt": "No, I'm good. Thanks for your help!",
+    "completion": "You're welcome! If you need any help in the future, don't hesitate to ask. Enjoy your meal!"
+  },
+  {
+    "prompt": "I feel like having Mexican food today.",
+    "completion": "Great! I'll show you a list of Mexican restaurants nearby."
+  },
+  {
+    "prompt": "I want to schedule my order for today at 12:30 pm.",
+    "completion": "Sure, I've set your order time for today at 12:30 pm. What would you like to order?"
+  },
+  {
+    "prompt": "I really enjoy chicken fajitas.",
+    "completion": "Chicken fajitas sound delicious. How many servings would you like to order?"
+  },
+  {
+    "prompt": "I'm vegetarian.",
+    "completion": "Got it. I'll only recommend vegetarian dishes and restaurants for you."
+  },
+  {
+    "prompt": "Yes, please change the chicken fajitas to vegetable fajitas.",
+    "completion": "I've updated your order to vegetable fajitas. Is there anything else you'd like to change?"
+  },
+  {
+    "prompt": "No, that's all. Thank you!",
+    "completion": "You're welcome! Your order has been confirmed. If you need any assistance later, feel free to ask."
+  },
+  {
+    "prompt": "The meal is for 4 people.",
+    "completion": "Alright, I'll make sure the order is enough for 4 people. Let me know if you'd like to add anything else."
+  },
+  {
+    "prompt": "Yes, please add two orders of guacamole and four bottles of sparkling water.",
+    "completion": "I've added two orders of guacamole and four bottles of sparkling water to your order. Anything else you'd like to include?"
+  },
+  {
+    "prompt": "Please make sure the fajitas are not too spicy.",
+    "completion": "I've added a note to your order requesting that the fajitas be made less spicy. If you have any other preferences, please let me know."
+  },
+  {
+    "prompt": "No, I'm good. Thanks for your help!",
+    "completion": "You're welcome! If you need any help in the future, don't hesitate to ask. Enjoy your meal!"
+  },
+  {
+    "prompt": "Can you recommend a good Italian restaurant nearby?",
+    "completion": "Of course! There's a great Italian restaurant called Trattoria just a few blocks away. Would you like me to make a reservation for you?"
+  },
+  {
+    "prompt": "I'd like to order a margherita pizza, please.",
+    "completion": "Great choice! Would you like anything else to go with that?"
+  },
+  {
+    "prompt": "Is there a gluten-free option for the pasta dish?",
+    "completion": "Yes, we have a gluten-free pasta option for that dish. Would you like to try it?"
+  },
+  {
+    "prompt": "I have a severe peanut allergy.",
+    "completion": "Noted. I'll make sure to inform the kitchen staff to avoid any peanuts or peanut-based ingredients in your order."
+  },
+  {
+    "prompt": "Can I get my salad with the dressing on the side?",
+    "completion": "Sure thing! Would you like any particular type of dressing with your salad?"
+  },
+  {
+    "prompt": "Can you make sure my steak is cooked medium rare?",
+    "completion": "Absolutely. I'll make a note in your order to cook your steak to medium-rare temperature. Is there anything else you'd like me to add?"
+  },
+  {
+    "prompt": "I'm in the mood for something sweet for dessert.",
+    "completion": "We have a delicious chocolate lava cake and a fruit tart on our dessert menu. Which one would you like to try?"
+  },
+  {
+    "prompt": "Can I get a glass of red wine with my dinner?",
+    "completion": "Certainly. Would you like a particular type of red wine or would you like me to suggest one for you?"
+  },
+  {
+    "prompt": "I have a coupon for a free appetizer. Can I use it for my order?",
+    "completion": "Yes, you can use the coupon for a free appetizer with your order. Please present the coupon to your server when you arrive."
+  },
+  {
+    "prompt": "Thanks for your help. Can you recommend some nearby attractions to visit after dinner?",
+    "completion": "You're welcome! There's a great museum and a park nearby that you might enjoy visiting after dinner. Would you like me to look up more information on them for you?"
+  },
+  {
+    "prompt": "I'm in the mood for some sushi tonight.",
+    "completion": "Great choice! We have some fantastic sushi rolls on the menu. Would you like to dine in or order takeout?"
+  },
+  {
+    "prompt": "Can you make sure my sushi rolls are not too spicy?",
+    "completion": "Sure thing! I'll inform the sushi chef to make your rolls mild. Would you like to try any other rolls?"
+  },
+  {
+    "prompt": "I'm allergic to shellfish.",
+    "completion": "Noted. We'll make sure to avoid any shellfish in your order. Would you like to try any of our vegetarian sushi rolls?"
+  },
+  {
+    "prompt": "Can I get some soy sauce on the side?",
+    "completion": "Certainly. Would you like any wasabi or pickled ginger with your sushi rolls?"
+  },
+  {
+    "prompt": "I'd like to try the sashimi platter.",
+    "completion": "Excellent choice! Our sashimi platter includes a variety of fresh seafood. Would you like any other dishes to go with that?"
+  },
+  {
+    "prompt": "I'm on a low-carb diet. What would you recommend?",
+    "completion": "We have a variety of sushi rolls that are made with cucumber instead of rice. Would you like to try one of those?"
+  },
+  {
+    "prompt": "Can I get some eel sauce on the side?",
+    "completion": "Certainly. Would you like any other sauces or toppings with your sushi rolls?"
+  },
+  {
+    "prompt": "I'm not sure what to order. Can you recommend something?",
+    "completion": "Sure thing! Our most popular sushi rolls are the California roll, the spicy tuna roll, and the dragon roll. Would you like to try any of those?"
+  },
+  {
+    "prompt": "Can I get a glass of green tea with my sushi?",
+    "completion": "Absolutely. Would you like hot or iced green tea?"
+  },
+  {
+    "prompt": "Thanks for your help. Can you recommend any Japanese desserts?",
+    "completion": "You're welcome! We have a delicious green tea ice cream and a mochi platter for dessert. Which one would you like to try?"
+  },
+  {
+    "prompt": "I'd like to make a reservation for four people at 7pm tonight.",
+    "completion": "Certainly. Your reservation for four people at 7pm has been confirmed. Can I get your name and phone number for the reservation?"
+  },
+  {
+    "prompt": "Is there a dress code for the restaurant?",
+    "completion": "Our dress code is business casual. We ask that you avoid wearing beachwear, shorts, and flip-flops."
+  },
+  {
+    "prompt": "I'd like to order a bottle of red wine for the table.",
+    "completion": "Excellent choice! Would you like a particular type of red wine or would you like me to suggest one for you?"
+  },
+  {
+    "prompt": "I'm in the mood for some comfort food.",
+    "completion": "We have a variety of comfort foods on our menu, including macaroni and cheese, meatloaf, and chicken pot pie. Which one would you like to try?"
+  },
+  {
+    "prompt": "I'm a vegetarian. What options do you have for me?",
+    "completion": "We have several vegetarian options on our menu, including a vegetarian burger, a grilled vegetable sandwich, and a spinach and mushroom quiche. Which one would you like to try?"
+  },
+  {
+    "prompt": "Can I substitute fries with a side salad?",
+    "completion": "Absolutely. Would you like any particular dressing with your salad?"
+  },
+  {
+    "prompt": "I'm gluten-free. What options do you have for me?",
+    "completion": "We have a variety of gluten-free options on our menu, including gluten-free buns for burgers and sandwiches, and gluten-free pasta. Would you like to try any of those?"
+  },
+  {
+    "prompt": "Can I get a glass of water with lemon, please?",
+    "completion": "Certainly. Would you like any other beverages with your meal?"
+  },
+  {
+    "prompt": "Can I get some ketchup and mustard on the side?",
+    "completion": "Absolutely. Would you like any other condiments or toppings with your burger?"
+  },
+  {
+    "prompt": "I'm in a hurry. Can you recommend something that's quick to prepare?",
+    "completion": "Our sandwiches and salads are quick and easy to prepare. Would you like to try one of those?"
+  },
+  {
+    "prompt": "I'd like to order a side of onion rings.",
+    "completion": "Great choice! Would you like any dipping sauce with your onion rings?"
+  },
+  {
+    "prompt": "Can I get my steak cooked well-done?",
+    "completion": "Certainly. Would you like any particular sides or toppings with your steak?"
+  },
+  {
+    "prompt": "Thanks for your help. Can you recommend any good desserts?",
+    "completion": "You're welcome! We have a variety of delicious desserts on our menu, including a chocolate lava cake, a crème brûlée, and a tiramisu. Which one would you like to try?"
+  },
+  {
+    "prompt": "I'd like to order a side of sweet potato fries.",
+    "completion": "Excellent choice! Would you like any dipping sauce with your sweet potato fries?"
+  },
+  {
+    "prompt": "Can you recommend a good beer to go with my burger?",
+    "completion": "We have a variety of beers on tap, including local craft beers and imported beers. Would you like me to suggest a particular beer for you?"
+  },
+  {
+    "prompt": "I'd like to make a reservation for a romantic dinner for two.",
+    "completion": "Certainly. I recommend our candlelit table by the fireplace for a romantic atmosphere. What date and time would you like to make the reservation for?"
+  },
+  {
+    "prompt": "Can you make sure my dish is not too spicy?",
+    "completion": "Sure thing! Would you like us to make it mild or just reduce the spiciness?"
+  },
+  {
+    "prompt": "I'm allergic to dairy products.",
+    "completion": "Noted. We'll make sure to avoid any dairy products in your order. Would you like to try any of our vegan options?"
+  },
+  {
+    "prompt": "Can you recommend a good wine to go with my pasta dish?",
+    "completion": "We have a variety of wines that pair well with pasta, including a Chianti and a Pinot Noir. Would you like me to suggest a particular wine for you?"
+  },
+  {
+    "prompt": "Can you recommend a good seafood restaurant nearby?",
+    "completion": "Of course! There's a great seafood restaurant called Ocean's Edge just a few blocks away. Would you like me to make a reservation for you?"
+  },
+  {
+    "prompt": "I'd like to order the grilled salmon.",
+    "completion": "Excellent choice! Would you like any particular sides or toppings with your salmon?"
+  },
+  {
+    "prompt": "Is there a gluten-free option for the seafood paella?",
+    "completion": "Yes, we have a gluten-free option for our seafood paella. Would you like to try it?"
+  },
+  {
+    "prompt": "I'm allergic to shellfish.",
+    "completion": "Noted. We'll make sure to avoid any shellfish in your order. Would you like to try any of our fish dishes?"
+  },
+  {
+    "prompt": "Can I get my lobster steamed instead of grilled?",
+    "completion": "Certainly. Would you like any particular sides or dipping sauce with your lobster?"
+  },
+  {
+    "prompt": "I'm not sure what to order. Can you recommend something?",
+    "completion": "Sure thing! Our most popular seafood dishes are the grilled salmon, the lobster tail, and the shrimp scampi. Would you like to try any of those?"
+  },
+  {
+    "prompt": "Can I get some lemon wedges and cocktail sauce with my shrimp cocktail?",
+    "completion": "Absolutely. Would you like any other condiments or sides with your shrimp cocktail?"
+  },
+  {
+    "prompt": "I'd like to order the seafood chowder.",
+    "completion": "Great choice! Would you like any particular sides or toppings with your seafood chowder?"
+  },
+  {
+    "prompt": "Can you make sure my fish is cooked through?",
+    "completion": "Certainly. Would you like any particular sides or toppings with your fish?"
+  },
+  {
+    "prompt": "Thanks for your help. Can you recommend any good wines to pair with seafood?",
+    "completion": "You're welcome! White wines like Sauvignon Blanc, Chardonnay, and Pinot Grigio pair well with seafood. Would you like me to suggest a particular wine for you?"
+  },
+  {
+    "prompt": "I'd like to make a reservation for a group of six at 8pm tonight.",
+    "completion": "Certainly. Your reservation for six people at 8pm has been confirmed. Can I get your name and phone number for the reservation?"
+  },
+  {
+    "prompt": "Is there a dress code for the restaurant?",
+    "completion": "Our dress code is business casual. We ask that you avoid wearing beachwear, shorts, and flip-flops."
+  },
+  {
+    "prompt": "I'd like to order the seafood linguine.",
+    "completion": "Excellent choice! Would you like any particular toppings or sides with your linguine?"
+  },
+  {
+    "prompt": "Can you recommend a good dessert to go with seafood?",
+    "completion": "We have a variety of desserts on our menu, including a key lime pie and a chocolate mousse. Which one would you like to try?"
+  },
+  {
+    "prompt": "I'm in the mood for some oysters.",
+    "completion": "Great choice! We have a variety of oysters on the half shell, including Blue Point and Kumamoto. Would you like any particular sides or condiments with your oysters?"
+  },
+  {
+    "prompt": "Can you recommend a good cocktail to go with seafood?",
+    "completion": "Our signature cocktail, the Ocean Breeze, pairs well with seafood. Would you like to try one?"
+  },
+  {
+    "prompt": "I'd like to order the seafood risotto.",
+    "completion": "Excellent choice! Would you like any particular toppings or sides with your risotto?"
+  },
+  {
+    "prompt": "Can you make sure my scallops are not overcooked?",
+    "completion": "Certainly. We'll make sure to cook your scallops to perfection. Would you like any particular sides or toppings with your scallops?"
+  },
+  {
+    "prompt": "I'm allergic to shellfish.",
+    "completion": "Noted. We'll make sure to avoid any shellfish in your order. Would you like to try any of our other seafood dishes?"
+  },
+  {
+    "prompt": "Can I get my tuna steak cooked rare?",
+    "completion": "Absolutely. Would you like any particular sides or toppings with your tuna steak?"
+  },
+  {
+    "prompt": "I'm not sure what to order. Can you recommend something?",
+    "completion": "Sure thing! Our most popular seafood dishes are the grilled salmon, the lobster tail, and the shrimp scampi. Would you like to try any of those?"
+  },
+  {
+    "prompt": "Can I get some drawn butter with my lobster?",
+    "completion": "Certainly. Would you like any other condiments or sides with your lobster?"
+  },
+  {
+    "prompt": "I'd like to order the seafood paella.",
+    "completion": "Great choice! Would you like any particular toppings or sides with your paella?"
+  },
+  {
+    "prompt": "Can you make sure my swordfish is not too dry?",
+    "completion": "Certainly. We'll make sure to cook your swordfish to perfection. Would you like any particular sides or toppings with your swordfish?"
+  },
+  {
+    "prompt": "Thanks for your help. Can you recommend any good white wines to pair with seafood?",
+    "completion": "You're welcome! White wines like Sauvignon Blanc, Chardonnay, and Pinot Grigio pair well with seafood. Would you like me to suggest a particular wine for you?"
+  },
+  {
+    "prompt": "I'd like to make a reservation for a group of eight at 7pm tonight.",
+    "completion": "Certainly. Your reservation for eight people at 7pm has been confirmed. Can I get your name and phone number for the reservation?"
+  },
+  {
+    "prompt": "Is there a dress code for the restaurant?",
+    "completion": "Our dress code is business casual. We ask that you avoid wearing beachwear, shorts, and flip-flops."
+  },
+  {
+    "prompt": "I'd like to order the crab cakes.",
+    "completion": "Excellent choice! Would you like any particular sides or dipping sauce with your crab cakes?"
+  },
+  {
+    "prompt": "Can you recommend a good dessert to go with seafood?",
+    "completion": "We have a variety of desserts on our menu, including a key lime pie and a chocolate mousse. Which one would you like to try?"
+  },
+  {
+    "prompt": "I'm in the mood for some sushi rolls.",
+    "completion": "We have a variety of sushi rolls on our menu, including the California roll, the spicy tuna roll, and the dragon roll. Which one would you like to try?"
+  }
+]

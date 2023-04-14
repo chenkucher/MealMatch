@@ -1,0 +1,13 @@
+.modifyItemModal{
+    display:flex;
+    flex-direction: column;
+    gap:5%;
+    margin-top:5%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    background-color: #f5f5f5;
+    border-radius: 0 0 4px 4px;
+}

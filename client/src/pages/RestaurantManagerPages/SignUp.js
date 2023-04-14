@@ -6,7 +6,7 @@ import NavBar from '../components/NavBar';
 
 function SellerSignupPage() {
   const [name, setName] = useState('');
-  const [category, setCategory] = useState('');
+  const [restaurantDetails, setRestaurantDetails] = useState('');
   const [address, setAddress] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -30,7 +30,7 @@ function SellerSignupPage() {
   const handleResend = async () => {
     try {
       const response = await axios.post(
-        `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerResendEmail/${email}`
+        `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerResendEmail/${email}`
       );
       if (response.data.message === 'Email sent') {
         const alertDiv = document.createElement('div');
@@ -78,7 +78,7 @@ function SellerSignupPage() {
     try {
       const requestData = {
         name,
-        category,
+        restaurantDetails,
         address,
         phone: phoneNumber,
         email,
@@ -86,7 +86,7 @@ function SellerSignupPage() {
         confirm_password: confirmPassword,
       };
 
-      const response = await axios.post('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerSignup', requestData, {
+      const response = await axios.post('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerSignup', requestData, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -130,16 +130,14 @@ function SellerSignupPage() {
               <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
               <label>Address:</label>
               <input type="text" name="address" value={address} onChange={(e) => setAddress(e.target.value)} />
-              <label>Category:</label>
-              <select name="category" value={category} onChange={(e) => setCategory(e.target.value)}>
-                <option value="">-- Select a category --</option>
-                <option value="Italian">Italian</option>
-                <option value="Mexican">Mexican</option>
-                <option value="Chinese">Chinese</option>
-                <option value="Japanese">Japanese</option>
-                <option value="Indian">Indian</option>
-                <option value="Greek">Greek</option>
-              </select>
+              <label>Restaurant Details:</label>
+              <textarea
+                name="restaurantDetails"
+                value={restaurantDetails}
+                onChange={(e) => setRestaurantDetails(e.target.value)}
+                maxLength="300"
+                rows="4"
+              ></textarea>
               <label>Phone Number:</label>
               <input type="tel" name="phone" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
               <label>Email:</label>

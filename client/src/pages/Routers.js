@@ -8,11 +8,21 @@ import Storage from './RestaurantManagerPages/Storage';
 import Orders from './RestaurantManagerPages/Orders';
 import Settings from './RestaurantManagerPages/Settings';
 import Login from './RestaurantManagerPages/Login';
-import CustomerLogin from './CustomerLogin';
 import SignUp from './RestaurantManagerPages/SignUp';
-import CustomerSignUp from './CustomerSignUp';
+
 import ConfirmEmailPage from '../pages/ConfirmEmailPage';
 import InvalidTokenPage from '../pages/components/InvalidTokenPage';
+import CustomerPreferences from '../pages/CustomerManagerPages/CustomerPreferences'
+import CustomerSignUp from '../pages/CustomerManagerPages/CustomerSignUp';
+import CustomerLogin from '../pages/CustomerManagerPages/CustomerLogin';
+import CustomerManage from '../pages/CustomerManagerPages/CustomerManage'
+import CustomerSettings from '../pages/CustomerManagerPages/CustomerSettings'
+import CustomerExplore from '../pages/CustomerManagerPages/CustomerExplore'
+import CustomerOrders from '../pages/CustomerManagerPages/CustomerOrders'
+import CustomerMenuView from '../pages/CustomerManagerPages/CustomerMenuView'
+import CustomerCategoryPage from '../pages/CustomerManagerPages/CustomerCategoryPage'
+import CustomerMealMatcher from '../pages/CustomerManagerPages/CustomerMealMatcher'
+
 import Home from './Home';
 
 function Routers(props) {
@@ -28,11 +38,20 @@ function Routers(props) {
                  <Route path="/Orders/:restaurantId" element={<Orders/>} />
                  <Route path="/Settings/:restaurantId" element={<Settings/>} />
                  <Route path="/Login" element={<Login/>} />
-                 <Route path="/CustomerLogin" element={<CustomerLogin/>} />
                  <Route path="/SignUp" element={<SignUp/>} />
-                 <Route path="/CustomerSignUp" element={<CustomerSignUp/>} />
                  <Route path="/InvalidTokenPage" element={<InvalidTokenPage/>} />
 
+                 <Route path="/CustomerSignUp" element={<CustomerSignUp/>} />
+                 <Route path="/CustomerLogin" element={<CustomerLogin/>} />
+                 <Route path="/CustomerPreferences/:customerId" element={<CustomerPreferences/>} />
+                 <Route path="/CustomerManage/:customerId" element={<CustomerManage/>} />
+                 <Route path="/CustomerSettings/:customerId" element={<CustomerSettings/>} />
+                 <Route path="/CustomerExplore/:customerId" element={<CustomerExplore/>} />
+                 <Route path="/CustomerOrders/:customerId" element={<CustomerOrders/>} />
+                 <Route path="/CustomerMenuView/:customerId/:restaurantId" element={<CustomerMenuView/>} />
+                 <Route path="/CustomerCategoryPage/:category" element={<CustomerCategoryPage/>} />
+                 <Route path="/CustomerMealMatcher/:customerId" element={<CustomerMealMatcher/>} />
+                 
              </Routes>
         </Router>
     );

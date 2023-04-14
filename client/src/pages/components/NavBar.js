@@ -4,22 +4,6 @@ import styles from '../../styles/NavBar.module.css';
 
 function NavBar(props) {
   const isLoggedIn = props.loggedIn;
-  const handleLogout = async () => {
-    try {
-      const response = await fetch('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerLogout', {
-        method: 'GET',
-        credentials: 'include'
-      });
-      if (response.ok) {
-        // Redirect to homepage after successful logout
-        window.location.href = '/';
-      } else {
-        console.error('Logout failed:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Logout failed:', error.message);
-    }
-  };
 
   return (
     <div className={styles.navbar}>

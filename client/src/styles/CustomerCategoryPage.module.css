@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+.main {
+  display: flex;
+  gap: 5%;
+  flex-grow: 1;
+}
+
+.section_side {
+  width: 25%;
+  margin-left: 5%;
+}
+
+.section_middle {
+  height: 100%;
+  width: 75%;
+}
+
+.restaurantGrid {
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4%;
+  margin-top: 1%;
+}
+
+.restaurant_box {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content:space-between;
+  margin-bottom: 1%;
+  width: 23%;
+  text-decoration: none;
+  color: black;
+  background-color: #fff;
+  transition: all 0.3s ease-in-out;
+}
+.restaurant_box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.restaurant_logo {
+  height: 150px;
+  position: relative;
+}
+
+.restaurant_logo img {
+  border-radius: 0.5rem 0.5rem 0 0;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.restaurant_details {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.restaurant_descrpition {
+  overflow-y: auto;
+  margin-bottom: 0.5%;
+  font-size: 1.25rem;
+  max-height: 100px;
+  /* align-self: center; */
+  padding: 2%;
+}
+
+.restaurant_name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 2%;
+  align-self: flex-start;
+  padding: 2%;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+button:hover {
+  background-color: #3e8e41;
+}
+
+button:focus {
+  outline: none;
+}
