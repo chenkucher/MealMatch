@@ -48,7 +48,9 @@ h1 {
   flex-direction: column;
   justify-content:space-between;
   margin-bottom: 1%;
-  width: 33%;
+  padding: 1%;
+  max-width: 25%;
+  /* width: auto; */
 }
 
 /* .menu_item_image {
@@ -187,7 +189,8 @@ h1 {
   width: 100%;
   margin-top: 4%;
   display: flex;
-  justify-content: space-around;
+  gap:1%;
+  /* justify-content: space-between; */
   align-self: flex-end;
 }
 .head_btn{

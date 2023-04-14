@@ -34,7 +34,7 @@ function MenuManager(props) {
   
   useEffect(() => {
     axios
-      .get('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerLogin')
+      .get('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogin')
       .then((response) => {
         console.log(response);
         setLoggedIn(response.data.loggedIn);
@@ -76,7 +76,7 @@ function MenuManager(props) {
     const updateItemInDatabase = async (imageUrl) => {
       // Send a PUT request to update the item in the database
       const response = await fetch(
-        `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/MenuSet/${selectedItem.item_id}`,
+        `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/MenuSet/${selectedItem.item_id}`,
         {
           method: 'PUT',
           headers: {
@@ -264,7 +264,7 @@ async function handleAddSubmit(event) {
 try {
   // First, create the new menu item without the image URL
   const response = await fetch(
-    `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/MenuAdd/${restaurantId}`,
+    `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/MenuAdd/${restaurantId}`,
     {
       method: 'POST',
       headers: {
@@ -309,7 +309,7 @@ try {
 
   // Update the menu item in the database with the image URL
   const putResponse = await fetch(
-    `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/ImageSet/${newItemId}`,
+    `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/ImageSet/${newItemId}`,
     {
       method: 'PUT',
       headers: {
@@ -432,7 +432,7 @@ try {
       await deleteFileFromS3(`${selectedItem.item_id}.png`);
   
       const response = await fetch(
-        `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/MenuItemDelete/${selectedItem.item_id}`,
+        `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/MenuItemDelete/${selectedItem.item_id}`,
         {
           method: 'DELETE',
         }
@@ -462,7 +462,7 @@ try {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch(`http://ec2-52-90-146-52.compute-1.amazonaws.com/api/restaurant/MenuGet/${restaurantId}`);
+        const response = await fetch(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/MenuGet/${restaurantId}`);
         const data = await response.json();
         setMenuItems(data);
       } catch (error) {
@@ -479,7 +479,7 @@ try {
 
   //Check if logged in
   useEffect(() => {
-      axios.get("http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerLogin").then((response) => {
+      axios.get("http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogin").then((response) => {
         console.log(response);
         setLoggedIn(response.data.loggedIn);
       });
@@ -516,7 +516,7 @@ try {
                       <div className={styles.menu_item_box} key={item.item_id}>
                         <div className={styles.menu_item_image}>
                           {/* {console.log(getImageUrl(item.item_image))} */}
-                          <img src={getImageUrl(item.item_image)} alt={item.item_name} />
+                          {/* <img src={getImageUrl(item.item_image)} alt={item.item_name} /> */}
                         <img src={item.item_image} alt={item.item_name} />
                         </div>
                         <div className={styles.menu_item_details}>

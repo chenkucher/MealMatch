@@ -1,0 +1,124 @@
+addToOrderCard {
+  
+    position: fixed;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: auto;
+    height:auto;
+    max-width: 500px;
+    min-width: 500px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 30px;
+    z-index: 1000;
+  }
+  
+  .addToOrderCard h2 {
+    font-size: 1.5rem;
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .addToOrderCard p {
+    font-size: 1.1rem;
+    color: #777;
+    margin: 8px 0;
+  }
+  
+  .addToOrderCard h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: #333;
+  }
+  
+  .addToOrderCard ul {
+    font-size: 1.1rem;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .addToOrderCard li {
+    margin: 8px 0;
+  }
+  
+  .addToOrderCard label {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    margin-top:5px;
+  }
+  
+  .addToOrderCard input[type='checkbox'] {
+    font-size: 1.1rem;
+    margin-right: 8px;
+  }
+  
+  .addToOrderCard input[type='number'] {
+    font-size: 1.1rem;
+    width: 60px;
+    margin-left: 8px;
+  }
+  
+  .addToOrderCard button {
+    font-size: 1.1rem;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+  }
+  
+  .addToOrderCard button:hover {
+    background-color: #0056b3;
+  }
+  
+  .addToOrderCard button:last-child {
+    background-color: #ccc;
+    color: #333;
+  }
+  
+  .addToOrderCard button:last-child:hover {
+    background-color: #999;
+  }
+  .addToOrderCard .top,.middle,.bottom {
+    margin-bottom: 5%;
+  }
+  
+  .addToOrderCard img{
+    width: 100%;
+  
+    object-fit: cover;
+    border-radius: 10px 10px 0 0;
+  }
+  .backgroundOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(44, 44, 44, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+  }
+  .alertMessage {
+    position: fixed;
+    top: 20px;
+    /* right: 20px; */
+    padding: 1%;
+    background-color: #45a049;
+    color: white;
+    border-radius: 5px;
+    z-index: 9999;
+    align-items: center;
+  }
+  

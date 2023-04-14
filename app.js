@@ -9,8 +9,6 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 const nodemailer = require('nodemailer');
-const path = require('path');
-const multer = require('multer');
 
 // Create Express application
 const app = express();
@@ -20,7 +18,7 @@ app.use(express.json());
 
 // Enable CORS for all routes
 const corsOptions = {
-  origin: 'http://ec2-52-90-146-52.compute-1.amazonaws.com:3000',
+  origin: 'http://ec2-50-17-11-178.compute-1.amazonaws.com:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 };
@@ -42,8 +40,8 @@ app.use(session({
 
 // Create a MySQL database connection
 const dbConnection = mysql.createConnection({
-  host: 'ec2-52-90-146-52.compute-1.amazonaws.com',
-  user: 'chen2',
+  host: 'ec2-50-17-11-178.compute-1.amazonaws.com',
+  user: 'meal',
   password: 'Ck96963',
   database: 'MealMatch'
 });
@@ -63,39 +61,340 @@ const server = http.createServer(app);
 // Create a Socket.IO instance and attach it to the HTTP server
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://ec2-52-90-146-52.compute-1.amazonaws.com",
+    origin: "http://ec2-50-17-11-178.compute-1.amazonaws.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
   }
 });
 
-// Set up the multer storage engine
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, '/home/chenkc/mealmatch/client/public/restaurants_menu_img/');
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
+
+// Endpoint to handle customer login
+app.post('/api/CustomerLogin', (req, res) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Please provide both email and password.' });
+  }
+
+  const query = 'SELECT customer_id FROM customers WHERE email = ? AND password = ?';
+  dbConnection.query(query, [email, password], (err, result) => {
+    if (err) {
+      console.error('Error occurred while executing query:', err);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    if (result.length === 0) {
+      return res.status(401).json({ message: 'Incorrect email or password.' });
+    }
+
+    const { customer_id } = result[0];
+
+    // Set session variables for customer
+    req.session.customerId = customer_id;
+    console.log(req.session.customerId);
+    return res.json({ message: 'Login successful.', customerId: customer_id });
+  });
 });
 
-// Set up the multer upload middleware
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5000000 },
-  fileFilter: function (req, file, cb) {
-    if (
-      file.mimetype === 'image/png' ||
-      file.mimetype === 'image/jpg' ||
-      file.mimetype === 'image/jpeg'
-    ) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type'));
+
+
+// Endpoint to handle customer signup
+app.post('/api/CustomerSignup', (req, res) => {
+const firstName = req.body.first_name;
+const lastName = req.body.last_name;
+const address = req.body.address;
+const phone = req.body.phone;
+const email = req.body.email;
+const password = req.body.password;
+const confirmPassword = req.body.confirm_password;
+
+if (!email || !password || !confirmPassword || !firstName || !lastName || !address || !phone) {
+  return res.status(400).json({ message: 'Please provide all required fields.' });
+}
+
+if (password !== confirmPassword) {
+  return res.status(400).json({ message: 'Passwords do not match.' });
+}
+
+const checkEmailQuery = 'SELECT * FROM customers WHERE email = ?';
+dbConnection.query(checkEmailQuery, [email], (error, result) => {
+  if (error) {
+    console.error('Error occurred while executing query:', error);
+    return res.status(500).json({ message: 'An error occurred while processing your request.' });
+  }
+
+  if (result.length !== 0) {
+    return res.status(409).json({ message: 'Email address already exists.' });
+  }
+
+  const checkPhoneQuery = 'SELECT * FROM customers WHERE phone_number = ?';
+  dbConnection.query(checkPhoneQuery, [phone], (error, result) => {
+    if (error) {
+      console.error('Error occurred while executing query:', error);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
     }
-  },
-}).single('item_image');
+
+    if (result.length !== 0) {
+      return res.status(409).json({ message: 'Phone number already exists.' });
+    }
+
+    const token = crypto.randomBytes(64).toString('hex');
+
+    const addUserQuery = 'INSERT INTO customers (first_name, last_name, address, email, phone_number, password, confirmation_token) VALUES (?, ?, ?, ?, ?, ?, ?)';
+    dbConnection.query(addUserQuery, [firstName, lastName, address, email, phone, password, token], (error) => {
+      if (error) {
+        console.error('Error occurred while executing query:', error);
+        return res.status(500).json({ message: 'An error occurred while processing your request.' });
+      }
+
+      const confirmationLink = `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/confirm-email-customer/${token}`;
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'chenkuchiersky@gmail.com',
+          pass: 'caauknmafaaglhhl'
+        }
+      });
+
+      const mailOptions = {
+        from: 'chenkuchiersky@gmail.com',
+        to: email,
+        subject: 'Confirm Your Email Address',
+        text: `Please click on the following link to confirm your email address: ${confirmationLink}`
+      };
+
+      transporter.sendMail(mailOptions, (error) => {
+        if (error) {
+          console.error('Error sending email:', error);
+        } else {
+          console.log('Email sent');
+        }
+      });
+      res.json({ message: 'Signup successful. Please check your email for a confirmation link.' });
+    });
+  });
+});
+});
+
+
+
+
+
+
+
+app.get('/api/confirm-email-customer/:token', async (req, res) => {
+  try {
+    const token = req.params.token;
+
+    // Check if the token is valid
+    const checkTokenQuery = 'SELECT * FROM customers WHERE confirmation_token = ?';
+    dbConnection.query(checkTokenQuery, [token], (tokenErr, tokenResult) => {
+      if (tokenErr) {
+        console.error('Error occurred while executing query:', tokenErr);
+        return res.status(500).json({ message: 'An error occurred while processing your request.' });
+      }
+
+      console.log(tokenResult);
+      if (tokenResult.length === 0) {
+        return res.redirect(`/InvalidTokenPage`);
+      }
+
+      // Update the user record in the database to mark their email as confirmed
+      const userId = tokenResult[0].customer_id;
+
+      const updateQuery = 'UPDATE customers SET email_confirmed = 1, confirmation_token = NULL WHERE customer_id = ?';
+      dbConnection.query(updateQuery, [userId], (updateErr) => {
+        if (updateErr) {
+          console.error('Error occurred while executing query:', updateErr);
+          return res.status(500).json({ message: 'An error occurred while processing your request.' });
+        }
+
+        // Redirect the user to the CustomerPreferences page and start a user session
+        req.session.customerId = userId;
+        return res.redirect(`/CustomerPreferences/${userId}`);
+      });
+    });
+  } catch (error) {
+    console.error('Error occurred while confirming email:', error);
+    return res.status(500).json({ message: 'An error occurred while confirming your email.' });
+  }
+});
+
+
+
+
+
+// Endpoint to handle customer preferences
+app.post('/api/CustomerPreferences', (req, res) => {
+  const customerId = req.body.customerId;
+  const preferences = req.body.preferences;
+
+  if (!customerId || !preferences) {
+    return res.status(400).json({ message: 'Please provide user ID and preferences.' });
+  }
+
+  const updatePreferencesQuery = 'UPDATE customers SET customer_preferences = ? WHERE customer_id = ?';
+  dbConnection.query(updatePreferencesQuery, [preferences.join(','), customerId], (error, result) => {
+    if (error) {
+      console.error('Error occurred while executing query:', error);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.json({ message: 'Preferences saved successfully.' });
+  });
+});
+
+
+//for validating login
+app.get('/api/CustomerLogin', (req, res) => {
+  if (req.session.customerId) {
+    res.send({loggedIn:true,userId:req.session.customerId})
+  }else{
+    res.send({loggedIn:false})
+  }
+});
+
+// Endpoint to log out the user and clear the session
+app.get('/api/CustomerLogout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
+});
+
+//get the attributes for customers data
+app.get('/api/CustomerSettings', (req, res) => {
+  const customerId = req.session.customerId;
+  console.log(customerId);
+  if (!customerId) {
+    return res.status(401).json({ message: 'Unauthorized.' });
+  }
+
+  const query = `SELECT 
+      customer_id, 
+      first_name, 
+      last_name, 
+      address, 
+      email, 
+      phone_number, 
+      password, 
+      customer_preferences
+    FROM customers 
+    WHERE customer_id = ?`;
+
+  dbConnection.query(query, [customerId], (err, result) => {
+    if (err) {
+      console.error('Error occurred while executing query:', err);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).json({ message: 'Customer not found.' });
+    }
+
+    const customer = result[0];
+    return res.json(customer);
+  });
+});
+
+
+//update customer attributes
+app.post('/api/CustomerSettings', (req, res) => {
+  const customerId = req.session.customerId;
+
+  if (!customerId) {
+    return res.status(401).json({ message: 'Unauthorized.' });
+  }
+
+  const {
+    firstName,
+    lastName,
+    address,
+    email,
+    phoneNumber,
+    password,
+    confirmPassword,
+    customerPreferences,
+  } = req.body;
+
+  const updateValues = {};
+
+  if (firstName) updateValues.first_name = firstName;
+  if (lastName) updateValues.last_name = lastName;
+  if (address) updateValues.address = address;
+  if (email) updateValues.email = email;
+  if (phoneNumber) updateValues.phone_number = phoneNumber;
+  if (password) updateValues.password = password;
+  if (customerPreferences) updateValues.customer_preferences = customerPreferences;
+
+  if (Object.keys(updateValues).length === 0) {
+    return res.status(400).json({ message: 'No fields to update.' });
+  }
+
+  const checkDuplicateEmailPhoneQuery = `SELECT email, phone_number FROM customers WHERE customer_id != ?`;
+  dbConnection.query(checkDuplicateEmailPhoneQuery, [customerId], (err, rows) => {
+    if (err) {
+      console.error('Error occurred while executing query:', err);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    const existingEmails = rows.map((row) => row.email);
+    const existingPhoneNumbers = rows.map((row) => row.phone_number);
+
+    // Check for duplicates
+    if (email && existingEmails.includes(email)) {
+      return res.status(400).json({ message: 'Email already exists.' });
+    }
+
+    if (phoneNumber && existingPhoneNumbers.includes(phoneNumber)) {
+      return res.status(400).json({ message: 'Phone number already exists.' });
+    }
+
+    // Check if any fields have been updated
+    const checkIfFieldsUpdatedQuery = `SELECT * FROM customers WHERE customer_id = ?`;
+    dbConnection.query(checkIfFieldsUpdatedQuery, [customerId], (err, rows) => {
+      if (err) {
+        console.error('Error occurred while executing query:', err);
+        return res.status(500).json({ message: 'An error occurred while processing your request.' });
+      }
+
+      const currentCustomer = rows[0];
+
+      let fieldsUpdated = false;
+      for (const [key, value] of Object.entries(updateValues)) {
+        if (currentCustomer[key] !== value) {
+          fieldsUpdated = true;
+          break;
+        }
+      }
+
+      if (!fieldsUpdated) {
+        return res.json({ message: 'No fields updated.' });
+      }
+
+      // Update the data in the database
+      const query = 'UPDATE customers SET ? WHERE customer_id = ?';
+      dbConnection.query(query, [updateValues, customerId], (err, result) => {
+        if (err) {
+          console.error('Error occurred while executing query:', err);
+          return res.status(500).json({ message: 'An error occurred while processing your request.' });
+        }
+
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ message: 'User not found.' });
+        }
+
+        return res.json({ message: 'Settings updated successfully.' });
+      });
+    });
+  });
+});
+
+
 
 app.post('/api/restaurant/MenuImageUpload', (req, res) => {
   upload(req, res, (err) => {
@@ -231,6 +530,7 @@ app.get('/api/confirm-email/:token', async (req, res) => {
 
 
 
+
 app.get('/api/SellerLogin', (req, res) => {
   if (req.session.restaurantId) {
     res.send({loggedIn:true,userId:req.session.restaurantId})
@@ -255,13 +555,12 @@ app.post('/api/SellerSignup', (req, res) => {
   const phone = req.body.phone;
   const email = req.body.email;
   const password = req.body.password;
-  const category = req.body.category;
+  const restaurantDetails = req.body.restaurantDetails;
   const confirm_password = req.body.confirm_password;
 
-  if (!email || !password || !confirm_password || !name || !address || !phone || !category) {
+  if (!email || !password || !confirm_password || !name || !address || !phone || !restaurantDetails) {
     return res.status(400).json({ message: 'Please provide all required fields.' });
   }
-
   if (password !== confirm_password) {
     return res.status(400).json({ message: 'Passwords do not match.' });
   }
@@ -290,14 +589,14 @@ app.post('/api/SellerSignup', (req, res) => {
 
       const token = crypto.randomBytes(64).toString('hex');
 
-      const addUserQuery = 'INSERT INTO restaurants (restaurant_name, restaurant_category, restaurant_address, restaurant_email, restaurant_phone_number, restaurant_password, confirmation_token) VALUES (?, ?, ?, ?, ?, ?, ?)';
-      dbConnection.query(addUserQuery, [name, category, address, email, phone, password, token], (error) => {
+      const addUserQuery = 'INSERT INTO restaurants (restaurant_name, restaurant_details, restaurant_address, restaurant_email, restaurant_phone_number, restaurant_password, confirmation_token) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      dbConnection.query(addUserQuery, [name, restaurantDetails, address, email, phone, password, token], (error) => {
         if (error) {
           console.error('Error occurred while executing query:', error);
           return res.status(500).json({ message: 'An error occurred while processing your request.' });
         }
 
-        const confirmationLink = `http://ec2-52-90-146-52.compute-1.amazonaws.com/api/confirm-email/${token}`;
+        const confirmationLink = `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/confirm-email/${token}`;
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -335,21 +634,23 @@ app.post('/api/SellerSettings', (req, res) => {
     return res.status(401).json({ message: 'Unauthorized.' });
   }
 
-  const { 
-    restaurantName, 
-    address, 
-    phone, 
-    logoUrl, 
-    openingHours, 
-    deliveryFee, 
-    email, 
-    password, 
-    confirmPassword 
+  const {
+    restaurantName,
+    address,
+    phone,
+    logoUrl,
+    openingHours,
+    deliveryFee,
+    email,
+    password,
+    confirmPassword,
+    restaurantDetails,
   } = req.body;
 
   const updateValues = {};
 
   if (restaurantName) updateValues.restaurant_name = restaurantName;
+  if (restaurantDetails) updateValues.restaurant_details = restaurantDetails;
   if (address) updateValues.restaurant_address = address;
   if (phone) updateValues.restaurant_phone_number = phone;
   if (logoUrl) updateValues.restaurant_logo_url = logoUrl;
@@ -435,7 +736,7 @@ app.get('/api/RestaurantSettings', (req, res) => {
   const query = `SELECT 
       restaurant_id, 
       restaurant_name, 
-      restaurant_category, 
+      restaurant_details, 
       restaurant_address, 
       restaurant_phone_number, 
       restaurant_password, 
@@ -465,78 +766,6 @@ app.get('/api/RestaurantSettings', (req, res) => {
 
 
 
-
-
-
-app.post('/api/CustomerLogin', (req, res) => {
-    const email = req.body.email;
-    const password = req.body.password;
-
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Please provide both email and password.' });
-    }
-
-    const query = 'SELECT * FROM users WHERE clients = ? AND password = ?';
-    dbConnection.query(query, [email, password], (err, result) => {
-        if (err) throw err;
-
-        if (result.length === 0) {
-            return res.status(401).json({ message: 'Incorrect email or password.' });
-        }
-
-        return res.json({ message: 'Login successful.' });
-    });
-});
-
-
-
-app.post('/api/CustomerSignup', function(req, res) {
-    const first_name = req.body.fname;
-    const last_name = req.body.lname;
-    const address = req.body.address;
-    const phone_number = req.body.phone;
-    const email = req.body.email;
-    const password = req.body.password;
-    const confirm_password = req.body.confirm_password;
-  
-    if (!email || !password || !confirm_password) {
-      return res.status(400).json({'message': 'Please provide all required fields.'});
-    }
-  
-    if (password !== confirm_password) {
-      return res.status(400).json({'message': 'Passwords do not match.'});
-    }
-  
-    const dbConnection = mysql.createConnection({
-      host: 'ec2-52-90-146-52.compute-1.amazonaws.com',
-      user: 'chen',
-      password: 'Ck96963',
-      database: 'MealMatch'
-    });
-    
-
-
-    dbConnection.connect(function(err) {
-      if (err) throw err;
-      console.log('Connected!');
-      
-      const query = 'SELECT * FROM clients WHERE email = ?';
-      dbConnection.query(query, [email], function(error, result, fields) {
-        if (error) throw error;
-  
-        if (result.length > 0) {
-          return res.status(409).json({'message': 'Email address already exists.'});
-        }
-  
-        const insertQuery = 'INSERT INTO clients (first_name, last_name, address, email, phone_number, password) VALUES (?, ?, ?, ?, ?, ?)';
-        dbConnection.query(insertQuery, [first_name, last_name, address, email, phone_number, password], function(insertError, insertResult, insertFields) {
-          if (insertError) throw insertError;
-          console.log('1 record inserted');
-          return res.json({'message': 'Signup successful.'});
-        });
-      });
-    });
-  });
 
 
 
@@ -753,6 +982,80 @@ app.post('/api/restaurant/NewOrder', (req, res) => {
     });
   });
   
+
+  // Route to get restaurant_id of restaurants with at least one item in customer preferences
+app.get('/api/restaurants-by-preferences/:customerId', (req, res) => {
+  const customerId = req.params.customerId;
+  
+  const query = `
+    SELECT DISTINCT r.restaurant_id,r.restaurant_details,r.restaurant_logo_url,r.restaurant_name
+    FROM restaurants r
+    JOIN restaurants_menu rm ON r.restaurant_id = rm.restaurant_id
+    JOIN restaurant_menu_items rmi ON rm.menu_id = rmi.menu_id
+    JOIN customers c ON c.customer_id = ?
+    WHERE FIND_IN_SET(rmi.item_category, c.customer_preferences) > 0;
+  `;
+
+  dbConnection.query(query, [customerId], (err, result) => {
+    if (err) {
+      console.error('Error occurred while executing query:', err);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    return res.json(result);
+  });
+});
+
+// Route to get restaurant_id of restaurants with at least one item of a given category
+app.get('/api/restaurants-by-category/:category', (req, res) => {
+  const category = req.params.category;
+  
+  const query = `
+  SELECT DISTINCT r.restaurant_id,r.restaurant_details,r.restaurant_logo_url,r.restaurant_name
+  FROM restaurants r
+  JOIN restaurants_menu rm ON r.restaurant_id = rm.restaurant_id
+  JOIN restaurant_menu_items rmi ON rm.menu_id = rmi.menu_id
+  WHERE rmi.item_category = ?;
+  `;
+
+  dbConnection.query(query, [category], (err, result) => {
+    if (err) {
+      console.error('Error occurred while executing query:', err);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    return res.json(result);
+  });
+});
+
+
+// Endpoint to handle MealMatcher
+app.get('/api/MealMatcher/:customerId', (req, res) => {
+  const customerId = parseInt(req.params.customerId);
+
+  if (!customerId) {
+    return res.status(400).json({ message: 'Customer ID is required.' });
+  }
+
+  const query = `
+  SELECT r.restaurant_name,rmi.item_name, rmi.item_image, rmi.item_description,rmi.item_price
+  FROM restaurant_menu_items AS rmi
+  JOIN restaurants_menu AS rm ON rmi.menu_id = rm.menu_id
+  JOIN restaurants AS r ON rm.restaurant_id = r.restaurant_id
+  JOIN customers AS c ON FIND_IN_SET(rmi.item_category, REPLACE(c.customer_preferences, ' ', '')) > 0
+    WHERE c.customer_id = ?;
+  `;
+
+  dbConnection.query(query, [customerId], (err, result) => {
+    if (err) {
+      console.error('Error occurred while executing query:', err);
+      return res.status(500).json({ message: 'An error occurred while processing your request.' });
+    }
+
+    return res.json({ items: result });
+  });
+});
+
   server.listen(5000, () => {
     console.log(`Server listening at http://localhost:5000`);
   });

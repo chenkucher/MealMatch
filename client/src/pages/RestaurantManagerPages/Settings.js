@@ -14,7 +14,7 @@ function Settings(props) {
   const [deliveryFee, setDeliveryFee] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [category, setCategory] = useState('');
+  const [restaurantDetails, setRestaurantDetails] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -24,7 +24,7 @@ function Settings(props) {
 
   useEffect(() => {
     axios
-      .get('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/SellerLogin')
+      .get('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogin')
       .then((response) => {
         console.log(response);
         setLoggedIn(response.data.loggedIn);
@@ -54,45 +54,10 @@ function Settings(props) {
         setOpeningHours(data.opening_hours);
         setDeliveryFee(data.delivery_fee);
         setEmail(data.restaurant_email);
-        setCategory(data.restaurant_category);
+        setRestaurantDetails(data.restaurant_details); // Add this line
       })
       .catch((error) => console.error(error));
   }, []);
-
-  function handleSave() {
-    // Send updated data to the server
-    const data = {
-      restaurantName,
-      address,
-      phone,
-      logoUrl,
-      openingHours,
-      deliveryFee,
-      email,
-      password,
-      confirmPassword,
-    };
-
-    fetch('/api/SellerSettings', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        if (data.message === 'Email already exists.') {
-          setErrorMessage(data.message);
-        } else if (data.message === 'Phone number already exists.') {
-          setErrorMessage(data.message);
-        } else {
-          setErrorMessage('');
-        }
-      })
-      .catch((error) => console.error(error));
-  }
 
 
   function handleSave() {
@@ -118,6 +83,7 @@ function Settings(props) {
       email,
       password,
       confirmPassword,
+      restaurantDetails,
     };
   
     fetch('/api/SellerSettings', {
@@ -192,6 +158,14 @@ function Settings(props) {
                   />
                 </div>
                 <div>
+                  <label htmlFor="restaurant-details">Restaurant Details:</label>
+                  <textarea
+                    id="restaurant-details"
+                    value={restaurantDetails}
+                    onChange={(e) => setRestaurantDetails(e.target.value)}
+                  />
+                </div>
+                <div>
                   <label htmlFor="address">Address:</label>
                   <input
                     type="text"
@@ -236,15 +210,7 @@ function Settings(props) {
                     onChange={(e) => setDeliveryFee(e.target.value)}
                   />
                 </div>
-                <div>
-                  <label htmlFor="category">Category:</label>
-                  <input
-                    type="text"
-                    id="category"
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                  />
-                </div>
+          
               </form>
               {errorMessage && (
                 <div className={styles.error}>{errorMessage}</div>

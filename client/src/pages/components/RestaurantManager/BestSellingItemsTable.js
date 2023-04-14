@@ -7,7 +7,7 @@ function BestSellingItemsTable() {
 
   useEffect(() => {
     // Fetch data from the server
-    fetch('http://ec2-52-90-146-52.compute-1.amazonaws.com/api/best-selling-items')
+    fetch('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/best-selling-items')
       .then((response) => response.json())
       .then((data) => setItems(data))
       .catch((error) => console.error(error));
