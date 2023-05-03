@@ -12,7 +12,7 @@ function Login() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogin', { email, password }, { withCredentials: true });
+      const response = await axios.post('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerLogin', { email, password }, { withCredentials: true });
 
       if (response.data.message === 'Login successful.') {
         const restaurantId = response.data.restaurantId;
@@ -27,7 +27,7 @@ function Login() {
   };
 
   useEffect(() => {
-    axios.get('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogin').then((response) => {
+    axios.get('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerLogin').then((response) => {
       console.log(response);
     });
   });

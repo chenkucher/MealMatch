@@ -11,12 +11,20 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [itemQuantity, setItemQuantity] = useState(1);
   const { addToCart } = useContext(ShoppingCartContext);
+  const [selectedAdditionalItems, setSelectedAdditionalItems] = useState([]);
 
   const handleIngredientChange = (ingredient, price, checked) => {
     setSelectedIngredients((prevSelected) =>
       checked
         ? [...prevSelected, { name: ingredient, price }]
         : prevSelected.filter((ing) => ing.name !== ingredient),
+    );
+  };
+  const handleAdditionalItemChange = (additionalItem, price, checked) => {
+    setSelectedAdditionalItems((prevSelected) =>
+      checked
+        ? [...prevSelected, { name: additionalItem, price }]
+        : prevSelected.filter((item) => item.name !== additionalItem),
     );
   };
 
@@ -26,11 +34,13 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
       itemDescription: item.item_description,
       itemPrice: item.item_price,
       selectedIngredients,
+      selectedAdditionalItems, 
       itemQuantity,
     });
     onAddToOrder({
       ...item,
       selectedIngredients,
+      selectedAdditionalItems,
       itemQuantity,
     });
     onClose();
@@ -38,11 +48,11 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
   
   
 
-  const totalPrice =
+   const totalPrice =
     item.item_price * itemQuantity +
-    selectedIngredients.reduce((sum, ing) => sum + ing.price, 0) * itemQuantity;
+    selectedIngredients.reduce((sum, ing) => sum + ing.price, 0) * itemQuantity +
+    selectedAdditionalItems.reduce((sum, item) => sum + item.price, 0) * itemQuantity;
 
-  const hasOptionalIngredients = item.item_optional_ingredience && Object.keys(item.item_optional_ingredience).length > 0;
 
   return (
     <div className={styles.addToOrderCard}>
@@ -53,28 +63,7 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
         <p>Price: ${item.item_price}</p>
       </div>
       
-      {hasOptionalIngredients && (
-        <>
-        <div className={styles.middle}>
-          <h3>Optional Ingredients:</h3>
-            <ul>
-              {Object.entries(item.item_optional_ingredience).map(([ingredient, price]) => (
-                <li key={ingredient}>
-                  <label>
-                    <input
-                      type="checkbox"
-                      value={ingredient}
-                      onChange={(e) => handleIngredientChange(ingredient, price, e.target.checked)}
-                    />
-                    {ingredient} (+${price})
-                  </label>
-                </li>
-              ))}
-            </ul>
-        </div>
 
-        </>
-      )}
       <div className={styles.bottom}>
         <div>
           <label>
@@ -86,6 +75,31 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
               onChange={(e) => setItemQuantity(parseInt(e.target.value, 10))}
             />
           </label>
+          {Array.isArray(item.additionalProperties) && item.additionalProperties.length > 0 && (
+    <div className={styles.additionalItems}>
+      <h3>Additional Items:</h3>
+      <ul>
+        {item.additionalProperties.map((additionalItem) => (
+          <li key={additionalItem.name}>
+            <label>
+              <input
+                type="checkbox"
+                value={additionalItem.name}
+                onChange={(e) =>
+                  handleAdditionalItemChange(
+                    additionalItem.name,
+                    additionalItem.price,
+                    e.target.checked,
+                  )
+                }
+              />
+              {additionalItem.name} (+${additionalItem.price})
+            </label>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
         </div>
         <p>Total Price: ${totalPrice.toFixed(2)}</p>
         <div>
@@ -114,7 +128,7 @@ function CustomerMenuView(props) {
   const [showAddToOrderCard, setShowAddToOrderCard] = useState(false);
 
   useEffect(() => {
-    axios.get("http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
+    axios.get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
       console.log(response);
       setLoggedIn(response.data.loggedIn);
       if (response.data.loggedIn===false) {
@@ -135,14 +149,14 @@ function CustomerMenuView(props) {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/MenuGet/${restaurantId}`);
+        const response = await fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/MenuGet/${restaurantId}`);
         const data = await response.json();
         
         // Map the data to parse item_optional_ingredience
         const parsedData = data.map(item => {
           return {
             ...item,
-            item_optional_ingredience: item.item_optional_ingredience ? JSON.parse(item.item_optional_ingredience) : null
+            additionalItems: item.item_additional ? JSON.parse(item.item_additional) : null
           };
         });
   
@@ -229,19 +243,19 @@ function CustomerMenuView(props) {
         </section>
       </main>
       {showAddToOrderCard && (
-  <>
-    <div className={styles.backgroundOverlay} onClick={() => setShowAddToOrderCard(false)}></div>
-    <AddToOrderCard
-      item={selectedItem}
-      onAddToOrder={(orderItem) => {
-        // Add orderItem to the orders
-        console.log(orderItem);
-        setShowAddToOrderCard(false);
-      }}
-      onClose={() => setShowAddToOrderCard(false)}
-    />
-  </>
-)}
+        <>
+          <div className={styles.backgroundOverlay} onClick={() => setShowAddToOrderCard(false)}></div>
+          <AddToOrderCard
+            item={{ ...selectedItem, additionalProperties: selectedItem.additionalItems }}
+            onAddToOrder={(orderItem) => {
+              // Add orderItem to the orders
+              console.log(orderItem);
+              setShowAddToOrderCard(false);
+            }}
+            onClose={() => setShowAddToOrderCard(false)}
+          />
+        </>
+      )}
     </div>
     
   );

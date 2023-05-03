@@ -19,16 +19,16 @@ function AddToOrderCard({ item}) {
     };
   
     const handleAddToOrder = (orderItem) => {
-        addToCart({
-          ...item,
-          itemDescription: item.item_description,
-          itemPrice: item.item_price,
-          selectedIngredients,
-          itemQuantity,
-        });
-        showAlertMessage(`Added ${item.item_name} to the Order Cart!`);
-      };
-      
+      addToCart({
+        ...item,
+        itemDescription: item.item_description,
+        itemPrice: item.item_price,
+        selectedIngredients: item.selectedAdditionalItems, 
+        itemQuantity,
+      });
+      showAlertMessage(`Added ${item.item_name} to the Order Cart!`);
+    };
+    
     
     
   

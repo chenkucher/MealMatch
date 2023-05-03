@@ -14,7 +14,7 @@ function CustomerLogin(props) {
 
     try {
       const response = await axios.post(
-        'http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerLogin',
+        'http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin',
         { email, password },
         { withCredentials: true }
       );

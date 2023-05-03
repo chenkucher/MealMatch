@@ -30,7 +30,7 @@ function SellerSignupPage() {
   const handleResend = async () => {
     try {
       const response = await axios.post(
-        `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerResendEmail/${email}`
+        `http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerResendEmail/${email}`
       );
       if (response.data.message === 'Email sent') {
         const alertDiv = document.createElement('div');
@@ -86,7 +86,7 @@ function SellerSignupPage() {
         confirm_password: confirmPassword,
       };
 
-      const response = await axios.post('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerSignup', requestData, {
+      const response = await axios.post('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerSignup', requestData, {
         headers: {
           'Content-Type': 'application/json',
         },

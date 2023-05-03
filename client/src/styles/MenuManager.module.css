@@ -355,6 +355,40 @@ font-size: 0.9rem;
   position: absolute;
   top:0;
   right: -20px;
+  cursor: pointer;
+}
+.additionalPropertiesContainer {
+  margin-bottom: 10px;
+}
 
+.additionalPropertiesWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.additionalPropertiesInput {
+  margin-right: 10px;
+}
+
+.addButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.edit_form .additionalPropertiesContainer .additionalPropertiesWrapper  .deleteButton {
+  border: none;
+  cursor: pointer;
+  background-color:red;
+
+}
+.icon {
+  width: 20px;
+  height: 20px;
   cursor: pointer;
 }

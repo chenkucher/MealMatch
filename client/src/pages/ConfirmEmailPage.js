@@ -8,7 +8,7 @@ function ConfirmEmailPage() {
   useEffect(() => {
     const checkEmailConfirmation = async () => {
       try {
-        const response = await axios.get('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/check-email-confirmation', { withCredentials: true });
+        const response = await axios.get('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/check-email-confirmation', { withCredentials: true });
         const emailConfirmed = response.data.emailConfirmed;
         if (emailConfirmed) {
           setMessage('Thank you for confirming your email. You can now log in to your account.');

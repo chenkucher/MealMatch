@@ -11,7 +11,7 @@ function Orders(props) {
     const { restaurantId } = useParams();
     const navigate = useNavigate();
     useEffect(() => {
-      axios.get("http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogin").then((response) => {
+      axios.get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerLogin").then((response) => {
         console.log(response);
         setLoggedIn(response.data.loggedIn);
         if (response.data.loggedIn===false) {

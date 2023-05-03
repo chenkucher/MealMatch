@@ -21,18 +21,15 @@ header{
   gap:5%
 }
 .section_side{
-  /* border: solid; */
   position: flex;
   width: 20%;
   margin-left:5%
 
 }
 .section_middle{
-  /* border: solid; */
   height: 70%;
   width: auto;
   flex-direction: column;
-  /* justify-content: space-between; */
 
 }
 .restaurants_header{
@@ -45,7 +42,7 @@ footer{
 .categories {
   position: relative;
   display: flex;
-  overflow-x: hidden; /* Change from auto to hidden */
+  overflow-x: hidden;
   padding: 2%;
   gap: 1%;
   margin-bottom: 2%;
@@ -130,7 +127,6 @@ footer{
   margin-bottom: 0.5%;
   font-size: 1.25rem;
   max-height: 100px;
-  /* align-self: center; */
   padding: 2%;
 }
 
@@ -164,7 +160,6 @@ footer{
   right: 0;
 }
 
-/* Add this new style */
 .categories_wrapper {
   position: relative;
 }
