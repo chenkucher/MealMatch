@@ -21,7 +21,7 @@ function Sidebar(props) {
   const { restaurantId } = useParams();
   useEffect(() => {
     // Fetch data from the server
-    fetch(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurant/name/${restaurantId}`)
+    fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/name/${restaurantId}`)
     .then((response) => response.json())
     .then((data) => setName(data.name))
     .catch((error) => console.error(error));
@@ -30,7 +30,7 @@ function Sidebar(props) {
   
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/SellerLogout', {
+      const response = await fetch('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerLogout', {
         method: 'GET',
         credentials: 'include'
       });

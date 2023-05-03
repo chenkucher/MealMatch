@@ -1,0 +1,29 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .table {
+    margin-top: 1%;
+    width: 100%;
+    /* border-collapse: separate; */
+    /* border-spacing: 1em 0.5em; */
+    height: 60%;
+  }
+  
+  .table th,
+  .table td {
+    width: auto;
+    text-align: center;
+    border: 1px solid #ccc;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+    padding: 8px 16px; 
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+  }
+  

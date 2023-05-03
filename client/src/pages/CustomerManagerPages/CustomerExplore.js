@@ -28,7 +28,7 @@ function CustomerExplore(props) {
   const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    axios.get("http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
+    axios.get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
       console.log(response);
       setLoggedIn(response.data.loggedIn);
       if (response.data.loggedIn===false) {
@@ -42,7 +42,7 @@ function CustomerExplore(props) {
       }
     });
 
-    axios.get(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurants-by-preferences/${customerId}`).then((response) => {
+    axios.get(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurants-by-preferences/${customerId}`).then((response) => {
       setRestaurants(response.data);
     });
 
@@ -93,7 +93,7 @@ function CustomerExplore(props) {
               <div className={styles.restaurant_box} key={restaurant.restaurant_id}>
                 <img src={restaurant.restaurant_logo_url} alt={restaurant.restaurant_name} />
                 <h3>{restaurant.restaurant_name}</h3>
-                <p>restaurant.details</p>
+                <p>{restaurant.restaurant_details}</p>
               </div>
             ))}
           </div>

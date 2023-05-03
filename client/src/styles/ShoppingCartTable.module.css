@@ -1,0 +1,42 @@
+.table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .ingredientsList {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .modifyButton {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  
+  .modifyButton:hover {
+    background-color: #45a049;
+  }
+  
+  .totalPriceCell {
+    font-weight: bold;
+    text-align: right;
+  }
+  

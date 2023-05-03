@@ -2,7 +2,7 @@ import React from "react";
 import AddToOrderCard from "../CustomerManager/AddToOrderCard";
 import styles from "../../../styles/Matched.module.css";
 
-function Matched({ matchedItems, onClose }) {
+function Matched({  matchedItems = [], onClose }) {
   return (
     <div className={styles.matchedOverlay}>
       <div className={styles.matchedContainer}>

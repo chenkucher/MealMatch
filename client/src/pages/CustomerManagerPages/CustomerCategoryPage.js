@@ -14,7 +14,7 @@ function CustomerCategoryPage(props) {
 
   useEffect(() => {
     axios
-      .get("http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerLogin")
+      .get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin")
       .then((response) => {
         console.log(response);
         setLoggedIn(response.data.loggedIn);
@@ -30,7 +30,7 @@ function CustomerCategoryPage(props) {
   useEffect(() => {
     if (loggedIn) {
       axios
-        .get(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/restaurants-by-category/${category}`)
+        .get(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurants-by-category/${category}`)
         .then((response) => {
           setRestaurants(response.data);
         });
@@ -49,6 +49,7 @@ function CustomerCategoryPage(props) {
         </section>
 
         <section className={styles.section_middle}>
+          <h1>Resutaurants that has {category} food:</h1>
           <div className={styles.restaurantGrid}>
             {restaurants.map((restaurant) => (
               <Link

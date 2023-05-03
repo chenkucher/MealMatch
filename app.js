@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Enable CORS for all routes
 const corsOptions = {
-  origin: 'http://ec2-50-17-11-178.compute-1.amazonaws.com:3000',
+  origin: 'http://ec2-35-169-139-56.compute-1.amazonaws.com:3000',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 };
@@ -40,7 +40,7 @@ app.use(session({
 
 // Create a MySQL database connection
 const dbConnection = mysql.createConnection({
-  host: 'ec2-50-17-11-178.compute-1.amazonaws.com',
+  host: 'ec2-35-169-139-56.compute-1.amazonaws.com',
   user: 'meal',
   password: 'Ck96963',
   database: 'MealMatch'
@@ -61,7 +61,7 @@ const server = http.createServer(app);
 // Create a Socket.IO instance and attach it to the HTTP server
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://ec2-50-17-11-178.compute-1.amazonaws.com",
+    origin: "http://ec2-35-169-139-56.compute-1.amazonaws.com",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["my-custom-header"],
     credentials: true
@@ -149,7 +149,7 @@ dbConnection.query(checkEmailQuery, [email], (error, result) => {
         return res.status(500).json({ message: 'An error occurred while processing your request.' });
       }
 
-      const confirmationLink = `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/confirm-email-customer/${token}`;
+      const confirmationLink = `http://ec2-35-169-139-56.compute-1.amazonaws.com/api/confirm-email-customer/${token}`;
       const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -396,6 +396,27 @@ app.post('/api/CustomerSettings', (req, res) => {
 
 
 
+
+// Define a route for getting a restaurant's orders
+app.get('/api/CustomerOrders/:customerId', (req, res) => {
+  const { customerId } = req.params;
+  const query = `SELECT order_id, order_name, order_price, order_category, order_timestamp, order_details,order_status FROM restaurants_orders WHERE customer_id = ${customerId}`;
+  dbConnection.query(query, (err, result) => {
+    if (err) throw err;
+
+    // Convert the timestamp to local timezone
+    const localResult = result.map(row => {
+      const timestamp = moment(row.order_timestamp).tz('Asia/Jerusalem').format('YYYY-MM-DD HH:mm:ss');
+      return {
+        ...row,
+        order_timestamp: timestamp
+      };
+    });
+
+    return res.json(localResult);
+  });
+});
+
 app.post('/api/restaurant/MenuImageUpload', (req, res) => {
   upload(req, res, (err) => {
     if (err) {
@@ -596,7 +617,7 @@ app.post('/api/SellerSignup', (req, res) => {
           return res.status(500).json({ message: 'An error occurred while processing your request.' });
         }
 
-        const confirmationLink = `http://ec2-50-17-11-178.compute-1.amazonaws.com/api/confirm-email/${token}`;
+        const confirmationLink = `http://ec2-35-169-139-56.compute-1.amazonaws.com/api/confirm-email/${token}`;
         const transporter = nodemailer.createTransport({
           service: 'gmail',
           auth: {
@@ -799,7 +820,7 @@ app.delete('/api/restaurant/MenuItemDelete/:itemId', (req, res) => {
 // Create a new item in the menu
 app.post('/api/restaurant/MenuAdd/:restaurantId', (req, res) => {
   const restaurantId = req.params.restaurantId;
-  const { item_name, item_description, item_price, item_status, item_category, item_image } = req.body;
+  const { item_name, item_description, item_price, item_status, item_category, item_image, item_additional } = req.body;
 
   // Get the menu_id from the restaurants_menu table
   const getMenuIdSql = 'SELECT menu_id FROM restaurants_menu WHERE restaurant_id = ?';
@@ -811,8 +832,8 @@ app.post('/api/restaurant/MenuAdd/:restaurantId', (req, res) => {
       const menuId = results[0].menu_id;
 
       // Insert the new item into the database
-      const insertItemSql = 'INSERT INTO `restaurant_menu_items` (menu_id, item_name, item_description, item_price, item_status, item_category, item_image) VALUES (?, ?, ?, ?, ?, ?, ?)';
-      dbConnection.query(insertItemSql, [menuId, item_name, item_description, item_price, item_status, item_category, item_image], (error, results, fields) => {
+      const insertItemSql = 'INSERT INTO `restaurant_menu_items` (menu_id, item_name, item_description, item_price, item_status, item_category, item_image, item_additional) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+      dbConnection.query(insertItemSql, [menuId, item_name, item_description, item_price, item_status, item_category, item_image, JSON.stringify(item_additional)], (error, results, fields) => {
         if (error) {
           console.error('Error creating menu item:', error);
           res.status(500).send('Error creating menu item');
@@ -825,6 +846,30 @@ app.post('/api/restaurant/MenuAdd/:restaurantId', (req, res) => {
     }
   });
 });
+
+
+
+// Update an existing item in the menu
+app.put('/api/restaurant/MenuSet/:id', (req, res) => {
+  const itemId = req.params.id;
+  const { item_name, item_description, item_price, item_status, item_category, item_image, item_additional } = req.body;
+
+  // Update the menu item in the database
+  const sql = 'UPDATE `restaurant_menu_items` SET item_name = ?, item_description = ?, item_price = ?, item_status = ?, item_category = ?, item_image = ?, item_additional = ? WHERE item_id = ?';
+  dbConnection.query(sql, [item_name, item_description, item_price, item_status, item_category, item_image, JSON.stringify(item_additional), itemId], (error, results, fields) => {
+
+    if (error) {
+      console.error('Error updating menu item:', error);
+      res.status(500).send('Error updating menu item');
+    } else {
+      io.emit('menu-item-added', results);
+      console.log(`Menu item ${itemId} updated successfully`);
+      return res.json({ message: 'Menu item updated successfully.'});
+    }
+  });
+});
+
+
 //update image as a part of MenuAdd
 app.put('/api/restaurant/ImageSet/:itemId', (req, res) => {
   const newItemId = req.params.itemId;
@@ -845,25 +890,7 @@ app.put('/api/restaurant/ImageSet/:itemId', (req, res) => {
 
 
 
-// Update an existing item in the menu
-app.put('/api/restaurant/MenuSet/:id', (req, res) => {
-  const itemId = req.params.id;
-  const { item_name, item_description, item_price, item_status, item_category, item_image } = req.body;
 
-  // Update the menu item in the database
-  const sql = 'UPDATE `restaurant_menu_items` SET item_name = ?, item_description = ?, item_price = ?, item_status = ?, item_category = ? , item_image = ? WHERE item_id = ?';
-  dbConnection.query(sql, [item_name, item_description, item_price, item_status, item_category ,item_image, itemId], (error, results, fields) => {
-    if (error) {
-      console.error('Error updating menu item:', error);
-      res.status(500).send('Error updating menu item');
-    } else {
-      io.emit('menu-item-added', results);
-      console.log(`Menu item ${itemId} updated successfully`);
-      return res.json({ message: 'Menu item updated successfully.'});
-      // res.status(200).send('Menu item updated successfully');
-    }
-  });
-});
 
 
 
@@ -875,7 +902,7 @@ app.get('/api/restaurant/MenuGet/:restaurantId', (req, res) => {
   
   const query = `     
   SELECT rmi.item_id,rmi.menu_id, rmi.item_name, rmi.item_description, rmi.item_price, 
-  rmi.item_category, rmi.item_status, rmi.item_image
+  rmi.item_category, rmi.item_status, rmi.item_image,rmi.item_additional
   FROM 
     restaurants_menu AS rm
   INNER JOIN 

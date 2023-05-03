@@ -7,7 +7,7 @@ import { BiFoodMenu} from "react-icons/bi";
 import { FiSettings} from "react-icons/fi";
 import { MdFoodBank} from "react-icons/md";
 import { CgLogOut} from "react-icons/cg";
-import { AiFillDashboard,} from "react-icons/ai";
+import { AiFillDashboard} from "react-icons/ai";
 
 
 
@@ -21,7 +21,7 @@ function Sidebar(props) {
 
   useEffect(() => {
     // Fetch data from the server
-    fetch(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerSettings`)
+    fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerSettings`)
       .then((response) => response.json())
       .then((data) => {
         const name = `${data.first_name}`;
@@ -34,7 +34,7 @@ function Sidebar(props) {
   
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerLogout', {
+      const response = await fetch('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogout', {
         method: 'GET',
         credentials: 'include'
       });
@@ -70,7 +70,7 @@ function Sidebar(props) {
 
             <li className={styles.nav_line}>
                 <MdFoodBank className={styles.nav_icon} />
-                <Link to={`/MyOrders/${customerId}`} className={styles.nav_link}>My Orders</Link>
+                <Link to={`/CustomerOrders/${customerId}`} className={styles.nav_link}>My Orders</Link>
             </li>
 
             <li className={styles.nav_line}>

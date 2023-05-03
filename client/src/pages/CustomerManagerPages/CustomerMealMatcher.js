@@ -17,7 +17,7 @@ function CustomerMealMatcher(props) {
   const [currentX, setCurrentX] = useState(0);
 
   useEffect(() => {
-    axios.get("http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
+    axios.get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
       console.log(response);
       setLoggedIn(response.data.loggedIn);
       if (response.data.loggedIn===false) {
@@ -34,7 +34,7 @@ function CustomerMealMatcher(props) {
   }, []);
 
   useEffect(() => {
-    axios.get(`http://ec2-50-17-11-178.compute-1.amazonaws.com/api/MealMatcher/${customerId}`).then((response) => {
+    axios.get(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/MealMatcher/${customerId}`).then((response) => {
       console.log(response);
       setRestaurantItems(response.data.items);
     });

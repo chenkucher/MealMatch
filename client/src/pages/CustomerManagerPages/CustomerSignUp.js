@@ -19,7 +19,7 @@ function CustomerSignUp() {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://ec2-50-17-11-178.compute-1.amazonaws.com/api/CustomerSignup', {first_name,last_name,address,phone, email, password, confirm_password: confirmPassword });
+      const response = await axios.post('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerSignup', {first_name,last_name,address,phone, email, password, confirm_password: confirmPassword });
       console.log(response.data.message);
       if (response.data.message === 'Signup successful. Please check your email for a confirmation link.') {
         setIsSubmitted(true);
