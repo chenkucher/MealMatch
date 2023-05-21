@@ -22,6 +22,7 @@ import CustomerOrders from '../pages/CustomerManagerPages/CustomerOrders'
 import CustomerMenuView from '../pages/CustomerManagerPages/CustomerMenuView'
 import CustomerCategoryPage from '../pages/CustomerManagerPages/CustomerCategoryPage'
 import CustomerMealMatcher from '../pages/CustomerManagerPages/CustomerMealMatcher'
+import CustomerCheckOut from '../pages/CustomerManagerPages/CustomerCheckOut'
 
 import Home from './Home';
 
@@ -51,6 +52,8 @@ function Routers(props) {
                  <Route path="/CustomerMenuView/:customerId/:restaurantId" element={<CustomerMenuView/>} />
                  <Route path="/CustomerCategoryPage/:category" element={<CustomerCategoryPage/>} />
                  <Route path="/CustomerMealMatcher/:customerId" element={<CustomerMealMatcher/>} />
+                 <Route path="/CustomerCheckOut/:customerId" element={<CustomerCheckOut/>} />
+
                  
              </Routes>
         </Router>

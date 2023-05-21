@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../../styles/CustomerPreferences.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
-const categories = ['Italian', 'Mexican', 'Chinese', 'Indian', 'Japanese', 'Thai', 'Mediterranean', 'American'];
+const categories = ['Italian', 'Mexican', 'Dessert', 'Street-food', 'Kosher', 'Vegan', 'Hamburger', 'Sandwich','Asian','Sushi'];
 
 const CustomerPreferences = () => {
     const { customerId } = useParams();
@@ -42,26 +42,29 @@ const CustomerPreferences = () => {
             }
         };
   
-    return (
-      <div className={styles.preferencesContainer}>
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className={`${styles.categoryCircle} ${selectedCategories.includes(category) ? styles.selected : ''}`}
-            style={{
-              left: `${Math.random() * 80}%`,
-              top: `${Math.random() * 80}%`,
-            }}
-            onClick={() => toggleCategory(category)}
-          >
-            {category}
+        return (
+          <div className={styles.preferencesContainer}>
+            <div className={styles.preferences_popup}>
+              <h3>Select Your Favorite Categories</h3>
+              <div className={styles.categories}>
+                {categories.map((category) => (
+                  <div
+                    key={category}
+                    className={`${styles.circle} ${
+                      selectedCategories.includes(category) ? styles.selected : ""
+                    }`}
+                    onClick={() => toggleCategory(category)}
+                  >
+                    {category}
+                  </div>
+                ))}
+              </div>
+              <button className={styles.submitBtn} onClick={submitPreferences}>
+                Submit Preferences
+              </button>
+            </div>
           </div>
-        ))}
-        <button className={styles.submitBtn} onClick={submitPreferences}>
-          Submit Preferences
-        </button>
-      </div>
-    );
-  };
-  
-  export default CustomerPreferences;
+        );
+      };
+      
+      export default CustomerPreferences;

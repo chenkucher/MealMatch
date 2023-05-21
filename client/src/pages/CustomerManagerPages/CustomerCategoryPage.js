@@ -76,6 +76,7 @@ function CustomerCategoryPage(props) {
           </div>
         </section>
       </main>
+      
     </div>
   );
 }

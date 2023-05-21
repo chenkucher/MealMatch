@@ -82,3 +82,101 @@
     text-align: center;
     vertical-align: middle;
   }
+
+  .button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+  }
+  
+  .button:hover {
+    background-color: white;
+    color: black;
+  }
+  
+  .modal {
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+  
+  }
+  
+  .modalContent {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  
+  .closeButton {
+    align-self: flex-end;
+    margin-top: 20px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #888;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .closeButton:hover {
+    background-color: #aaa;
+  }
+  
+  .closeButton:hover,
+  .closeButton:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .detailsTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .detailsTable th, .detailsTable td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .additionalItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .detailsTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .detailsTable th, .detailsTable td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  .additionalItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  

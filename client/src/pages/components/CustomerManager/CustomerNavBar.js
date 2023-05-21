@@ -7,6 +7,8 @@ import styles from '../../../styles/NavBar.module.css';
 
 function NavBar(props) {
   const isLoggedIn = props.loggedIn;
+  // const customerId = props.customerId;
+  // console.log(customerId);
   const [showShoppingCart, setShowShoppingCart] = useState(false);
   const [showMatched, setShowMatched] = useState(false);
   const matchedItems = props.matchedItems || [];
@@ -58,7 +60,7 @@ function NavBar(props) {
         {isLoggedIn ? <button onClick={toggleShoppingCart}>Order Cart</button> : null}
       </div>
       {showShoppingCart && (
-      <CustomerShoppingCart onClose={toggleShoppingCart} />
+      <CustomerShoppingCart onClose={toggleShoppingCart} customerId={50}/>
       )}
       {showMatched && (
         <Matched onClose={toggleMatched} matchedItems={props.matchedItems} />

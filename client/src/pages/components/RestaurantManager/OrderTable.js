@@ -1,12 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import styles from '../../../styles/OrderTable.module.css';
 
 function OrderTable(props) {
   const [items, setItems] = useState([]);
-  const [selectedItem, setSelectedItem] = useState(null);
   const { restaurantId } = useParams();
+  const [currentItem, setCurrentItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
+
+  const handleOpenModal = (item) => {
+    const parsedDetails = JSON.parse(item.order_details);
+    setCurrentItem({...item, order_details: parsedDetails});
+  };
+
+  const handleCloseModal = () => {
+    setCurrentItem(null);
+  };
 
   const handleSelectItem = (itemId) => {
     setSelectedItem((prevItem) => (prevItem === itemId ? null : itemId));
@@ -21,7 +31,7 @@ function OrderTable(props) {
     setSelectedItem(null);
 
     // Send an update to the server
-   // Update the order status in the database
+    // Update the order status in the database
     fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/Orders/${selectedItem}`, {
       method: 'PUT',
       headers: {
@@ -32,7 +42,6 @@ function OrderTable(props) {
       .then(res => res.json())
       .then(data => console.log(data))
       .catch(err => console.error(err));
-
   };
 
   useEffect(() => {
@@ -53,59 +62,100 @@ function OrderTable(props) {
   }, [restaurantId]);
 
   return (
-    <div>
+    <div className={styles.container}>
       <h1>Orders Management</h1>
       <table className={styles.table}>
         <thead>
           <tr>
             <th>ID</th>
             <th>Time</th>
-            <th>Name</th>
+            <th>Item</th>
             <th>Details</th>
             <th>Price</th>
             <th>Status</th>
+            <th>Modify Status</th>
           </tr>
         </thead>
         <tbody>
-          {items.map((item) => (
-            <tr key={item.order_id}>
-              <td>{item.order_id}</td>
-              <td>{item.order_timestamp}</td>
-              <td>{item.order_name}</td>
-              <td>{item.order_details}</td>
-              <td>{item.order_price}</td>
-              {/* <td>{item.order_status}</td> */}
-              <td>
-                {selectedItem === item.order_id ? (
-                  <div className={styles.dropdown_menu}>
-                    <button className={styles.dropdown_item} onClick={() => handleUpdateStatus('Pending')}>
-                      Pending
-                    </button>
-                    <button className={styles.dropdown_item} onClick={() => handleUpdateStatus('In Progress')}>
-                      In Progress
-                    </button>
-                    <button className={styles.dropdown_item} onClick={() => handleUpdateStatus('Delivered')}>
-                      Delivered
-                    </button>
-                  </div>
-                ) : (
-                  <div
-                    className={item.order_status === 'Delivered' ? styles.status_complete : styles.status}
-                    onClick={() => handleSelectItem(item.order_id)}
-                  >
-                    {item.order_status}
-                  </div>
-                )}
-              </td>
-              <td>
-                <button className={styles.modify_button} onClick={() => handleSelectItem(item.order_id)}>
-                  Modify Status
-                </button>
-              </td>
-            </tr>
-          ))}
+          {items.map((item) => {
+            const orderDetails = JSON.parse(item.order_details);
+            const itemNames = orderDetails.map(detail => detail.item_name).join(', ');
+
+            return (
+              <tr key={item.order_id}>
+                <td>{item.order_id}</td>
+                <td>{item.order_timestamp}</td>
+                <td>{itemNames}</td>
+                <td>
+                  <button className={styles.button} onClick={() => handleOpenModal(item)}>View Details</button>
+                </td>
+                <td>{item.order_price}$</td>
+                <td>
+                  {selectedItem === item.order_id ? (
+                    <div className={styles.dropdown_menu}>
+                      <button className={styles.dropdown_item} onClick={() => handleUpdateStatus('Pending')}>
+                        Pending
+                      </button>
+                      <button className={styles.dropdown_item} onClick={() => handleUpdateStatus('In Progress')}>
+                        In Progress
+                      </button>
+                      <button className={styles.dropdown_item} onClick={() => handleUpdateStatus('Delivered')}>
+                        Delivered
+                      </button>
+                    </div>
+                  ) : (
+                    <div
+                      className={item.order_status === 'Delivered' ? styles.status_complete : styles.status}
+                      onClick={() => handleSelectItem(item.order_id)}
+                    >
+                      {item.order_status}
+                    </div>
+                  )}
+                </td>
+                <td>
+                  <button className={styles.modify_button} onClick={() => handleSelectItem(item.order_id)}>
+                    Modify Status
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
+      {currentItem && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>Order Details</h2>
+            <table className={styles.detailsTable}>
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Item Quantity</th>
+                  <th>Item Price</th>
+                  <th>Additional Items</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentItem.order_details.map((detail, index) => (
+                  <tr key={index}>
+                    <td>{detail.item_name}</td>
+                    <td>{detail.itemQuantity}</td>
+                    <td>{detail.itemPrice}$</td>
+                    <td>
+                      {detail.selectedAdditionalItems.map((additionalItem, aiIndex) => (
+                        <div key={aiIndex} className={styles.additionalItem}>
+                          {additionalItem.name} : {additionalItem.price}$
+                        </div>
+                      ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <button className={styles.closeButton} onClick={handleCloseModal}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ import styles from '../../../styles/StatisticsComponents.module.css';
 function LastOrdersTable() {
   const [orders, setOrders] = useState([]);
   const { restaurantId } = useParams();
+  const [currentOrder, setCurrentOrder] = useState(null);
 
   useEffect(() => {
     const socket = socketIOClient('http://ec2-35-169-139-56.compute-1.amazonaws.com:5000');
@@ -24,21 +25,22 @@ function LastOrdersTable() {
       .then((data) => setOrders(data));
   }, [restaurantId]);
 
-  useEffect(() => {
-    fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/Orders/${restaurantId}`)
-      .then((res) => res.json())
-      .then((data) => setOrders(data));
-  }, [orders]);
+  const handleOpenModal = (order) => {
+    setCurrentOrder(order);
+  };
+
+  const handleCloseModal = () => {
+    setCurrentOrder(null);
+  };
 
   return (
     <div className={styles.last_orders_table}>
-      {/* <h2>Last Orders</h2> */}
+      <h2>Last Orders</h2>
       <table>
         <thead>
           <tr>
             <th>ID</th>
             <th>Timestamp</th>
-            <th>Name</th>
             <th>Details</th>
             <th>Price</th>
           </tr>
@@ -48,13 +50,53 @@ function LastOrdersTable() {
             <tr key={order.id}>
               <td>{order.order_id}</td>
               <td>{order.order_timestamp}</td>
-              <td>{order.order_name}</td>
-              <td>{order.order_details}</td>
-              <td>{order.order_price}</td>
+              <td>
+                <button className={styles.button} onClick={() => handleOpenModal(order)}>View Details</button>
+              </td>
+              <td>{order.order_price}$</td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {currentOrder && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <h2>Order Details</h2>
+              <table className={styles.detailsTable}>
+                <thead>
+                  <tr>
+                    <th>Item Name</th>
+                    <th>Item Quantity</th>
+                    <th>Item Price</th>
+                    <th>Additional Items</th>
+
+                  </tr>
+                </thead>
+                <tbody>
+                  {JSON.parse(currentOrder.order_details).map((detail, index) => (
+                    <tr key={index}>
+                      <td>{detail.item_name}</td>
+                      <td>{detail.itemQuantity}</td>
+                      <td>{detail.itemPrice}$</td>
+                      <td>
+                        {detail.selectedAdditionalItems.map((additionalItem, aiIndex) => (
+                          <div key={aiIndex} className={styles.additionalItem}>
+                            {additionalItem.name} : {additionalItem.price}$
+                          </div>
+                        ))}
+                      </td>
+
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button className={styles.closeButton} onClick={handleCloseModal}>Close</button>
+            </div>
+          </div>
+        )}
+
+
     </div>
   );
 }

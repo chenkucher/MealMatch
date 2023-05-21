@@ -3,12 +3,14 @@ import ShoppingCartContext from '../../components/CustomerManager/ShoppingCartCo
 import ModifyItemModal from '../../components/CustomerManager/ModifyItemModal';
 import styles from '../../../styles/ShoppingCart.module.css';
 import tableStyles from '../../../styles/ShoppingCartTable.module.css';
+import { useNavigate } from 'react-router-dom';
 
-
-function CustomerShoppingCart({ onClose }) {
+function CustomerShoppingCart({ onClose, customerId }) {
+  console.log(customerId);
   const { cartItems, removeFromCart, updateCartItem } = useContext(ShoppingCartContext);
   const [showModifyModal, setShowModifyModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const navigate = useNavigate();
 
   const totalPrice = cartItems.reduce(
     (sum, item) => {
@@ -16,11 +18,20 @@ function CustomerShoppingCart({ onClose }) {
         (total, ingredient) => total + parseFloat(ingredient.price),
         0
       );
-      return sum + parseFloat(item.itemQuantity * (parseFloat(item.itemPrice) + parseFloat(ingredientCost)));
+      const additionalItemCost = (item.selectedAdditionalItems || []).reduce(
+        (total, additionalItem) => total + parseFloat(additionalItem.price),
+        0
+      );
+      return (
+        sum +
+        parseFloat(
+          item.itemQuantity *
+            (parseFloat(item.itemPrice) + parseFloat(ingredientCost) + parseFloat(additionalItemCost))
+        )
+      );
     },
     0
   );
-  
 
   const handleModifyItem = (item) => {
     console.log(item);
@@ -32,6 +43,7 @@ function CustomerShoppingCart({ onClose }) {
     setSelectedItem(null);
     setShowModifyModal(false);
   };
+
   console.log("Cart items:", cartItems);
   return (
     <>
@@ -46,7 +58,7 @@ function CustomerShoppingCart({ onClose }) {
               <tr>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Ingredients</th>
+                <th>Selected Additional Items</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Action</th>
@@ -59,38 +71,43 @@ function CustomerShoppingCart({ onClose }) {
                   <td>{item.itemDescription}</td>
                   <td>
                     <ul className={tableStyles.ingredientsList}>
-                      {item.selectedAdditionalItems.map((ingredient, index) => (
-                        <li key={index}>
-                          {ingredient.name} (+${ingredient.price})
-                        </li>
-                      ))}
+                      {item.selectedAdditionalItems &&
+                        item.selectedAdditionalItems.map((ingredient, index) => (
+                          <li key={index}>
+                            {ingredient.name} (+${ingredient.price})
+                          </li>
+                        ))}
                     </ul>
                   </td>
                   <td>${(item.itemPrice * item.itemQuantity).toFixed(2)}</td>
                   <td>{item.itemQuantity}</td>
                   <td>
-                    <button className={tableStyles.modifyButton} onClick={() => handleModifyItem(item)}>
-                      Modify
-                    </button>
-                    {selectedItem === item && (
-                      <ModifyItemModal
-                        item={selectedItem}
-                        onClose={handleCloseModifyModal}
-                        removeFromCart={removeFromCart}
-                        updateCartItem={updateCartItem}
-                      />
-                    )}
+                    <div className={tableStyles.actionContainer}>
+                      <button className={tableStyles.modifyButton} onClick={() => handleModifyItem(item)}>
+                        Modify
+                      </button>
+                      {selectedItem === item && (
+                        <ModifyItemModal
+                          item={selectedItem}
+                          onClose={handleCloseModifyModal}
+                          removeFromCart={removeFromCart}
+                          updateCartItem={updateCartItem}
+                        />
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
-
-
-                <p className={tableStyles.totalPriceCell}>Total Price: ${totalPrice.toFixed(2)}</p>
-
+              <tr>
+                <td colSpan="4" className={tableStyles.totalPriceCell}>
+                  Total Price: ${totalPrice.toFixed(2)}
+                </td>
+              </tr>
             </tbody>
           </table>
         )}
         <button onClick={onClose}>Close</button>
+        <button onClick={() => navigate(`/CustomerCheckOut/${customerId}`)}>Checkout</button>
       </div>
     </>
   );

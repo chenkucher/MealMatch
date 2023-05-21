@@ -394,13 +394,38 @@ app.post('/api/CustomerSettings', (req, res) => {
   });
 });
 
+// a route for entering a orders to restaurant
+
+app.post('/api/restaurant/NewOrder', (req, res) => {
+  // Extracting the necessary data from the request body
+  const { order_price, order_details, restaurant_id, customer_id} = req.body;
+
+  // Creating the query to insert the order data into the database
+  const query = `INSERT INTO restaurants_orders (order_price, order_details, restaurant_id, customer_id) VALUES (?, ?, ?, ?)`;
+
+  // Executing the query and emitting a new order event with Socket.IO
+  dbConnection.query(query, [ order_price, order_details, restaurant_id, customer_id], (err, result) => {
+    if (err) throw err;
+
+    dbConnection.query('SELECT LAST_INSERT_ID() as order_id', (err, result) => {
+      if (err) throw err;
+
+      const orderId = result[0].order_id;
+
+      io.emit('newOrder', { ...result, order_id: orderId });
+
+      // Returning a success response
+      return res.json({ message: 'Order Added!', order_id: orderId });
+    });
+  });
+});
 
 
 
-// Define a route for getting a restaurant's orders
+// a route for getting a restaurant's orders
 app.get('/api/CustomerOrders/:customerId', (req, res) => {
   const { customerId } = req.params;
-  const query = `SELECT order_id, order_name, order_price, order_category, order_timestamp, order_details,order_status FROM restaurants_orders WHERE customer_id = ${customerId}`;
+  const query = `SELECT order_id, order_price, order_timestamp, order_details,order_status FROM restaurants_orders WHERE customer_id = ${customerId}`;
   dbConnection.query(query, (err, result) => {
     if (err) throw err;
 
@@ -932,10 +957,12 @@ app.put('/api/restaurant/Orders/:orderId', (req, res) => {
   });
 });
 
-// Define a route for getting a restaurant's orders
+
+
+//route for getting a restaurant's orders
 app.get('/api/restaurant/Orders/:restaurantId', (req, res) => {
   const { restaurantId } = req.params;
-  const query = `SELECT order_id, order_name, order_price, order_category, order_timestamp, order_details,order_status FROM restaurants_orders WHERE restaurant_id = ${restaurantId}`;
+  const query = `SELECT order_id,  order_price, order_timestamp, order_details,order_status FROM restaurants_orders WHERE restaurant_id = ${restaurantId}`;
   dbConnection.query(query, (err, result) => {
     if (err) throw err;
 
@@ -952,10 +979,10 @@ app.get('/api/restaurant/Orders/:restaurantId', (req, res) => {
   });
 });
 
-// Define a route for getting a restaurant's orders within the next 3 hours
+// route for getting a restaurant's orders within the next 3 hours
 app.get('/api/restaurant/Orders/next3hours/:restaurantId', (req, res) => {
   const { restaurantId } = req.params;
-  const query = `SELECT order_id, order_name, order_price, order_category, order_timestamp, order_details FROM restaurants_orders WHERE restaurant_id = ${restaurantId} AND order_timestamp BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 HOUR)`;
+  const query = `SELECT order_id, order_price, order_timestamp, order_details FROM restaurants_orders WHERE restaurant_id = ${restaurantId} AND order_timestamp BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 3 HOUR)`;
   dbConnection.query(query, (err, result) => {
     if (err) throw err;
 
@@ -973,20 +1000,6 @@ app.get('/api/restaurant/Orders/next3hours/:restaurantId', (req, res) => {
 });
 
 
-app.post('/api/restaurant/NewOrder', (req, res) => {
-  // Extracting the necessary data from the request body
-  const { order_name, order_price, order_category, order_timestamp, order_details, restaurant_id } = req.body;
-  // Creating the query to insert the order data into the database
-  const query = `INSERT INTO restaurants_orders (order_name, order_price, order_category, order_timestamp, order_details, restaurant_id) VALUES ('${order_name}', '${order_price}', '${order_category}', '${order_timestamp}', '${order_details}', ${restaurant_id})`;
-  // Executing the query and emitting a new order event with Socket.IO
-  dbConnection.query(query, (err, result) => {
-    if (err) throw err;
-
-    io.emit('newOrder', result);
-    // Returning a success response
-    return res.json({ message: 'Order Added!' });
-  });
-});
 
 
 

@@ -36,15 +36,18 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
       selectedIngredients,
       selectedAdditionalItems, 
       itemQuantity,
+      restaurantId: item.restaurantId,
     });
     onAddToOrder({
       ...item,
       selectedIngredients,
       selectedAdditionalItems,
       itemQuantity,
+      restaurantId: item.restaurantId,
     });
     onClose();
   };
+  
   
   
 
@@ -176,7 +179,10 @@ function CustomerMenuView(props) {
     
   const handleClick = (item) => {
     console.log(item);
-    setSelectedItem(item);
+    setSelectedItem({
+      ...item,
+      restaurantId: restaurantId
+    });
     setShowAddToOrderCard(true);
   };
 
