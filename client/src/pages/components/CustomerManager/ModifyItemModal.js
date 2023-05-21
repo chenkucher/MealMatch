@@ -41,7 +41,7 @@ function ModifyItemModal({ item, onClose }) {
           onChange={(e) => setNewQuantity(parseInt(e.target.value, 10))}
         />
       </label>
-      {selectedIngredients.map((ingredient, index) => (
+      {selectedIngredients && selectedIngredients.map((ingredient, index) => (
         <div key={index} className={styles.ingredient}>
           <label>
             Ingredient name:

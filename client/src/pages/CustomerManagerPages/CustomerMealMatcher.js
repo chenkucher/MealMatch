@@ -150,11 +150,12 @@ function CustomerMealMatcher(props) {
               <p>{item.item_description}</p>
             </div>
           ))}
-          <div className={styles.buttons}>
-            <button onClick={() => swipe('left', restaurantItems[0])}>Swipe Left</button>
-            <button onClick={undoSwipe}>Undo Swipe</button>
-            <button onClick={() => swipe('right', restaurantItems[0])}>Swipe Right</button>
-          </div>
+            <div className={styles.buttons}>
+              <button onClick={() => swipe('left', restaurantItems[0])}>&#8592;</button>
+              <button onClick={undoSwipe}>Undo Swipe</button>
+              <button onClick={() => swipe('right', restaurantItems[0])}>&#8594;</button>
+            </div>
+
         </section>
       </main>
     </div>

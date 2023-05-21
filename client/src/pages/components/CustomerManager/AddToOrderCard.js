@@ -2,108 +2,112 @@ import React, { useState, useEffect,useContext } from 'react';
 import ShoppingCartContext from '../../../pages/components/CustomerManager/ShoppingCartContext'
 import styles from '../../../styles/AddToCard.module.css';
 
+function AddToOrderCard({ item, onAddToOrder, onClose }) {
+  const [selectedIngredients, setSelectedIngredients] = useState([]);
+  const [itemQuantity, setItemQuantity] = useState(1);
+  const { addToCart } = useContext(ShoppingCartContext);
+  const [selectedAdditionalItems, setSelectedAdditionalItems] = useState([]);
 
-function AddToOrderCard({ item}) {
-    const [selectedIngredients, setSelectedIngredients] = useState([]);
-    const [itemQuantity, setItemQuantity] = useState(1);
-    const [alertMessage, setAlertMessage] = useState("");
+  const handleIngredientChange = (ingredient, price, checked) => {
+    setSelectedIngredients((prevSelected) =>
+      checked
+        ? [...prevSelected, { name: ingredient, price }]
+        : prevSelected.filter((ing) => ing.name !== ingredient),
+    );
+  };
+  const handleAdditionalItemChange = (additionalItem, price, checked) => {
+    setSelectedAdditionalItems((prevSelected) =>
+      checked
+        ? [...prevSelected, { name: additionalItem, price }]
+        : prevSelected.filter((item) => item.name !== additionalItem),
+    );
+  };
 
-    const { addToCart } = useContext(ShoppingCartContext);
+  const handleAddToOrder = (orderItem) => {
+    addToCart({
+      ...item,
+      itemDescription: item.item_description,
+      itemPrice: item.item_price,
+      selectedIngredients,
+      selectedAdditionalItems, 
+      itemQuantity,
+      restaurantId: item.restaurantId,
+    });
+    onAddToOrder({
+      ...item,
+      selectedIngredients,
+      selectedAdditionalItems,
+      itemQuantity,
+      restaurantId: item.restaurantId,
+    });
+    onClose();
+  };
   
-    const handleIngredientChange = (ingredient, price, checked) => {
-      setSelectedIngredients((prevSelected) =>
-        checked
-          ? [...prevSelected, { name: ingredient, price }]
-          : prevSelected.filter((ing) => ing.name !== ingredient),
-      );
-    };
   
-    const handleAddToOrder = (orderItem) => {
-      addToCart({
-        ...item,
-        itemDescription: item.item_description,
-        itemPrice: item.item_price,
-        selectedIngredients: item.selectedAdditionalItems, 
-        itemQuantity,
-      });
-      showAlertMessage(`Added ${item.item_name} to the Order Cart!`);
-    };
-    
-    
-    
-  
-    const totalPrice =
-      item.item_price * itemQuantity +
-      selectedIngredients.reduce((sum, ing) => sum + ing.price, 0) * itemQuantity;
-  
-    const hasOptionalIngredients = item.item_optional_ingredience && Object.keys(item.item_optional_ingredience).length > 0;
   
 
+   const totalPrice =
+    item.item_price * itemQuantity +
+    selectedIngredients.reduce((sum, ing) => sum + ing.price, 0) * itemQuantity +
+    selectedAdditionalItems.reduce((sum, item) => sum + item.price, 0) * itemQuantity;
 
-    const showAlertMessage = (message) => {
-        setAlertMessage(message);
-        setTimeout(() => {
-          setAlertMessage("");
-        }, 3000);
-      };
 
+  return (
+    <div className={styles.addToOrderCard}>
+      <div className={styles.top}>
+        <img src={item.item_image} alt={item.item_name}/>
+        <h2>{item.item_name}</h2>
+        <p>{item.item_description}</p>
+        <p>Price: ${item.item_price}</p>
+      </div>
       
 
-    return (
-    <>
-      {alertMessage && <div className={styles.alertMessage}>{alertMessage}</div>}
-      <div className={styles.addToOrderCard}>
-        <div className={styles.top}>
-          <img src={item.item_image} alt={item.item_name}/>
-          <h2>{item.item_name}</h2>
-          <p>{item.item_description}</p>
-          <p>Price: ${item.item_price}</p>
-        </div>
-        
-        {hasOptionalIngredients && (
-          <>
-          <div className={styles.middle}>
-            <h3>Optional Ingredients:</h3>
-              <ul>
-                {Object.entries(item.item_optional_ingredience).map(([ingredient, price]) => (
-                  <li key={ingredient}>
-                    <label>
-                      <input
-                        type="checkbox"
-                        value={ingredient}
-                        onChange={(e) => handleIngredientChange(ingredient, price, e.target.checked)}
-                      />
-                      {ingredient} (+${price})
-                    </label>
-                  </li>
-                ))}
-              </ul>
-          </div>
-  
-          </>
-        )}
-        <div className={styles.bottom}>
-          <div>
+      <div className={styles.bottom}>
+        <div>
+          <label>
+            Quantity:
+            <input
+              type="number"
+              min="1"
+              value={itemQuantity}
+              onChange={(e) => setItemQuantity(parseInt(e.target.value, 10))}
+            />
+          </label>
+          {Array.isArray(item.additionalProperties) && item.additionalProperties.length > 0 && (
+    <div className={styles.additionalItems}>
+      <h3>Additional Items:</h3>
+      <ul>
+        {item.additionalProperties.map((additionalItem) => (
+          <li key={additionalItem.name}>
             <label>
-              Quantity:
               <input
-                type="number"
-                min="1"
-                value={itemQuantity}
-                onChange={(e) => setItemQuantity(parseInt(e.target.value, 10))}
+                type="checkbox"
+                value={additionalItem.name}
+                onChange={(e) =>
+                  handleAdditionalItemChange(
+                    additionalItem.name,
+                    additionalItem.price,
+                    e.target.checked,
+                  )
+                }
               />
+              {additionalItem.name} (+${additionalItem.price})
             </label>
-          </div>
-          <p>Total Price: ${totalPrice.toFixed(2)}</p>
-
-          <div>
-            <button onClick={handleAddToOrder}>Add To Order</button>
-          </div>
-
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+        </div>
+        <p>Total Price: ${totalPrice.toFixed(2)}</p>
+        <div>
+          <button onClick={handleAddToOrder}>Add To Order</button>
+          <button onClick={onClose}>Close</button>
         </div>
       </div>
-      </>
-    );
-  }
 
+     
+    </div>
+  );
+}
   export default  AddToOrderCard;
