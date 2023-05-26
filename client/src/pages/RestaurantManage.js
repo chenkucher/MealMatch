@@ -47,14 +47,7 @@ function RestaurantManage(props) {
             <div className={styles.future}>
               <h1>Future Orders</h1>
               <div className={styles.dashboard_sum}>
-                {/* <FutureOrdersChart /> */}
-              </div>
-            </div>
-
-            <div className={styles.best}>
-              <h1>Best Orders</h1>
-              <div className={styles.best_sum}>
-                {/* <BestSellingItemsTable /> */}
+                <FutureOrdersChart />
               </div>
             </div>
           </div>

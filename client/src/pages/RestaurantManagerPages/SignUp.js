@@ -12,6 +12,9 @@ function SellerSignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [openingHoursStart, setOpeningHoursStart] = useState('');
+  const [openingHoursEnd, setOpeningHoursEnd] = useState('');
+
   const [error, setError] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [seconds, setSeconds] = useState(60);
@@ -84,7 +87,10 @@ function SellerSignupPage() {
         email,
         password,
         confirm_password: confirmPassword,
+        openingHoursStart,
+        openingHoursEnd,
       };
+      
 
       const response = await axios.post('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/SellerSignup', requestData, {
         headers: {
@@ -130,6 +136,11 @@ function SellerSignupPage() {
               <input type="text" name="name" value={name} onChange={(e) => setName(e.target.value)} />
               <label>Address:</label>
               <input type="text" name="address" value={address} onChange={(e) => setAddress(e.target.value)} />
+
+              <label>Opening Hours Start:</label>
+              <input type="time" name="openingHoursStart" value={openingHoursStart} onChange={(e) => setOpeningHoursStart(e.target.value)} />
+              <label>Opening Hours End:</label>
+              <input type="time" name="openingHoursEnd" value={openingHoursEnd} onChange={(e) => setOpeningHoursEnd(e.target.value)} />
               <label>Restaurant Details:</label>
               <textarea
                 name="restaurantDetails"

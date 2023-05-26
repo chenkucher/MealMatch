@@ -34,8 +34,8 @@ function LastOrdersTable() {
   };
 
   return (
-    <div className={styles.last_orders_table}>
-      <h2>Last Orders</h2>
+    <div className={styles.future_orders_chart}>
+      {/* <h2>Last Orders</h2> */}
       <table>
         <thead>
           <tr>

@@ -1,21 +1,83 @@
-/* CustomerCalendar.module.css */
 .overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .orderSummary {
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.orderSummary {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.orderSummary table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+
+.orderSummary table thead {
+  background-color: #dddddd;
+  color: rgb(0, 0, 0);
+}
+
+.orderSummary table th,
+.orderSummary table td {
+  padding: 1rem;
+  border: 1px solid #000000;
+  text-align: left;
+  width: 20%;
+}
+
+.orderSummary table th {
+  font-weight: bold;
+}
+
+.orderSummary table tbody tr:nth-child(even) {
+  background-color: #dddddd;
+}
+
+.orderSummary table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.buttonsContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  margin: 2%;
+}
+
+.orderButton {
+  padding: 0.5em 1em;
+  color: #fff;
+  background-color: #007BFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.orderButtonClose {
+  padding: 0.5em 1em;
+  color: #fff;
+  background-color: red;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.orderButton:hover {
+  background-color: #0056b3;
+}
+.orderButtonClose:hover  {
+
+  background-color: rgb(255, 59, 59);
+
+}

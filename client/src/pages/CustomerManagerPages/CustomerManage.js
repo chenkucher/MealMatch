@@ -5,6 +5,7 @@ import styles from '../../styles/CustomerOrders.module.css';
 import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
 import CustomerCalender from '../components/CustomerManager/CustomerCalender';
+import Footer from '../components/Footer';
 
 function CustomerManage(props) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -44,6 +45,7 @@ function CustomerManage(props) {
           <CustomerCalender customerId={customerId} />
         </section>
       </main>
+
     </div>
   );
 }

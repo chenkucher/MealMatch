@@ -67,20 +67,25 @@ function MenuManager(props) {
     event.preventDefault();
 
     const handleImageUpdate = async () => {
-      // Delete current file
-      await deleteFileFromS3(`${editedItem.item_id}.png`);
-
-      // Upload new image to S3
-      const imageUrl = await uploadFileToS3(
-        `${editedItem.item_id}.png`,
-        editedItem.imageFile
-      );
-
-      // Update the cache-busting key
-      setCacheBustingKey(Date.now());
-
+      let imageUrl = editedItem.item_image;
+    
+      if (editedItem.imageFile) {
+        // Delete current file
+        await deleteFileFromS3(`${editedItem.item_id}.png`);
+    
+        // Upload new image to S3
+        imageUrl = await uploadFileToS3(
+          `${editedItem.item_id}.png`,
+          editedItem.imageFile
+        );
+    
+        // Update the cache-busting key
+        setCacheBustingKey(Date.now());
+      }
+    
       return imageUrl;
     };
+    
 
     const updateItemInDatabase = async (imageUrl) => {
       // Send a PUT request to update the item in the database
@@ -204,17 +209,17 @@ function MenuManager(props) {
   };
   
   function handleNameChange(event) {
-    setEditedItem({ ...editedItem, name: event.target.value });
+    setEditedItem({ ...editedItem, item_name: event.target.value });
   }
 
   function handleDescriptionChange(event) {
-    setEditedItem({ ...editedItem, description: event.target.value });
+    setEditedItem({ ...editedItem, item_description: event.target.value });
   }
 
   function handlePriceChange(event) {
     setEditedItem({
       ...editedItem,
-      price: parseFloat(event.target.value),
+      item_price: parseFloat(event.target.value),
     });
   }
 
