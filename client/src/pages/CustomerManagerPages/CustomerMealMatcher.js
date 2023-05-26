@@ -4,6 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from '../../styles/CustomerMealMatcher.module.css';
 import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
+import Footer from '../components/Footer';
+
 
 function CustomerMealMatcher(props) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -158,6 +160,7 @@ function CustomerMealMatcher(props) {
 
         </section>
       </main>
+      {/* <Footer/> */}
     </div>
   );
 }

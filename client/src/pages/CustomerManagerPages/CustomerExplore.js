@@ -44,6 +44,7 @@ function CustomerExplore(props) {
 
     axios.get(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurants-by-preferences/${customerId}`).then((response) => {
       setRestaurants(response.data);
+      console.log(response.data);
     });
 
   }, []);

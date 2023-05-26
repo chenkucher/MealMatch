@@ -45,7 +45,7 @@ function CustomerCategoryPage(props) {
 
       <main className={styles.main}>
         <section className={styles.section_side}>
-          <Sidebar loggedIn={loggedIn} />
+          <Sidebar loggedIn={loggedIn} customerId={customerId} />
         </section>
 
         <section className={styles.section_middle}>

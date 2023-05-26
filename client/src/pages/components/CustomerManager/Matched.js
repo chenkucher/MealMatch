@@ -2,19 +2,28 @@ import React from "react";
 import AddToOrderCard from "../CustomerManager/AddToOrderCard";
 import styles from "../../../styles/Matched.module.css";
 
-function Matched({  matchedItems = [], onClose }) {
+function Matched({ matchedItems = [], onClose }) {
+
+  const [items, setItems] = React.useState(matchedItems);
+
+  const removeItem = (itemToRemove) => {
+    setItems(items.filter(item => item !== itemToRemove));
+  }
+
   return (
     <div className={styles.matchedOverlay}>
       <div className={styles.matchedContainer}>
         <h1>Matched!</h1>
-        {matchedItems.length === 0 ? (
+        {console.log(items)}
+        {items.length === 0 ? (
           <p>You Have No Matched Items!</p>
         ) : (
-          matchedItems.map((item, index) => (
+          items.map((item, index) => (
             <AddToOrderCard
               key={index}
-              item={item}
-            //   onClose={() => setShowAddToOrderCard(false)}
+              item={{ ...item, additionalProperties: item.item_additional }}
+              onClose={onClose}
+              onAddToOrder={() => removeItem(item)}
             />
           ))
         )}
@@ -23,5 +32,6 @@ function Matched({  matchedItems = [], onClose }) {
     </div>
   );
 }
+
 
 export default Matched;

@@ -39,13 +39,18 @@ function CustomerSettings() {
   };
 
   useEffect(() => {
-    setCustomerPreferences(selectedCategories.join(', '));
+    setCustomerPreferences(selectedCategories.join(','));
   }, [selectedCategories]);
 
   const handleShowPreferencesPopup = () => {
-    setSelectedCategories(customerPreferences.split(',').map((category) => category.trim()));
+    if (customerPreferences) {
+      setSelectedCategories(customerPreferences.split(',').map((category) => category.trim()));
+    } else {
+      setSelectedCategories([]);
+    }
     setShowPreferencesPopup(true);
   };
+  
   
 
   useEffect(() => {
@@ -282,3 +287,9 @@ function CustomerSettings() {
   );
 }
 export default CustomerSettings;
+
+
+
+
+
+// remove the spaces from the preferences!!!

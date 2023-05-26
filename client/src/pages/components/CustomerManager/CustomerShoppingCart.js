@@ -92,6 +92,7 @@ function CustomerShoppingCart({ onClose, customerId }) {
                           onClose={handleCloseModifyModal}
                           removeFromCart={removeFromCart}
                           updateCartItem={updateCartItem}
+                          additionalItems={selectedItem.selectedAdditionalItems}
                         />
                       )}
                     </div>

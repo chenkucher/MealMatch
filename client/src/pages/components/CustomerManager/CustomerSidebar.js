@@ -17,7 +17,8 @@ function capitalizeString(str) {//to captalize the name
 function Sidebar(props) {
   const isLoggedIn = props.loggedIn;
   const [name, setName] = useState('');
-  const { customerId } = useParams();
+  let { customerId } = useParams();
+  customerId = customerId ?? props.customerId;
 
   useEffect(() => {
     // Fetch data from the server
@@ -73,10 +74,10 @@ function Sidebar(props) {
                 <Link to={`/CustomerOrders/${customerId}`} className={styles.nav_link}>My Orders</Link>
             </li>
 
-            <li className={styles.nav_line}>
+            {/* <li className={styles.nav_line}>
                 <BiFoodMenu className={styles.nav_icon} />
                 <Link to={`/Customerbilling/${customerId}`} className={styles.nav_link}>Billing Information</Link>
-            </li>
+            </li> */}
 
             <li className={styles.nav_line}>
                 <FiSettings className={styles.nav_icon} />

@@ -60,7 +60,7 @@ function CustomerOrderTable(props) {
                 <td>
                   <button className={styles.button} onClick={() => handleOpenModal(item)}>View Details</button>
                 </td>
-                <td>{item.order_price}</td>
+                <td>{item.order_price}$</td>
               </tr>
             );
           })}
@@ -85,7 +85,7 @@ function CustomerOrderTable(props) {
                     <tr key={index}>
                       <td>{detail.item_name}</td>
                       <td>{detail.itemQuantity}</td>
-                      <td>{detail.itemPrice}</td>
+                      <td>{detail.itemPrice}$</td>
                       <td>
                         {detail.selectedAdditionalItems.map((additionalItem, aiIndex) => (
                           <div key={aiIndex} className={styles.additionalItem}>

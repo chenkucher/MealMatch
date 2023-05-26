@@ -11,13 +11,16 @@ function Settings(props) {
   const [phone, setPhone] = useState('');
   const [logoUrl, setLogoUrl] = useState('');
   const [openingHours, setOpeningHours] = useState('');
-  const [deliveryFee, setDeliveryFee] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [restaurantDetails, setRestaurantDetails] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const [openingHoursStart, setOpeningHoursStart] = useState('');
+  const [openingHoursEnd, setOpeningHoursEnd] = useState('');
+
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const { restaurantId } = useParams();
   const navigate = useNavigate();
@@ -52,9 +55,11 @@ function Settings(props) {
         setPhone(data.restaurant_phone_number);
         setLogoUrl(data.restaurant_logo_url);
         setOpeningHours(data.opening_hours);
-        setDeliveryFee(data.delivery_fee);
         setEmail(data.restaurant_email);
-        setRestaurantDetails(data.restaurant_details); // Add this line
+        setRestaurantDetails(data.restaurant_details);
+        setOpeningHoursStart(data.start_opening_time);
+        setOpeningHoursEnd(data.close_opening_time);
+
       })
       .catch((error) => console.error(error));
   }, []);
@@ -78,13 +83,14 @@ function Settings(props) {
       address,
       phone,
       logoUrl,
-      openingHours,
-      deliveryFee,
+      openingHoursStart,
+      openingHoursEnd,
       email,
       password,
       confirmPassword,
       restaurantDetails,
     };
+    
   
     fetch('/api/SellerSettings', {
       method: 'POST',
@@ -193,23 +199,25 @@ function Settings(props) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="opening-hours">Opening Hours:</label>
+                  <label htmlFor="opening-hours-start">Opening Hours Start:</label>
                   <input
-                    type="text"
-                    id="opening-hours"
-                    value={openingHours}
-                    onChange={(e) => setOpeningHours(e.target.value)}
+                    type="time"
+                    id="opening-hours-start"
+                    value={openingHoursStart}
+                    onChange={(e) => setOpeningHoursStart(e.target.value)}
                   />
                 </div>
                 <div>
-                  <label htmlFor="delivery-fee">Delivery Fee:</label>
+                  <label htmlFor="opening-hours-end">Opening Hours End:</label>
                   <input
-                    type="text"
-                    id="delivery-fee"
-                    value={deliveryFee}
-                    onChange={(e) => setDeliveryFee(e.target.value)}
+                    type="time"
+                    id="opening-hours-end"
+                    value={openingHoursEnd}
+                    onChange={(e) => setOpeningHoursEnd(e.target.value)}
                   />
                 </div>
+
+
           
               </form>
               {errorMessage && (

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import '../styles/Home.css'
 import NavBar from './components/NavBar';
-import backgroundImage from './helpers/background.jpg';
 import logo from './helpers/logo.jpg';
 import makeFoodImage from './helpers/makefood.jpg';
 import planFoodImage from './helpers/planfood.jpg';
+
+// remove this line
+// import backgroundImage from './helpers/background.jpg';
 
 function Home(props) {
   const [boxHoverStates, setBoxHoverStates] = useState({
@@ -34,7 +36,9 @@ function Home(props) {
       };
     }
   }
-  
+
+  // Use the URL directly in the style
+  const backgroundImage = 'https://mealmatch.s3.amazonaws.com/background.jpg';
 
   return (
     <div className="home-page">

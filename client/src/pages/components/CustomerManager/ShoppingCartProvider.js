@@ -33,11 +33,11 @@ const ShoppingCartProvider = ({ children }) => {
     });
   };
 
-  const updateCartItem = (item_id, newQuantity, selectedIngredients) => {
+  const updateCartItem = (item_id, newQuantity, selectedIngredients,selectedAdditionalItems) => {
     setCartItems((prevCartItems) => {
       const newCartItems = prevCartItems.map((item) =>
         item.item_id === item_id
-          ? { ...item, itemQuantity: newQuantity, selectedIngredients: selectedIngredients }
+          ? { ...item, itemQuantity: newQuantity, selectedIngredients: selectedIngredients,selectedAdditionalItems: selectedAdditionalItems  }
           : item
       );
       window.localStorage.setItem('cartItems', JSON.stringify(newCartItems));

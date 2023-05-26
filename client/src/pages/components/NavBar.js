@@ -9,10 +9,9 @@ function NavBar(props) {
     <div className={styles.navbar}>
       <img src={logo} alt="Logo" className={styles.logo} />
       <div className={styles.navbar_left}>
-        <a href="/">Home</a>
-        <a href="/OrderNow">Order Now</a>
-        <a href="/Restaurants">Restaurants</a>
-        <a href="/SuperMarket">Super Market</a>
+      <a href="/ContactUs">Contact Us</a>
+        <a href="/TermsOfUse">Terms of Use</a>
+        <a href="/PrivacyPolicy">Privacy Policy</a>
         {isLoggedIn ? null : <a href="/CustomerLogin">Customer Login</a>}
         {isLoggedIn ? null : <a href="/Login">Seller Login</a>}
       </div>
@@ -23,5 +22,7 @@ function NavBar(props) {
     </div>
   );
 }
+
+
 
 export default NavBar;
