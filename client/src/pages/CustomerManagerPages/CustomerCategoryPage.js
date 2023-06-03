@@ -11,7 +11,7 @@ function CustomerCategoryPage(props) {
   const [restaurants, setRestaurants] = useState([]);
   const { category } = useParams();
   const navigate = useNavigate();
-
+  const logo = "https://mealmatch.s3.amazonaws.com/logo.jpg";
   useEffect(() => {
     axios
       .get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin")
@@ -40,7 +40,7 @@ function CustomerCategoryPage(props) {
   return (
     <div className={styles.container}>
       <header>
-        <NavBar loggedIn={loggedIn} />
+        <NavBar loggedIn={loggedIn} customerId={customerId}/>
       </header>
 
       <main className={styles.main}>
@@ -58,9 +58,10 @@ function CustomerCategoryPage(props) {
                 className={styles.restaurant_box}
               >
                 <div className={styles.restaurant_logo}>
-                  <img
-                    src={restaurant.restaurant_logo_url}
-                    alt={restaurant.restaurant_details}
+                <img
+                  src={restaurant.restaurant_logo_url || logo}
+                  alt={`${restaurant.restaurant_name} logo`}
+
                   />
                 </div>
                 <div className={styles.restaurant_details}>

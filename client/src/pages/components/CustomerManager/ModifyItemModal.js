@@ -26,14 +26,8 @@ function ModifyItemModal({ item, onClose,additionalItems }) {
       setSelectedAdditionalItems(selectedAdditionalItems.filter(ai => ai.id !== additionalItem.id));
     }
   };
-
-  
-
-
   return (
     <div className={styles.modifyItemModal}>
-      {/* <h2>Modify Item</h2> */}
-      {/* <h3>{item.itemName}</h3> */}
       <label>
         Quantity:
         <input
@@ -43,22 +37,7 @@ function ModifyItemModal({ item, onClose,additionalItems }) {
           onChange={(e) => setNewQuantity(parseInt(e.target.value, 10))}
         />
       </label>
-      {/* <label>
-        Additional Items:
-        {additionalItems.map(additionalItem => { // additionalItems used here
-          const isSelected = selectedAdditionalItems.some(ai => ai.id === additionalItem.id);
-          return (
-            <div key={additionalItem.id}>
-              <input
-                type="checkbox"
-                checked={isSelected}
-                onChange={e => handleAdditionalItemChange(additionalItem, e.target.checked)}
-              />
-              {additionalItem.name}
-            </div>
-          );
-        })}
-      </label> */}
+
 
       <div className={styles.buttons}>
         <button onClick={handleUpdateItem}>Update</button>

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import ShoppingCartContext from "../../components/CustomerManager/ShoppingCartContext";
 import styles from "../../../styles/Checkout.module.css";
-import dayjs from "dayjs";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 function Checkout({ customerId }) {
   const { cartItems, removeFromCart, updateCartItem } =
@@ -17,6 +17,8 @@ function Checkout({ customerId }) {
   const [isInNextHour, setIsInNextHour] = useState({});
   const [deliveryAddresses, setDeliveryAddresses] = useState({});
   const [restaurantSettings, setRestaurantSettings] = useState({});
+  const [showPaypalButton, setShowPaypalButton] = useState(false);
+  const dateInputRef = React.createRef();
 
   useEffect(() => {
     let newRefs = {};
@@ -52,67 +54,159 @@ function Checkout({ customerId }) {
   }, [cartItems]);
 
   useEffect(() => {
+    const getPaypalApiKey = async (restaurantId) => {
+      try {
+        const response = await axios.get(
+          `/api/getPaypalApiKey/${restaurantId}`
+        );
+        return response.data.paypal_api_key;
+      } catch (error) {
+        console.error("Failed to get Paypal API Key:", error);
+      }
+    };
+
     if (window.paypal) {
       for (const restaurantId in paypalRefs) {
         if (paypalRefs[restaurantId].current && totals[restaurantId]) {
-          const onApprove = (restaurantId) =>
-            async function (data, actions) {
-              const order = await actions.order.capture();
-              setDeliveryDates((currentDeliveryDates) => {
-                const deliveryDate = currentDeliveryDates[restaurantId];
+          getPaypalApiKey(restaurantId).then((paypalApiKey) => {
+            if (paypalApiKey) {
+              const onApprove = (restaurantId) =>
+                async function (data, actions) {
+                  const order = await actions.order.capture();
 
-                if (!deliveryDate) {
-                  setErrorPopupMessage(`Delivery date not set for!`);
-                  setShowErrorPopup(true);
-                } else {
-                  setDeliveryAddresses((currentDeliveryAddresses) => {
-                    const deliveryAddress =
-                      currentDeliveryAddresses[restaurantId];
+                  setDeliveryDates((currentDeliveryDates) => {
+                    const deliveryDate = currentDeliveryDates[restaurantId];
 
-                    if (!deliveryAddress) {
-                      setErrorPopupMessage(
-                        `Delivery address not set for restaurantId: ${restaurantId}`
-                      );
-                      setShowErrorPopup(true);
+                    if (!deliveryDate) {
+                      Swal.fire({
+                        icon: "error",
+                        title: "Oops...",
+                        text: "Delivery date not set for!",
+                      });
+                      return;
                     } else {
-                      handleCheckout(
-                        order,
-                        restaurantId,
-                        deliveryDate,
-                        deliveryAddress
-                      );
-                    }
-                    return currentDeliveryAddresses;
-                  });
-                }
-                return currentDeliveryDates;
-              });
-            };
+                      setDeliveryAddresses((currentDeliveryAddresses) => {
+                        const deliveryAddress =
+                          currentDeliveryAddresses[restaurantId];
 
-          window.paypal
-            .Buttons({
-              createOrder: function (data, actions) {
-                return actions.order.create({
-                  purchase_units: [
-                    {
-                      amount: {
-                        value: totals[restaurantId].toFixed(2),
-                      },
-                      payee: {
-                        account_id:
-                          "Aap6RrtnUqXmNxEPKzVRW-4AghHqRIQ2Swx9EDwOeD4a5H6kEMBFkMU2nvVhYmi2jtFsQiPy10qGWnDX",
-                      },
-                    },
-                  ],
-                });
-              },
-              onApprove: onApprove(restaurantId),
-            })
-            .render(paypalRefs[restaurantId].current);
+                        if (!deliveryAddress) {
+                          Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: "Delivery address not set",
+                          });
+                          return;
+                        } else {
+                          handleCheckout(
+                            order,
+                            restaurantId,
+                            deliveryDate,
+                            deliveryAddress
+                          );
+                        }
+                        return currentDeliveryAddresses;
+                      });
+                    }
+                    return currentDeliveryDates;
+                  });
+                };
+
+              window.paypal
+                .Buttons({
+                  createOrder: function (data, actions) {
+                    return actions.order.create({
+                      purchase_units: [
+                        {
+                          amount: {
+                            value: totals[restaurantId].toFixed(2),
+                          },
+                          payee: {
+                            account_id: paypalApiKey,
+                          },
+                        },
+                      ],
+                    });
+                  },
+                  onApprove: onApprove(restaurantId),
+                })
+                .render(paypalRefs[restaurantId].current);
+            }
+          });
         }
       }
     }
-  }, [paypalRefs, totals]);
+  }, [paypalRefs, totals, showPaypalButton]);
+
+  const checkDateTime = (
+    order,
+    restaurantId,
+    selectedDeliveryDate,
+    deliveryAddress
+  ) => {
+    let selectedDateTime = new Date(selectedDeliveryDate);
+
+    if (!deliveryAddress) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Delivery address not set",
+      });
+      return false;
+    }
+
+    if (!selectedDeliveryDate) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Delivery date not set",
+      });
+      return false;
+    }
+
+    let now = new Date();
+    let nowPlusOneHour = new Date(now.getTime() + 30 * 60 * 1000);
+
+    if (selectedDateTime < now) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "The selected delivery time cannot be in the past.",
+      });
+      return false;
+    }
+
+    if (selectedDateTime < nowPlusOneHour) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "The selected delivery time must be at least half an hour from now.",
+      });
+      return false;
+    }
+
+    let [startHours, startMinutes] =
+      restaurantSettings[restaurantId].start_opening_time.split(":");
+    let startOpeningTime = new Date(selectedDateTime);
+    startOpeningTime.setHours(startHours, startMinutes);
+
+    let [closeHours, closeMinutes] =
+      restaurantSettings[restaurantId].close_opening_time.split(":");
+    let closeOpeningTime = new Date(selectedDateTime);
+    closeOpeningTime.setHours(closeHours, closeMinutes);
+
+    if (
+      selectedDateTime < startOpeningTime ||
+      selectedDateTime > closeOpeningTime
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: `The selected delivery time must be between the opening and closing times of the restaurant. Working hours for the selected restaurant are from ${restaurantSettings[restaurantId].start_opening_time} to ${restaurantSettings[restaurantId].close_opening_time}.`,
+      });
+      return false;
+    }
+    return true;
+  };
 
   const handleCheckout = async (
     order,
@@ -121,21 +215,34 @@ function Checkout({ customerId }) {
     deliveryAddress
   ) => {
     try {
+      const dateTimeCheck = checkDateTime(
+        order,
+        restaurantId,
+        selectedDeliveryDate,
+        deliveryAddress
+      );
+      if (!dateTimeCheck) {
+        return;
+      }
       const group = cartItems.filter(
         (item) => parseInt(item.restaurantId, 10) === parseInt(restaurantId, 10)
       );
 
       if (!deliveryAddress) {
-        setErrorPopupMessage(`Delivery address not set`);
-        setShowErrorPopup(true);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Delivery address not set",
+        });
         return;
       }
 
       if (!selectedDeliveryDate) {
-        // Set the error message
-        setErrorPopupMessage(`Delivery date not set`);
-        // Show the error popup
-        setShowErrorPopup(true);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Delivery date not set",
+        });
         return;
       }
 
@@ -174,7 +281,7 @@ function Checkout({ customerId }) {
         delivery_datetime: selectedDeliveryDate,
         delivery_address: deliveryAddress,
         order_paid: order ? "1" : "0",
-        reminder_sent: order ? "1" : "0",
+        reminder_sent: "0",
       };
 
       const response = await axios.post("/api/restaurant/NewOrder", orderData);
@@ -215,22 +322,35 @@ function Checkout({ customerId }) {
 
       orderDetailsHTML += "</tbody></table>";
 
+      // Prepare additional order details
+      let additionalOrderDetails = "";
+      if (order) {
+        additionalOrderDetails =
+          "The order has been paid, and a reminder will be sent close to the delivery time.<br></br>";
+      } else {
+        additionalOrderDetails =
+          "NOTICE! You did not pay for the order. You must pay for it at least half an hour before the delivery time<br></br> If you want to pay now, you can do it from your dashboard in your account, or you can wait for a reminder email 2 hours before the delivery time and pay there!<br></br>";
+      }
+
       // Send order confirmation email
       const emailResponse = await axios.post("/api/SendOrderConfirmation", {
         customerId: customerId,
         orderDetails: orderDetailsHTML,
         total: total,
+        additionalOrderDetails: additionalOrderDetails,
       });
 
-      // Show the pop-up
-      setShowPopup(true);
+      // Show the Swal.fire popup instead of the custom one
+      Swal.fire({
+        icon: "success",
+        title: "Order Confirmation",
+        text: "Your order has been placed successfully! Order details will be sent to your email.",
+      }).then(() => {
+        window.location.reload();
+      });
     } catch (err) {
       console.error(err);
     }
-  };
-
-  const closePopup = () => {
-    setShowPopup(false);
   };
 
   //get restaurant opening hours
@@ -250,44 +370,20 @@ function Checkout({ customerId }) {
     restaurantIds.forEach(fetchWorkingHours);
   }, [cartItems]);
 
+  //handilng change is date picker
   const handleDateTimeChange = (value, restaurantId) => {
-    let selectedDateTime = new Date(value);
-  
-    let [startHours, startMinutes] =
-      restaurantSettings[restaurantId].start_opening_time.split(":");
-    let startOpeningTime = new Date(selectedDateTime);
-    startOpeningTime.setHours(startHours, startMinutes);
-  
-    let [closeHours, closeMinutes] =
-      restaurantSettings[restaurantId].close_opening_time.split(":");
-    let closeOpeningTime = new Date(selectedDateTime);
-    closeOpeningTime.setHours(closeHours, closeMinutes);
-  
-    if (
-      selectedDateTime < startOpeningTime ||
-      selectedDateTime > closeOpeningTime
-    ) {
-      setErrorPopupMessage(
-        `The selected delivery time must be between the opening and closing times of the restaurant. Working hours for the selected restaurant are from ${restaurantSettings[restaurantId].start_opening_time} to ${restaurantSettings[restaurantId].close_opening_time}.`
-      );
-      setShowErrorPopup(true);
-      return;
-    }
-  
     setDeliveryDates((prevDates) => ({ ...prevDates, [restaurantId]: value }));
-  
-    let nowPlusOneHour = new Date();
-    nowPlusOneHour.setHours(nowPlusOneHour.getHours() + 1);
-  
+
+    let selectedDateTime = new Date(value);
     setIsInNextHour((prevState) => {
       const newIsInNextHour = {
         ...prevState,
-        [restaurantId]: selectedDateTime <= nowPlusOneHour,
+        [restaurantId]:
+          selectedDateTime <= new Date(new Date().getTime() + 720 * 60 * 1000),
       };
       return newIsInNextHour;
     });
   };
-  
 
   const handleAddressChange = (value, restaurantId) => {
     setDeliveryAddresses((prevAddresses) => ({
@@ -309,16 +405,7 @@ function Checkout({ customerId }) {
           <button onClick={() => setShowErrorPopup(false)}>Close</button>
         </div>
       )}
-      {showPopup && <div className={styles.overlay}></div>}
-      {showPopup && (
-        <div className={styles.popup}>
-          <h2>Order Confirmation</h2>
-          <p>Your order has been placed successfully!</p>
-          <p>Order details will be sent to your email.</p>
-          <button onClick={closePopup}>Close</button>
-        </div>
-      )}
-      <h2>Checkout</h2>
+
 
       {Object.keys(totals).map((restaurantId) => (
         <div key={restaurantId}>
@@ -363,6 +450,7 @@ function Checkout({ customerId }) {
                       <div className={styles.datePickerContainer}>
                         <input
                           type="datetime-local"
+                          ref={dateInputRef}
                           value={deliveryDates[restaurantId] || ""}
                           onChange={(e) =>
                             handleDateTimeChange(e.target.value, restaurantId)
@@ -386,24 +474,64 @@ function Checkout({ customerId }) {
             </tbody>
           </table>
           <p>Total: ${totals[restaurantId].toFixed(2)}</p>
+          <div className={styles.buttons}>
+            {showPaypalButton ? (
+              isInNextHour[restaurantId] && deliveryAddresses[restaurantId] ? (
+                <div ref={paypalRefs[restaurantId]}></div>
+              ) : (
+                <p>
+                  Please select a delivery time at least an hour from now and
+                  provide a delivery address.
+                </p>
+              )
+            ) : (
+              <button
+                onClick={() => {
+                  if (
+                    isInNextHour[restaurantId] &&
+                    deliveryAddresses[restaurantId]
+                  ) {
+                    const dateTimeCheck = checkDateTime(
+                      null,
+                      restaurantId,
+                      deliveryDates[restaurantId],
+                      deliveryAddresses[restaurantId]
+                    );
+                    if (!dateTimeCheck) {
+                      return;
+                    } else {
+                      setShowPaypalButton(true);
+                    }
+                  } else {
+                    Swal.fire({
+                      icon: "error",
+                      title: "Oops...",
+                      text: "Please select a delivery time at least an hour from now and provide a delivery address.",
+                    });
+                  }
+                }}
+              >
+                Pay Now
+              </button>
+            )}
 
-          {console.log(isInNextHour[restaurantId])}
-          {isInNextHour[restaurantId] ? (
-            <div ref={paypalRefs[restaurantId]}></div>
-          ) : (
-            <button
-              onClick={() =>
-                handleCheckout(
-                  null,
-                  restaurantId,
-                  deliveryDates[restaurantId],
-                  deliveryAddresses[restaurantId]
-                )
-              }
-            >
-              Checkout
-            </button>
-          )}
+            {isInNextHour[restaurantId] && showPaypalButton ? (
+              <div ref={paypalRefs[restaurantId]}></div>
+            ) : (
+              <button
+                onClick={() =>
+                  handleCheckout(
+                    null,
+                    restaurantId,
+                    deliveryDates[restaurantId],
+                    deliveryAddresses[restaurantId]
+                  )
+                }
+              >
+                Save Order
+              </button>
+            )}
+          </div>
         </div>
       ))}
     </div>

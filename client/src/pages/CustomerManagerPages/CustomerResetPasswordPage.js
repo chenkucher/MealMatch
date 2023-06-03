@@ -30,10 +30,11 @@ function CustomerResetPasswordPage() {
     }
   };
 
+
   return (
     <div className="reset-password-page">
       <h1>Reset Password</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="reset-password-form">
         <label>New Password:</label>
         <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
         <label>Confirm New Password:</label>
@@ -43,6 +44,7 @@ function CustomerResetPasswordPage() {
       {error && <p className="error">{error}</p>}
     </div>
   );
+
 }
 
 export default CustomerResetPasswordPage;

@@ -25,9 +25,9 @@ function Orders(props) {
       });
     }, []);
     return (
-        <div>
+        <div className={styles.container}>
             <header>
-                <NavBar loggedIn={loggedIn}/>
+                <NavBar loggedIn={loggedIn} restaurantId={restaurantId}/>
             </header>
 
             <main className={styles.main}>

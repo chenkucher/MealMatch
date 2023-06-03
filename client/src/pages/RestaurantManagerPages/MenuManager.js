@@ -10,6 +10,9 @@ import {
   getImageUrl,
 } from "./s3bucket_control";
 
+
+// categories=["Italian","Mexican","Dessert", "Street-food","Kosher","Vegan","Hamburger", "Sandwich", "Asian","Sushi"]
+
 import { MdOutlineRemoveCircle } from "react-icons/md";
 function MenuManager(props) {
   const [menuItems, setMenuItems] = useState([]);
@@ -20,6 +23,7 @@ function MenuManager(props) {
     price: "",
     item_status: "",
     item_category: "",
+    item_type: "",
     item_image: "",
     additionalProperties: [],
   });
@@ -30,6 +34,7 @@ function MenuManager(props) {
     price: "",
     item_status: "available",
     item_category: "",
+    item_type: "",
     item_image: "",
     additionalProperties: [],
   });
@@ -68,24 +73,23 @@ function MenuManager(props) {
 
     const handleImageUpdate = async () => {
       let imageUrl = editedItem.item_image;
-    
+
       if (editedItem.imageFile) {
         // Delete current file
         await deleteFileFromS3(`${editedItem.item_id}.png`);
-    
+
         // Upload new image to S3
         imageUrl = await uploadFileToS3(
           `${editedItem.item_id}.png`,
           editedItem.imageFile
         );
-    
+
         // Update the cache-busting key
         setCacheBustingKey(Date.now());
       }
-    
+
       return imageUrl;
     };
-    
 
     const updateItemInDatabase = async (imageUrl) => {
       // Send a PUT request to update the item in the database
@@ -102,6 +106,7 @@ function MenuManager(props) {
             item_price: editedItem.item_price,
             item_status: editedItem.item_status,
             item_category: editedItem.item_category,
+            item_type: editedItem.item_type,
             item_image: imageUrl,
             // editedItem.additionalProperties
             item_additional: editedItem.additionalProperties,
@@ -141,6 +146,7 @@ function MenuManager(props) {
                 item_price: editedItem.price,
                 item_status: editedItem.item_status,
                 item_category: editedItem.item_category,
+                item_type: editedItem.item_type,
                 item_image: `${imageUrl}?v=${cacheBustingKey}`,
                 item_additional: JSON.stringify(
                   editedItem.additionalProperties
@@ -158,6 +164,7 @@ function MenuManager(props) {
         price: 0,
         item_status: "available",
         item_category: "",
+        item_type: "",
         item_image: "",
         additionalProperties: [],
       });
@@ -180,36 +187,27 @@ function MenuManager(props) {
         price: selectedItem.item_price,
         item_status: selectedItem.item_status,
         item_category: selectedItem.item_category,
+        item_type: selectedItem.item_type,
         additionalProperties: JSON.parse(selectedItem.item_additional),
       });
     }
   }
 
-  // const handleEditNow = (item) => {
-  //   setSelectedItem(item); // Set the selected item state variable
-  //   const additionalPropertiesArray = Object.entries(
-  //     JSON.parse(item.item_additional || "{}")
-  //   ).map(([name, price]) => ({
-  //     name,
-  //     price,
-  //   }));
-
-  //   setEditedItem({
-  //     // Set the edited item state variable to the values of the selected item
-  //     ...item,
-  //     additionalProperties: additionalPropertiesArray,
-  //   });
-  // };
   const handleEditNow = (item) => {
     setSelectedItem(item);
     setEditedItem({
       ...item,
-      additionalProperties: item.item_additional ? JSON.parse(item.item_additional) : [],
+      additionalProperties: item.item_additional
+        ? JSON.parse(item.item_additional)
+        : [],
     });
   };
-  
+
   function handleNameChange(event) {
     setEditedItem({ ...editedItem, item_name: event.target.value });
+  }
+  function handleTypeChange(event) {
+    setEditedItem({ ...editedItem, item_type: event.target.value });
   }
 
   function handleDescriptionChange(event) {
@@ -261,12 +259,14 @@ function MenuManager(props) {
     event.preventDefault();
 
     // Check if all required fields have a value
+    console.log(newItem);
     if (
       !newItem.name ||
       !newItem.description ||
       newItem.price === 0 ||
       !newItem.item_category ||
-      !newItem.imageFile
+      !newItem.imageFile ||
+      !newItem.item_type
     ) {
       const alertContainer = document.createElement("div");
       alertContainer.classList.add(styles.alert);
@@ -310,8 +310,9 @@ function MenuManager(props) {
             item_price: newItem.price,
             item_status: newItem.item_status,
             item_category: newItem.item_category,
+            item_type: newItem.item_type,
             item_image: null, // Set item_image to null initially
-            item_additional:newItem.additionalProperties,
+            item_additional: newItem.additionalProperties,
           }),
         }
       );
@@ -372,6 +373,7 @@ function MenuManager(props) {
           item_price: newItem.price,
           item_status: newItem.item_status,
           item_category: newItem.item_category,
+          item_type: newItem.item_type,
           item_image: `https://mealmatch.s3.amazonaws.com/${newItemId}.png`,
           item_additional: newItem.additionalProperties,
         },
@@ -384,6 +386,7 @@ function MenuManager(props) {
         price: 0,
         item_status: "available",
         item_category: "",
+        item_type: "",
         item_image: "",
         additionalProperties: [],
       });
@@ -402,6 +405,7 @@ function MenuManager(props) {
       price: 0,
       item_status: "available",
       item_category: "",
+      item_type: "",
       item_image: "",
       additionalProperties: [],
     });
@@ -411,7 +415,9 @@ function MenuManager(props) {
   function handleNewNameChange(event) {
     setNewItem({ ...newItem, name: event.target.value });
   }
-
+  function handleNewTypeChange(event) {
+    setNewItem({ ...newItem, item_type: event.target.value });
+  }
   function handleNewDescriptionChange(event) {
     setNewItem({ ...newItem, description: event.target.value });
   }
@@ -545,8 +551,8 @@ function MenuManager(props) {
     });
   };
 
-  // Get a list of unique categories
-  const categories = [...new Set(menuItems.map((item) => item.item_category))];
+  // Get a list of unique types
+  const types = [...new Set(menuItems.map((item) => item.item_type))];
 
   //Check if logged in
   useEffect(() => {
@@ -559,9 +565,10 @@ function MenuManager(props) {
   }, []);
 
   return (
-    <div>
+    <div className={styles.container}>
       <header>
-        <NavBar loggedIn={loggedIn} />
+      <NavBar loggedIn={loggedIn} restaurantId={restaurantId}/>
+
       </header>
 
       <main className={styles.main}>
@@ -577,12 +584,12 @@ function MenuManager(props) {
               <h1>Menu Management</h1>
               <button onClick={() => setShowAddForm(true)}>Add Item</button>
             </div>
-            {categories.map((category) => (
+            {types.map((category) => (
               <div key={category}>
                 <h3>{category}</h3>
                 <div className={styles.menu_items_container}>
                   {menuItems
-                    .filter((item) => item.item_category === category)
+                    .filter((item) => item.item_type === category)
                     .map((item) => (
                       <div className={styles.menu_item_box} key={item.item_id}>
                         <div className={styles.menu_item_image}>
@@ -602,10 +609,10 @@ function MenuManager(props) {
                               Edit
                             </button>
                             <p className={styles.menu_item_price}>
-                              Price: ${item.item_price}
+                              ${item.item_price}
                             </p>
                             <p className={styles.menu_item_status}>
-                              Status: {item.item_status}
+                              {item.item_status}
                             </p>
                           </div>
                         </div>
@@ -640,21 +647,39 @@ function MenuManager(props) {
                   <label>
                     Description:
                     <textarea
-                      value={editedItem.item_description} // Changed from editedItem.description
+                      value={editedItem.item_description} 
                       onChange={handleDescriptionChange}
+                    />
+                  </label>
+                  <label>
+                    Status:
+                    <select
+                      className={styles.dropdown}
+                      value={editedItem.item_status}
+                      onChange={handleStatusChange}
+                    >
+                      <option value="available">Available</option>
+                      <option value="unavailable">Unavailable</option>
+                    </select>
+                  </label>
+                  <label>
+                    Type:
+                    <input
+                      type="text"
+                      value={editedItem.item_type}
+                      onChange={handleTypeChange}
                     />
                   </label>
                   <label>
                     Price:
                     <input
                       type="number"
-                      value={editedItem.item_price} // Changed from editedItem.price
+                      value={editedItem.item_price}
                       onChange={handlePriceChange}
                     />
                   </label>
                   <div className={styles.additionalPropertiesContainer}>
-                    <p>Additional: </p>
-                    <br></br>
+                    <label>Additional: </label>
                     {console.log(editedItem.additionalProperties)}
                     {Array.isArray(editedItem.additionalProperties) &&
                       editedItem.additionalProperties.map((property, index) => (
@@ -732,10 +757,13 @@ function MenuManager(props) {
                       onChange={handleImageChange}
                     />
                   </label>
-                  <button type="submit">Save</button>
-                  <button type="button" onClick={handleEditCancel}>
-                    Cancel
-                  </button>
+                  <div className={styles.down_buttons}>
+                    <button type="submit">Save</button>
+                    <button type="button" onClick={handleEditCancel}>
+                      Cancel
+                    </button>
+                  </div>
+
                 </form>
               </div>
             )}
@@ -767,7 +795,7 @@ function MenuManager(props) {
                     />
                   </label>
                   <label>
-                    Status:
+                    Status: 
                     <select
                       className={styles.dropdown}
                       value={newItem.item_status}
@@ -778,16 +806,31 @@ function MenuManager(props) {
                     </select>
                   </label>
                   <label>
-                    Category:
+                    Category: 
+                    <select value={newItem.item_category || "Italian"} onChange={handleNewCategoryChange}>
+                      <option value="Italian">Italian</option>
+                      <option value="Mexican">Mexican</option>
+                      <option value="Dessert">Dessert</option>
+                      <option value="Street-food">Street-food</option>
+                      <option value="Kosher">Kosher</option>
+                      <option value="Vegan">Vegan</option>
+                      <option value="Hamburger">Hamburger</option>
+                      <option value="Sandwich">Sandwich</option>
+                      <option value="Asian">Asian</option>
+                      <option value="Sushi">Sushi</option>
+                    </select>
+                  </label><br/>
+                  <label>
+                    Type:
                     <input
                       type="text"
-                      value={newItem.item_category}
-                      onChange={handleNewCategoryChange}
+                      placeholder="Main Course / Dessert.."
+                      value={newItem.item_type}
+                      onChange={handleNewTypeChange}
                     />
                   </label>
                   <div className={styles.additionalPropertiesContainer}>
-                    <p>Additional: </p>
-                    <br></br>
+                    <label>Additional: </label>
 
                     {newItem.additionalProperties.map((property, index) => (
                       <div
@@ -859,10 +902,13 @@ function MenuManager(props) {
                       onChange={handleNewImageChange}
                     />
                   </label>
-                  <button type="submit">Add</button>
-                  <button type="button" onClick={handleAddCancel}>
-                    Cancel
-                  </button>
+                  <div className={styles.down_buttons}>
+                    <button type="submit">Add</button>
+                    <button type="button" onClick={handleAddCancel}>
+                      Cancel
+                    </button>
+                  </div>
+
                 </form>
               </div>
             )}

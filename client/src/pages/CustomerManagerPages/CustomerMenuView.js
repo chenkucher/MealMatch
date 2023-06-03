@@ -1,11 +1,10 @@
-import React, { useState, useEffect,useContext } from 'react';
-import { useNavigate, useParams,Link  } from 'react-router-dom';
-import NavBar from '../components/CustomerManager/CustomerNavBar';
-import Sidebar from '../components/CustomerManager/CustomerSidebar';
-import ShoppingCartContext from '../../pages/components/CustomerManager/ShoppingCartContext'
-import styles from '../../styles/MenuView.module.css';
-import axios from 'axios';
-
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate, useParams, Link } from "react-router-dom";
+import NavBar from "../components/CustomerManager/CustomerNavBar";
+import Sidebar from "../components/CustomerManager/CustomerSidebar";
+import ShoppingCartContext from "../../pages/components/CustomerManager/ShoppingCartContext";
+import styles from "../../styles/MenuView.module.css";
+import axios from "axios";
 
 function AddToOrderCard({ item, onAddToOrder, onClose }) {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -17,14 +16,14 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
     setSelectedIngredients((prevSelected) =>
       checked
         ? [...prevSelected, { name: ingredient, price }]
-        : prevSelected.filter((ing) => ing.name !== ingredient),
+        : prevSelected.filter((ing) => ing.name !== ingredient)
     );
   };
   const handleAdditionalItemChange = (additionalItem, price, checked) => {
     setSelectedAdditionalItems((prevSelected) =>
       checked
         ? [...prevSelected, { name: additionalItem, price }]
-        : prevSelected.filter((item) => item.name !== additionalItem),
+        : prevSelected.filter((item) => item.name !== additionalItem)
     );
   };
 
@@ -34,7 +33,7 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
       itemDescription: item.item_description,
       itemPrice: item.item_price,
       selectedIngredients,
-      selectedAdditionalItems, 
+      selectedAdditionalItems,
       itemQuantity,
       restaurantId: item.restaurantId,
     });
@@ -47,25 +46,20 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
     });
     onClose();
   };
-  
-  
-  
 
-   const totalPrice =
+  const totalPrice =
     item.item_price * itemQuantity +
-    selectedIngredients.reduce((sum, ing) => sum + ing.price, 0) * itemQuantity +
-    selectedAdditionalItems.reduce((sum, item) => sum + item.price, 0) * itemQuantity;
+    selectedAdditionalItems.reduce((sum, item) => sum + parseFloat(item.price), 0) * itemQuantity;
 
 
   return (
     <div className={styles.addToOrderCard}>
       <div className={styles.top}>
-        <img src={item.item_image} alt={item.item_name}/>
+        <img src={item.item_image} alt={item.item_name} />
         <h2>{item.item_name}</h2>
         <p>{item.item_description}</p>
         <p>Price: ${item.item_price}</p>
       </div>
-      
 
       <div className={styles.bottom}>
         <div>
@@ -78,31 +72,32 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
               onChange={(e) => setItemQuantity(parseInt(e.target.value, 10))}
             />
           </label>
-          {Array.isArray(item.additionalProperties) && item.additionalProperties.length > 0 && (
-    <div className={styles.additionalItems}>
-      <h3>Additional Items:</h3>
-      <ul>
-        {item.additionalProperties.map((additionalItem) => (
-          <li key={additionalItem.name}>
-            <label>
-              <input
-                type="checkbox"
-                value={additionalItem.name}
-                onChange={(e) =>
-                  handleAdditionalItemChange(
-                    additionalItem.name,
-                    additionalItem.price,
-                    e.target.checked,
-                  )
-                }
-              />
-              {additionalItem.name} (+${additionalItem.price})
-            </label>
-          </li>
-        ))}
-      </ul>
-    </div>
-  )}
+          {Array.isArray(item.additionalProperties) &&
+            item.additionalProperties.length > 0 && (
+              <div className={styles.additionalItems}>
+                <h3>Additional Items:</h3>
+                <ul>
+                  {item.additionalProperties.map((additionalItem) => (
+                    <li key={additionalItem.name}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          value={additionalItem.name}
+                          onChange={(e) =>
+                            handleAdditionalItemChange(
+                              additionalItem.name,
+                              additionalItem.price,
+                              e.target.checked
+                            )
+                          }
+                        />
+                        {additionalItem.name} (+${additionalItem.price})
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
         </div>
         <p>Total Price: ${totalPrice.toFixed(2)}</p>
         <div>
@@ -110,83 +105,76 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
           <button onClick={onClose}>Close</button>
         </div>
       </div>
-
-     
     </div>
   );
 }
 
-
-
-
-
-
-
 function CustomerMenuView(props) {
   const [menuItems, setMenuItems] = useState([]);
-  const {customerId,restaurantId} = useParams();
+  const { customerId, restaurantId } = useParams();
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(null);
   const [showAddToOrderCard, setShowAddToOrderCard] = useState(false);
 
   useEffect(() => {
-    axios.get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin").then((response) => {
-      console.log(response);
-      setLoggedIn(response.data.loggedIn);
-      if (response.data.loggedIn===false) {
-        // Redirect to login page if not logged in
-        navigate('/CustomerLogin');
-      }
-      else if (response.data.loggedIn===true && response.data.userId!=customerId) {
-        // Redirect to login page if not logged in
-        console.log(response.data.userId,customerId);
-        navigate('/CustomerLogin');
-      }
-    });
-
+    axios
+      .get("http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerLogin")
+      .then((response) => {
+        console.log(response);
+        setLoggedIn(response.data.loggedIn);
+        if (response.data.loggedIn === false) {
+          // Redirect to login page if not logged in
+          navigate("/CustomerLogin");
+        } else if (
+          response.data.loggedIn === true &&
+          response.data.userId != customerId
+        ) {
+          // Redirect to login page if not logged in
+          console.log(response.data.userId, customerId);
+          navigate("/CustomerLogin");
+        }
+      });
   }, [loggedIn]);
-
-
 
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/MenuGet/${restaurantId}`);
+        const response = await fetch(
+          `http://ec2-35-169-139-56.compute-1.amazonaws.com/api/customer/MenuGet/${restaurantId}`
+        );
         const data = await response.json();
-        
+
         // Map the data to parse item_optional_ingredience
-        const parsedData = data.map(item => {
+        const parsedData = data.map((item) => {
           return {
             ...item,
-            additionalItems: item.item_additional ? JSON.parse(item.item_additional) : null
+            additionalItems: item.item_additional
+              ? JSON.parse(item.item_additional)
+              : null,
           };
         });
-  
+
         setMenuItems(parsedData);
       } catch (error) {
         console.error(error);
       }
     };
-  
+
     fetchMenuItems();
   }, [menuItems]);
-  
 
   // Get a list of unique categories
-  const categories = [...new Set(menuItems.map((item) => item.item_category))];
+  const types = [...new Set(menuItems.map((item) => item.item_type))];
 
-    
   const handleClick = (item) => {
     console.log(item);
     setSelectedItem({
       ...item,
-      restaurantId: restaurantId
+      restaurantId: restaurantId,
     });
     setShowAddToOrderCard(true);
   };
-
-
 
   const handleCloseAddToOrderCard = () => {
     setSelectedItem(null);
@@ -195,13 +183,13 @@ function CustomerMenuView(props) {
   return (
     <div>
       <header>
-        <NavBar loggedIn={loggedIn}/>
+        <NavBar loggedIn={loggedIn} customerId={customerId}/>
       </header>
 
       <main className={styles.main}>
         <section className={styles.section_side}>
           <div className={styles.sidebar}>
-            <Sidebar loggedIn={loggedIn}/>
+            <Sidebar loggedIn={loggedIn} customerId={customerId}/>
           </div>
         </section>
 
@@ -210,15 +198,19 @@ function CustomerMenuView(props) {
             <div className={styles.head_btn}>
               {/* <h1>Menu Management</h1> */}
             </div>
-            {categories.map((category) => (
+            {types.map((category) => (
               <div key={category}>
                 <h3>{category}</h3>
                 <div className={styles.menu_items_container}>
                   {menuItems
-                    .filter((item) => item.item_category === category)
+                    .filter((item) => item.item_type === category)
                     .map((item) => (
-                      <Link key={item.item_id} onClick={() => handleClick(item)}  className={styles.menu_item_box}>
-                      {/* <div key={item.item_id}> */}
+                      <Link
+                        key={item.item_id}
+                        onClick={() => handleClick(item)}
+                        className={styles.menu_item_box}
+                      >
+                        {/* <div key={item.item_id}> */}
 
                         <div className={styles.menu_item_image}>
                           <img src={item.item_image} alt={item.item_name} />
@@ -238,23 +230,28 @@ function CustomerMenuView(props) {
                             </p>
                           </div>
                         </div>
-                      {/* </div> */}
+                        {/* </div> */}
                       </Link>
                     ))}
                 </div>
               </div>
             ))}
-            
           </div>
         </section>
       </main>
       {showAddToOrderCard && (
         <>
-          <div className={styles.backgroundOverlay} onClick={() => setShowAddToOrderCard(false)}></div>
+          <div
+            className={styles.backgroundOverlay}
+            onClick={() => setShowAddToOrderCard(false)}
+          ></div>
+          
           <AddToOrderCard
-            item={{ ...selectedItem, additionalProperties: selectedItem.additionalItems }}
+            item={{
+              ...selectedItem,
+              additionalProperties: selectedItem.additionalItems,
+            }}
             onAddToOrder={(orderItem) => {
-              // Add orderItem to the orders
               console.log(orderItem);
               setShowAddToOrderCard(false);
             }}
@@ -263,7 +260,6 @@ function CustomerMenuView(props) {
         </>
       )}
     </div>
-    
   );
 }
 

@@ -4,6 +4,7 @@ import ModifyItemModal from '../../components/CustomerManager/ModifyItemModal';
 import styles from '../../../styles/ShoppingCart.module.css';
 import tableStyles from '../../../styles/ShoppingCartTable.module.css';
 import { useNavigate } from 'react-router-dom';
+import Table from 'react-bootstrap/Table';
 
 function CustomerShoppingCart({ onClose, customerId }) {
   console.log(customerId);
@@ -11,6 +12,7 @@ function CustomerShoppingCart({ onClose, customerId }) {
   const [showModifyModal, setShowModifyModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
+
 
   const totalPrice = cartItems.reduce(
     (sum, item) => {
@@ -53,7 +55,7 @@ function CustomerShoppingCart({ onClose, customerId }) {
         {cartItems.length === 0 ? (
           <p>Your shopping cart is empty.</p>
         ) : (
-          <table className={tableStyles.table}>
+          <Table responsive>
             <thead>
               <tr>
                 <th>Name</th>
@@ -82,10 +84,11 @@ function CustomerShoppingCart({ onClose, customerId }) {
                   <td>${(item.itemPrice * item.itemQuantity).toFixed(2)}</td>
                   <td>{item.itemQuantity}</td>
                   <td>
-                    <div className={tableStyles.actionContainer}>
                       <button className={tableStyles.modifyButton} onClick={() => handleModifyItem(item)}>
                         Modify
                       </button>
+                    <div className={tableStyles.actionContainer}>
+
                       {selectedItem === item && (
                         <ModifyItemModal
                           item={selectedItem}
@@ -105,10 +108,13 @@ function CustomerShoppingCart({ onClose, customerId }) {
                 </td>
               </tr>
             </tbody>
-          </table>
+          </Table>
         )}
-        <button onClick={onClose}>Close</button>
-        <button onClick={() => navigate(`/CustomerCheckOut/${customerId}`)}>Checkout</button>
+        <div className={styles.buttons}>
+          <button onClick={onClose}>Close</button>
+          <button onClick={() => navigate(`/CustomerCheckOut/${customerId}`)}>Checkout</button>
+        </div>
+
       </div>
     </>
   );

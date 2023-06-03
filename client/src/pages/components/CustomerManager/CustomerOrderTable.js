@@ -41,9 +41,9 @@ function CustomerOrderTable(props) {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Time</th>
             <th>Item</th>
             <th>Details</th>
+            <th>Time Of Delivery</th>
             <th>Price</th>
           </tr>
         </thead>
@@ -55,11 +55,11 @@ function CustomerOrderTable(props) {
             return (
               <tr key={item.order_id}>
                 <td>{item.order_id}</td>
-                <td>{item.order_timestamp}</td>
                 <td>{itemNames}</td>
                 <td>
                   <button className={styles.button} onClick={() => handleOpenModal(item)}>View Details</button>
                 </td>
+                <td>{item.order_delivery_datetime}</td>
                 <td>{item.order_price}$</td>
               </tr>
             );

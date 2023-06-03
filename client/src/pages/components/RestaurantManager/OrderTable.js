@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
+import Table from 'react-bootstrap/Table';
 import styles from '../../../styles/OrderTable.module.css';
 
-function OrderTable(props) {
+function OrderTable() {
   const [items, setItems] = useState([]);
   const { restaurantId } = useParams();
   const [currentItem, setCurrentItem] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
 
   const handleOpenModal = (item) => {
-    const parsedDetails = JSON.parse(item.order_details);
-    setCurrentItem({...item, order_details: parsedDetails});
+    setCurrentItem(item);
   };
 
   const handleCloseModal = () => {
@@ -23,25 +23,11 @@ function OrderTable(props) {
   };
 
   const handleUpdateStatus = (newStatus) => {
-    // Update the status of the selected item
     const updatedItems = items.map((item) =>
       item.order_id === selectedItem ? { ...item, order_status: newStatus } : item
     );
     setItems(updatedItems);
     setSelectedItem(null);
-
-    // Send an update to the server
-    // Update the order status in the database
-    fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/Orders/${selectedItem}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ order_status: newStatus }),
-    })
-      .then(res => res.json())
-      .then(data => console.log(data))
-      .catch(err => console.error(err));
   };
 
   useEffect(() => {
@@ -64,7 +50,7 @@ function OrderTable(props) {
   return (
     <div className={styles.container}>
       <h1>Orders Management</h1>
-      <table className={styles.table}>
+      <Table responsive>
         <thead>
           <tr>
             <th>ID</th>
@@ -104,16 +90,13 @@ function OrderTable(props) {
                       </button>
                     </div>
                   ) : (
-                    <div
-                      className={item.order_status === 'Delivered' ? styles.status_complete : styles.status}
-                      onClick={() => handleSelectItem(item.order_id)}
-                    >
+                    <div className={item.order_status === 'Delivered' ? styles.status_complete : styles.status}>
                       {item.order_status}
                     </div>
                   )}
                 </td>
                 <td>
-                  <button className={styles.modify_button} onClick={() => handleSelectItem(item.order_id)}>
+                  <button className={styles.button} onClick={() => handleSelectItem(item.order_id)}>
                     Modify Status
                   </button>
                 </td>
@@ -121,12 +104,13 @@ function OrderTable(props) {
             );
           })}
         </tbody>
-      </table>
+      </Table>
+
       {currentItem && (
         <div className={styles.modal}>
           <div className={styles.modalContent}>
             <h2>Order Details</h2>
-            <table className={styles.detailsTable}>
+            <Table className={styles.detailsTable} responsive>
               <thead>
                 <tr>
                   <th>Item Name</th>
@@ -136,7 +120,7 @@ function OrderTable(props) {
                 </tr>
               </thead>
               <tbody>
-                {currentItem.order_details.map((detail, index) => (
+                {JSON.parse(currentItem.order_details).map((detail, index) => (
                   <tr key={index}>
                     <td>{detail.item_name}</td>
                     <td>{detail.itemQuantity}</td>
@@ -151,7 +135,7 @@ function OrderTable(props) {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </Table>
             <button className={styles.closeButton} onClick={handleCloseModal}>Close</button>
           </div>
         </div>

@@ -43,12 +43,16 @@
   background-color: #dddddd;
   color: rgb(0, 0, 0);
 }
-
-.button {
-  background-color: #4CAF50;
+.buttons{
+  display: flex;
+  gap:2%;
+}
+.checkout .butoons button {
+  background-color: #12bc5e;
   color: rgb(0, 0, 0);
   padding: 10px 24px;
   text-align: center;
+  border-radius: 5px;
   text-decoration: none;
   display: inline-block;
   font-size: 16px;
@@ -117,10 +121,15 @@
   background-color: #ff0000;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 
 .errorPopup button:hover {
   background-color: #cc0000;
 }
+.buttons{
+  margin-right:10px ;
+}
+
+

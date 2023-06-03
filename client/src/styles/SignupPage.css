@@ -1,4 +1,5 @@
 .signup-page {
+    
     display: flex;
     justify-content: center;
     /* align-items: center; */
@@ -195,4 +196,8 @@
     font-size: 20px;
     cursor: pointer;
   }
-  
+  @media screen and (max-width: 600px) {
+    .signup-form {
+      margin-top: 100px;
+    }
+  }

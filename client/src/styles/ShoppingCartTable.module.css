@@ -23,20 +23,24 @@
   }
   
   .modifyButton {
-    background-color: #4caf50;
+    background-color: #12bc5e;
     color: white;
     border: none;
     cursor: pointer;
     padding: 5px 10px;
     font-size: 14px;
+    border-radius: 5px;
+
   }
-  
   .modifyButton:hover {
-    background-color: #45a049;
+    background-color: #118947;
   }
   
   .totalPriceCell {
     font-weight: bold;
     text-align: right;
   }
-  
+  .shoppingCart .actionContainer{
+    margin-right: 50px;
+    width: 10%;
+  }

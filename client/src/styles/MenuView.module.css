@@ -1,27 +1,70 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container{
+  height: 100%;
+  width: 100%;
+  background-color: #faf5ef;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+header{
+  height: 15%;
+}
+
+.main{
+  padding: 2%;
+  margin-top: 2%;
+  height: 70%;
+  display: flex;
+  gap:5%
+}
+.section_side{
+  margin-left:5%;
+  position: flex;
+
+
+}
+.section_middle{
+  width: 70%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (max-width: 600px) {
   .main {
-    margin-top: 2%;
-    height: 60%;
+    flex-direction: column;
+  }
+  .section_middle{
+    width: 300px;
+    height: 70%;
     display: flex;
-    gap: 5%;
+    flex-direction: column;
   }
-  
-  .section_side {
-    /* border: solid; */
-    width: 25%;
-    margin-left: 5%;
+  .section_side{
+      margin-left:0%;
+      position: flex;
+      margin-bottom:10px;
   }
-  
-  .section_middle {
-    /* border: solid; */
-    height: 100%;
-    width: 75%;
+  .menu_items_container {
+    width: 100%;
   }
+
+  .menu_item_box{
+    width: 100px;
+  }
+  .menu_item_description {
+      overflow-y: auto;
+      font-size: 8px;
+  }
+
+}
   
   h1 {
     margin-top: 0;
@@ -38,6 +81,7 @@
     flex-wrap: wrap;
     gap: 4%;
     margin-top: 1%;
+    width: 100%;
   }
   
   .menu_item_box {
@@ -53,8 +97,9 @@
     color: black;
     background-color: #fff;
     transition: all 0.3s ease-in-out;
+    width: 300px;
   }
-  
+
   .menu_item_image img {
     border-radius: 0.5rem 0.5rem 0 0;
     height: 100%;
@@ -62,7 +107,6 @@
     object-fit: cover;
     position: absolute;
     top: 0;
-    width: 100%;
   }
   
   .menu_item_details {
@@ -142,7 +186,7 @@
   
   .edit_form button[type="submit"],
   .edit_form button[type="button"] {
-    background-color: #4CAF50;
+    background-color: #12bc5e;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -153,7 +197,7 @@
   
   .edit_form button[type="submit"]:hover,
   .edit_form button[type="button"]:hover {
-    background-color: #3e8e41;
+    background-color: #118947;
   }
   
   .edit_form button[type="submit"]:focus,
@@ -161,7 +205,7 @@
     outline: none;
   }
   .menu_item_details button {
-    background-color: #4CAF50;
+    background-color: #12bc5e;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -171,7 +215,7 @@
   }
   
   .menu_item_details button:hover {
-    background-color: #3e8e41;
+    background-color: #118947;
   }
   .box_down{
     width: 100%;
@@ -185,7 +229,7 @@
     gap: 2%;
   }
   .head_btn button {
-    background-color: #4CAF50;
+    background-color: #12bc5e;
     color: white;
     padding: 10px 20px;
     border: none;
@@ -194,12 +238,12 @@
   }
   
   .head_btn button:hover {
-    background-color: #3e8e41;
+    background-color: #118947;
   }
   
   .head_btn button:focus {
     outline: none;
-    box-shadow: 0 0 0 2px #4CAF50;
+    box-shadow: 0 0 0 2px #12bc5e;
   }
   
   .box_up{
@@ -211,7 +255,6 @@
   
   }
   
-  /* Add to the existing .menu_item_image class */
   .menu_item_image {
     display: flex;
     width: 100%;
@@ -222,15 +265,7 @@
     padding-bottom: 60%;
     position: relative;
   }
-  /* .menu_item_box {
-    display: flex;
-    flex-direction: column;
-    width: 240px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
-  } */
+
   
   .menu_item_box:hover {
     transform: translateY(-5px);
@@ -250,15 +285,15 @@
   }
   
   .addToOrderCard {
-  
+    overflow-y: auto;
     position: fixed;
     display:flex;
     flex-direction: column;
     justify-content: space-around;
-    width: auto;
-    height:auto;
+    width: 80%;
     max-width: 500px;
-    min-width: 500px;
+    min-width: 300px;
+    max-height: 80%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -268,6 +303,15 @@
     padding: 30px;
     z-index: 1000;
   }
+  
+  @media screen and (max-width: 600px) {
+    .addToOrderCard {
+      width: 90%;
+      min-width: 90%;
+      padding: 20px;
+    }
+  }
+  
   
   .addToOrderCard h2 {
     font-size: 1.5rem;

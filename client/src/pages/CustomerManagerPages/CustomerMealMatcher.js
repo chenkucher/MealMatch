@@ -4,7 +4,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import styles from '../../styles/CustomerMealMatcher.module.css';
 import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
-import Footer from '../components/Footer';
 
 
 function CustomerMealMatcher(props) {
@@ -125,42 +124,48 @@ function CustomerMealMatcher(props) {
   return (
     <div className={styles.container}>
       <header>
-        <NavBar loggedIn={loggedIn} matchedItems={swipedRightItems} />
+        <NavBar loggedIn={loggedIn} matchedItems={swipedRightItems} customerId={customerId}/>
       </header>
       {console.log(restaurantItems)}
       <main className={styles.main}>
         <section className={styles.section_side}>
-          <Sidebar loggedIn={loggedIn} />
+          <Sidebar loggedIn={loggedIn} customerId={customerId}/>
         </section>
-
+  
         <section className={styles.section_middle}>
             <h1>Match with your meal!</h1>
-          {restaurantItems.slice(0, 1).map((item, index) => (
-            <div
-            key={index}
-            className={styles.item}
-            style={{ transform: `translateX(${currentX - startX}px)` }}
-            onTouchStart={touchStart}
-            onTouchMove={touchMove}
-            onTouchEnd={touchEnd}
-            >
-
-              <h1>{item.restaurant_name}</h1>
-              <img src={item.item_image} alt={item.item_name} className={styles.itemImage} />
-              <h2>{item.item_name}</h2>
-              <h3>price: {item.item_price}$</h3>
-              <p>{item.item_description}</p>
+          {restaurantItems.length > 0 ? 
+            restaurantItems.slice(0, 1).map((item, index) => (
+              <div
+              key={index}
+              className={styles.item}
+              style={{ transform: `translateX(${currentX - startX}px)` }}
+              onTouchStart={touchStart}
+              onTouchMove={touchMove}
+              onTouchEnd={touchEnd}
+              >
+  
+                <h1>{item.restaurant_name}</h1>
+                <img src={item.item_image} alt={item.item_name} className={styles.itemImage} />
+                <h2>{item.item_name}</h2>
+                <h3>price: {item.item_price}$</h3>
+                <p>{item.item_description}</p>
+              </div>
+            )) : 
+            <div className={styles.noItemsMessage}>
+              <h2>Oops!</h2>
+              <p>If you got here, it means we have nothing to show you anymore. Try to explore more items on the explore page!</p>
+              <p>Try to change you category preferences at the settings page!</p>
             </div>
-          ))}
+          }
             <div className={styles.buttons}>
-              <button onClick={() => swipe('left', restaurantItems[0])}>&#8592;</button>
+              <button disabled={restaurantItems.length === 0} onClick={() => swipe('left', restaurantItems[0])}>&#8592;</button>
               <button onClick={undoSwipe}>Undo Swipe</button>
-              <button onClick={() => swipe('right', restaurantItems[0])}>&#8594;</button>
+              <button disabled={restaurantItems.length === 0} onClick={() => swipe('right', restaurantItems[0])}>&#8594;</button>
             </div>
-
+  
         </section>
       </main>
-      {/* <Footer/> */}
     </div>
   );
 }
