@@ -31,12 +31,12 @@ function ResetPasswordPage() {
   return (
     <div className="reset-password-page">
       <h1>Reset Password</h1>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="reset-password-form">
         <label>New Password:</label>
-        <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} className="reset-password-input" />
         <label>Confirm New Password:</label>
-        <input type="password" name="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-        <button type="submit">Reset Password</button>
+        <input type="password" name="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="reset-password-input" />
+        <button type="submit" className="reset-password-button">Reset Password</button>
       </form>
       {error && <p className="error">{error}</p>}
     </div>

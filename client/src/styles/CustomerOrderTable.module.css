@@ -4,26 +4,6 @@
     box-sizing: border-box;
   }
   
-  /* .table {
-    margin-top: 1%;
-    width: 100%;
-    height: 60%;
-  }
-  
-  .table th,
-  .table td {
-    width: auto;
-    text-align: center;
-    border: 1px solid #ccc;
-    overflow: hidden;
-    padding: 8px 16px; 
-  }
-  
-  .table th {
-    background-color: #f2f2f2;
-  }
-  
-   */
 
    .container {
     width: 100%;
@@ -42,13 +22,14 @@
   }
   
   .button {
-    background-color: #4CAF50;
+    background-color: #12bc5e;
     color: white;
     padding: 10px 24px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
+    border-radius:5px;
     margin: 4px 2px;
     transition-duration: 0.4s;
     cursor: pointer;

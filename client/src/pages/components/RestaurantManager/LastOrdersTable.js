@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import styles from '../../../styles/StatisticsComponents.module.css';
+import Table from 'react-bootstrap/Table';
 
 function LastOrdersTable() {
   const [orders, setOrders] = useState([]);
@@ -35,12 +36,11 @@ function LastOrdersTable() {
 
   return (
     <div className={styles.future_orders_chart}>
-      {/* <h2>Last Orders</h2> */}
-      <table>
+      <Table responsive>
         <thead>
           <tr>
             <th>ID</th>
-            <th>Timestamp</th>
+            <th>Delivery Time</th>
             <th>Details</th>
             <th>Price</th>
           </tr>
@@ -49,7 +49,7 @@ function LastOrdersTable() {
           {orders.map((order) => (
             <tr key={order.id}>
               <td>{order.order_id}</td>
-              <td>{order.order_timestamp}</td>
+              <td>{order.order_delivery_datetime}</td>
               <td>
                 <button className={styles.button} onClick={() => handleOpenModal(order)}>View Details</button>
               </td>
@@ -57,20 +57,19 @@ function LastOrdersTable() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
 
       {currentOrder && (
           <div className={styles.modal}>
             <div className={styles.modalContent}>
               <h2>Order Details</h2>
-              <table className={styles.detailsTable}>
+              <Table className={styles.detailsTable} responsive>
                 <thead>
                   <tr>
                     <th>Item Name</th>
                     <th>Item Quantity</th>
                     <th>Item Price</th>
                     <th>Additional Items</th>
-
                   </tr>
                 </thead>
                 <tbody>
@@ -86,17 +85,14 @@ function LastOrdersTable() {
                           </div>
                         ))}
                       </td>
-
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </Table>
               <button className={styles.closeButton} onClick={handleCloseModal}>Close</button>
             </div>
           </div>
         )}
-
-
     </div>
   );
 }

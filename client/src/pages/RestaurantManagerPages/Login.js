@@ -11,7 +11,6 @@ function Login() {
   const [showModal, setShowModal] = useState(false);
   const [resetEmail, setResetEmail] = useState('');
 
-
   const handleForgotPassword = async () => {
     try {
       const response = await axios.post('http://ec2-35-169-139-56.compute-1.amazonaws.com/api/forgot-password', { email: resetEmail });
@@ -23,7 +22,6 @@ function Login() {
       setError(error.response.data.message);
     }
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +61,7 @@ function Login() {
           <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="submit">Login</button>
         </form>
-        <button type="button" onClick={() => setShowModal(true)}>Forgot Password?</button>
+        <button type="button" className="forgot-password-button" onClick={() => setShowModal(true)}>Forgot Password?</button>
         <Modal show={showModal} onClose={() => setShowModal(false)}>
           <h1>Reset Password</h1>
           <label>Email:</label>

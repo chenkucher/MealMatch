@@ -20,10 +20,10 @@ function CustomerCheckout(props) {
         if (response.data.loggedIn === false) {
           // Redirect to login page if not logged in
           navigate('/CustomerLogin');
-        // } else if (response.data.loggedIn === true && response.data.userId != customerId) {
-        //   // Redirect to login page if not logged in
-        //   console.log(response.data.userId, customerId);
-        //   navigate('/CustomerLogin');
+        } else if (response.data.loggedIn === true && response.data.userId != customerId) {
+          // Redirect to login page if not logged in
+          console.log(response.data.userId, customerId);
+          navigate('/CustomerLogin');
         }
       });
   }, []);
@@ -40,6 +40,10 @@ function CustomerCheckout(props) {
         </section>
 
         <section className={styles.section_middle}>
+        <h2>Checkout</h2>
+        <div className={styles.notice_popup}>
+          <b>NOTICE: You can pay for your order 12 hour before delivery time, if you want to pay close to the delivery time,<br></br> save your order and 2 hours before the delivery time a reminder email will be sent to you.<br></br><br></br> After payment order refunds are not acceptable! Only changing time and address of delivery.</b>
+        </div>
         <Checkout customerId={customerId} />
 
 

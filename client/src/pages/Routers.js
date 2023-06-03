@@ -2,7 +2,7 @@ import React from 'react';
 import {BrowserRouter as Router} from "react-router-dom";
 import { Routes,Route} from "react-router-dom";
 import MenuManager from './RestaurantManagerPages/MenuManager';
-import RestaurantManage from '../pages/RestaurantManage';
+import RestaurantManage from '../pages/RestaurantManagerPages/RestaurantManage';
 import Statistic from './RestaurantManagerPages/Statistic';
 import Storage from './RestaurantManagerPages/Storage';
 import Orders from './RestaurantManagerPages/Orders';

@@ -59,10 +59,10 @@
 
 .orderButton {
   padding: 0.5em 1em;
-  color: #fff;
-  background-color: #007BFF;
+  color: #ffffff;
+  background-color: #12bc5e;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 .orderButtonClose {
@@ -70,14 +70,52 @@
   color: #fff;
   background-color: red;
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   cursor: pointer;
 }
 .orderButton:hover {
-  background-color: #0056b3;
+  background-color: #118947;
 }
 .orderButtonClose:hover  {
 
   background-color: rgb(255, 59, 59);
 
+}
+.orderSummary .popup {
+  position: abosulute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background-color: #f9ed69;
+  text-align: left;
+  transition: opacity 2s ease-in-out;
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .orderSummary {
+    padding: 10px;
+    width: 90%;
+    box-sizing: border-box;
+  }
+
+  .orderSummary table {
+    font-size: 0.8rem;
+  }
+
+  .orderSummary table th,
+  .orderSummary table td {
+    padding: 0.5rem;
+  }
+
+  .buttonsContainer {
+    flex-direction: column;
+  }
+
+  .orderButton,
+  .orderButtonClose {
+    width: 100%;
+    margin-bottom: 1em;
+  }
 }

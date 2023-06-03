@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
-import '../styles/Home.css'
+import styles from '../styles/Home.module.css';
 import NavBar from './components/NavBar';
-import logo from './helpers/logo.jpg';
 import makeFoodImage from './helpers/makefood.jpg';
 import planFoodImage from './helpers/planfood.jpg';
-
-// remove this line
-// import backgroundImage from './helpers/background.jpg';
+import { useNavigate } from 'react-router-dom';
 
 function Home(props) {
+  const navigate = useNavigate();
   const [boxHoverStates, setBoxHoverStates] = useState({
     customers: false,
     sellers: false
@@ -27,7 +25,7 @@ function Home(props) {
       return {
         backgroundImage: `url(${boxType === 'customers' ? planFoodImage : makeFoodImage})`,
         backgroundColor: '#ddd',
-        backgroundSize: 'cover' // add this property to fit the image to the box
+        backgroundSize: 'cover' 
       };
     } else {
       return {
@@ -37,34 +35,36 @@ function Home(props) {
     }
   }
 
-  // Use the URL directly in the style
   const backgroundImage = 'https://mealmatch.s3.amazonaws.com/background.jpg';
+  const logo = 'https://mealmatch.s3.amazonaws.com/logo.jpg';
 
   return (
-    <div className="home-page">
+    <div className={styles.homePage}>
       <header>
         <NavBar/>
       </header>
-      <img src={logo} alt="logo" className="logo-image" />
-      <div className='middleOptions'>
+      <img src={logo} alt="logo" className={styles.logoImage} />
+      <div className={styles.middleOptions}>
         <div
-          className='customers box'
+          className={styles.customersBox}
           style={getBoxStyle('customers')}
           onMouseEnter={() => handleBoxHover('customers')}
           onMouseLeave={() => handleBoxLeave('customers')}
+          onClick={() => navigate('/CustomerLogin')}
         >
           <h1>Customers</h1>
         </div>
         <div
-          className='sellers box'
+          className={styles.sellersBox}
           style={getBoxStyle('sellers')}
           onMouseEnter={() => handleBoxHover('sellers')}
           onMouseLeave={() => handleBoxLeave('sellers')}
+          onClick={() => navigate('/Login')}
         >
           <h1>Sellers</h1>
         </div>
       </div>
-      <img src={backgroundImage} alt="Background" className="background-image" />
+      <img src={backgroundImage} alt="Background" className={styles.backgroundImage} />
     </div>
   );
 }

@@ -63,12 +63,12 @@ function CustomerLogin(props) {
           <input type="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} />
           <button type="submit">Login</button>
         </form>
-        <button type="button" onClick={() => setShowModal(true)}>Forgot Password?</button>
+        <button type="button" className="forgot-password-button" onClick={() => setShowModal(true)}>Forgot Password?</button>
         <Modal show={showModal} onClose={() => setShowModal(false)}>
           <h1>Reset Password</h1>
           <label>Email:</label>
           <input type="email" name="email" value={resetEmail} onChange={(e) => setResetEmail(e.target.value)} />
-          <button type="button" onClick={handleForgotPassword}>Send Reset Link</button>
+          <button  type="button" onClick={handleForgotPassword}>Send Reset Link</button>
         </Modal>
         {error && <p className="error">{error}</p>}
       </div>

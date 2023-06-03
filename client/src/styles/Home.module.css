@@ -1,0 +1,70 @@
+.homePage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.middleOptions {
+  display: flex;
+  justify-content: center;
+  gap:5%;
+  margin-top: 2%;
+  justify-content: space-between;
+}
+
+.customersBox, .sellersBox{
+  background-color:#F7F8F3;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  transition: background-color 0.2s ease-in-out;
+  width: 250px;
+  margin-top: 1%;
+  cursor: pointer;
+  
+  
+}
+
+.customersBox:hover,
+.sellersBox:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+}
+
+.backgroundImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
+
+.logoImage {
+  width: 500px;
+  margin-top: 2%;
+  border-radius: 10px;
+}
+
+
+@media screen and (max-width: 768px) {
+  .logoImage {
+    gap:10px;
+    width: 90%;
+    max-width: 300px;
+  }
+
+  .middleOptions {
+    
+    flex-direction: column;
+    align-items: center;
+    gap:10px;
+  }
+
+  .customersBox,
+  .sellersBox {
+    width: 90%;
+    max-width: 400px;
+  }
+}

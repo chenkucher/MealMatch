@@ -1,26 +1,66 @@
+
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
+.container{
+  height: 100%;
+  width: 100%;
+  background-color: #faf5ef;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
 header{
   height: 15%;
-  /* margin-top: 2%; */
 }
+
 .main{
+  padding: 2%;
   margin-top: 2%;
-  height: 60%;
+  height: 70%;
   display: flex;
   gap:5%
 }
-footer{
-  height:15%
+.section_side{
+  position: flex;
+
+
 }
+.section_middle{
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (max-width: 600px) {
+  .main {
+    
+    flex-direction: column;
+  }
+  .section_side{
+      margin-left:0%;
+      position: flex;
+      margin-bottom:10px;
+  
+  
+  }
+}
+
 .settings_page {
     margin-top: 1.2%;
     display: flex;
     gap:10%;
-    /* justify-content: space-between; */
+
+  }
+  @media screen and (max-width: 600px) {
+    .settings_page {
+      flex-direction: column;
+    }
   }
   
   .settings_page h2 {
@@ -31,7 +71,7 @@ footer{
   .settings_page form {
     display: flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
   }
   
   .settings_page div {
@@ -71,18 +111,23 @@ footer{
   .settings_page button:hover {
     background-color: #0062cc;
   }
-  .section_side{
-    /* border: solid; */
-    width: 20%;
-    margin-left:5%
 
-}
-.section_middle{
-    /* border: solid; */
-    height: 100%;
-    width: 50%;
+  .settings_page .save_button {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #12bc5e;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .settings_page .save_button:hover {
+    background-color: #118947;
+  } 
 
-}
 
 .pass,.alert,.no_fields {
   position: fixed;
@@ -156,4 +201,14 @@ footer{
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(5px);
   z-index: 5;
+}
+.password_container{
+  margin-top: 5px;
+}
+.logo{
+  display: flex;
+  flex-direction: column;
+}
+.logoImage{
+  width: 200px;
 }

@@ -7,7 +7,13 @@
 .container{
   height: 100%;
   width: 100%;
+  background-color: #faf5ef;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
+
+
 
 header{
   height: 15%;
@@ -16,15 +22,13 @@ header{
 .main{
   width: 100%;
   margin-top: 2%;
-  height: 70%;
+  height: 100%;
   display: flex;
-  gap:5%
+  gap:5%;
 }
 .section_side{
   position: flex;
-  width: 20%;
-  margin-left:5%
-
+  width: 30%;
 }
 .section_middle{
   height: 70%;
@@ -34,9 +38,6 @@ header{
 }
 .restaurants_header{
   margin-top: 5%;;
-}
-footer{
-  height:15%;
 }
 
 .categories {
@@ -79,14 +80,8 @@ footer{
 
 
 
-.restaurants {
-  margin-top: 1%;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1%;
-}
-
 .restaurant_box {
+  align-items: center;
   border: 1px solid #ddd;
   border-radius: 0.5rem;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -99,16 +94,25 @@ footer{
   color: black;
   background-color: #fff;
   transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  padding: 1%;
+  flex-shrink: 0; 
 }
+
 .restaurant_box:hover {
   transform: translateY(-5px);
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 .restaurant_logo {
+  width: 200px;
   height: 150px;
   position: relative;
 }
+.restaurant_box img{
+  max-height: 120px;
+  width: 100%;
 
+}
 .restaurant_logo img {
   border-radius: 0.5rem 0.5rem 0 0;
   height: 40%;
@@ -143,7 +147,7 @@ footer{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background-color: rgba(187, 187, 187, 0.7);
+  background-color: rgba(169, 169, 169, 0.7);
   border: none;
   font-size: 24px;
   padding: 10px 15px;
@@ -158,8 +162,66 @@ footer{
 
 .arrowRight {
   right: 0;
+  margin-right: 1%;
 }
 
 .categories_wrapper {
   position: relative;
+  width: 90%;
+}
+
+
+@media screen and (max-width: 600px) {
+  .main {
+    
+    flex-direction: column;
+  }
+
+
+
+  .section_side{
+    margin-left:0%;
+    position: flex;
+    margin-bottom:10px;
+
+
+}
+
+  .section_middle{
+    width: 100%;
+  }
+
+  .categories {
+    /* flex-direction: column; */
+    align-items: center;
+  }
+
+  .categoryItem {
+    width: 50%;
+    margin-top: 1%;
+  }
+
+  .restaurants {
+    align-items: center;
+  }
+
+  .restaurant_box {
+    height: 300px;
+    width: 200px;
+  }
+}
+.restaurants_wrapper {
+  position: relative;
+  width: 90%;
+}
+
+.restaurants {
+  position: relative;
+  display: flex;
+  padding: 2%;
+  gap: 1%;
+  margin-bottom: 2%;
+  margin-top: 1%;
+  flex-wrap: nowrap;
+  overflow-x: hidden;
 }

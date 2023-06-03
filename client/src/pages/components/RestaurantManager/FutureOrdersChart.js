@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import styles from '../../../styles/StatisticsComponents.module.css';
+import Table from 'react-bootstrap/Table';
 
 function FutureOrdersChart() {
   const { restaurantId } = useParams();
@@ -9,7 +10,7 @@ function FutureOrdersChart() {
 
   useEffect(() => {
     // Fetch initial data from the server
-    fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/Orders/next3hours/${restaurantId}`)
+    fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/Orders/futureOrders/${restaurantId}`)
       .then((response) => response.json())
       .then((data) => {
         setOrders(data);
@@ -26,32 +27,26 @@ function FutureOrdersChart() {
     };
   }, []);
 
-  // if (orders.length === 0) {
-  //   return <div>Loading...</div>;
-  // }
-
   return (
     <div className={styles.future_orders_chart}>
-      <table>
+      <Table responsive>
         <thead>
           <tr>
             <th>Order ID</th>
-            <th>Price</th>
             <th>Delivery Time</th>
-            {/* <th>Details</th> */}
+            <th>Price</th>
           </tr>
         </thead>
         <tbody>
           {orders.map((order) => (
             <tr key={order.order_id}>
               <td>{order.order_id}</td>
-              <td>{order.order_price}</td>
               <td>{order.order_delivery_datetime}</td>
-              {/* <td>{order.order_details[0].item_name}</td> */}
+              <td>{order.order_price}$</td>
             </tr>
           ))}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 }

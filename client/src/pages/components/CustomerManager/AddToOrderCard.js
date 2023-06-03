@@ -49,8 +49,7 @@ function AddToOrderCard({ item: initialItem, onAddToOrder}) {
 
   const totalPrice =
     item.item_price * itemQuantity +
-    selectedIngredients.reduce((sum, ing) => sum + ing.price, 0) * itemQuantity +
-    selectedAdditionalItems.reduce((sum, item) => sum + item.price, 0) * itemQuantity;
+    selectedAdditionalItems.reduce((sum, item) => sum + parseFloat(item.price), 0) * itemQuantity;
 
   return (
     <div className={styles.addToOrderCard}>

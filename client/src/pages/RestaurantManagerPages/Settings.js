@@ -3,7 +3,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import NavBar from '../components/NavBar';
 import Sidebar from '../components/RestaurantManager/Sidebar';
 import styles from '../../styles/Settings.module.css';
+import { uploadFileToS3 } from "./s3bucket_control";
 import axios from 'axios';
+
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function Settings(props) {
   const [restaurantName, setRestaurantName] = useState('');
@@ -15,15 +21,19 @@ function Settings(props) {
   const [password, setPassword] = useState('');
   const [restaurantDetails, setRestaurantDetails] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [paypalApiKey, setPaypalApiKey] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const [logoFile, setLogoFile] = useState(null);
   const [openingHoursStart, setOpeningHoursStart] = useState('');
   const [openingHoursEnd, setOpeningHoursEnd] = useState('');
-
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [logoUpdated, setLogoUpdated] = useState(false);
+
   const { restaurantId } = useParams();
+  const logo = "https://mealmatch.s3.amazonaws.com/logo.jpg";
   const navigate = useNavigate();
+
 
   useEffect(() => {
     axios
@@ -59,13 +69,43 @@ function Settings(props) {
         setRestaurantDetails(data.restaurant_details);
         setOpeningHoursStart(data.start_opening_time);
         setOpeningHoursEnd(data.close_opening_time);
+        setPaypalApiKey(data.paypal_api_key);
 
       })
       .catch((error) => console.error(error));
   }, []);
 
 
-  function handleSave() {
+  function handleLogoChange(event) {
+    const file = event.target.files[0];
+  
+    if (file) {
+      const imageURL = URL.createObjectURL(file);
+      const img = new Image();
+      img.src = imageURL;
+      setLogoUpdated(true)
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+  
+        // Convert the image to PNG format
+        canvas.toBlob((blob) => {
+          setLogoFile(blob);
+  
+          // Release the object URL to free up memory
+          URL.revokeObjectURL(imageURL);
+        }, "image/png");
+      };
+    }
+  }
+  
+  
+
+
+  async function handleSave() {
     if (password !== confirmPassword) {
         const alertBox = document.createElement('div');
           alertBox.className = styles.pass;
@@ -77,6 +117,18 @@ function Settings(props) {
           }, 3000);
         return;
       }
+
+      if (logoFile) {
+        // Generate a unique file name (e.g., using the current timestamp)
+        const fileName = `restaurant_logo_${restaurantId}.png`;
+    
+        // Upload the logo to S3 and update the logoUrl state variable
+        const imageUrl = await uploadFileToS3(fileName, logoFile);
+        // setLogoUrl(imageUrl)
+        // await delay(2000);
+
+      }
+      
     // Send updated data to the server
     const data = {
       restaurantName,
@@ -89,8 +141,11 @@ function Settings(props) {
       password,
       confirmPassword,
       restaurantDetails,
+      paypalApiKey,
+      logoUpdated
     };
     
+    console.log(data);
   
     fetch('/api/SellerSettings', {
       method: 'POST',
@@ -133,15 +188,13 @@ function Settings(props) {
       })
       .catch((error) => console.error(error));
   }
-//   function handlePasswordChange() {
-//     setShowPasswordInputs(!showPasswordInputs);
-//   }
+
   
   
   return (
-    <div>
+    <div className={styles.container}>
       <header>
-        <NavBar loggedIn={loggedIn} />
+        <NavBar loggedIn={loggedIn} restaurantId={restaurantId}/>
       </header>
       <main className={styles.main}>
         <section className={styles.section_side}>
@@ -189,17 +242,24 @@ function Settings(props) {
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
-                <div>
-                  <label htmlFor="logo-url">Logo URL:</label>
+                <div className={styles.logo}>
+                  <label htmlFor="logo-file">Logo:</label>
                   <input
-                    type="text"
-                    id="logo-url"
-                    value={logoUrl}
-                    onChange={(e) => setLogoUrl(e.target.value)}
+                    type="file"
+                    id="logo-file"
+                    accept="image/jpeg, image/png, image/jpg"
+                    onChange={handleLogoChange}
+                  />
+                  <img
+                  src={logoUrl || logo}
+                  alt={`${restaurantName} logo`}
+                  className={styles.logoImage}
+
                   />
                 </div>
+
                 <div>
-                  <label htmlFor="opening-hours-start">Opening Hours Start:</label>
+                  <label htmlFor="opening-hours-start">Opening Hours Start:</label><br/>
                   <input
                     type="time"
                     id="opening-hours-start"
@@ -208,7 +268,7 @@ function Settings(props) {
                   />
                 </div>
                 <div>
-                  <label htmlFor="opening-hours-end">Opening Hours End:</label>
+                  <label htmlFor="opening-hours-end">Opening Hours End:</label><br/>
                   <input
                     type="time"
                     id="opening-hours-end"
@@ -223,14 +283,23 @@ function Settings(props) {
               {errorMessage && (
                 <div className={styles.error}>{errorMessage}</div>
               )}
-              <button onClick={handleSave}>Save</button>
+              <button className={styles.save_button} onClick={handleSave}>Save Changes</button>
             </div>
             <div className={styles.settings_page_right}>
               <h2>Account Settings</h2>
               <div>
-                  <label htmlFor="email">Email:</label>
+                <label htmlFor="paypal-api-key">PayPal API Key:</label>
+                <input
+                  type="password"
+                  id="paypal-api-key"
+                  value={paypalApiKey}
+                  onChange={(e) => setPaypalApiKey(e.target.value)}
+                />
+              </div>
+              <div>
+                  <label htmlFor="email">Email:</label><br/>
                   <input
-                    type="email"
+                    type="text"
                     id="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}

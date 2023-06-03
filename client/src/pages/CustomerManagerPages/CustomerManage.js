@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
-import styles from '../../styles/CustomerOrders.module.css';
+import styles from '../../styles/CustomerManage.module.css';
 import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
 import CustomerCalender from '../components/CustomerManager/CustomerCalender';
-import Footer from '../components/Footer';
 
 function CustomerManage(props) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -32,12 +31,12 @@ function CustomerManage(props) {
   return (
     <div className={styles.container}>
       <header>
-        <NavBar loggedIn={loggedIn} />
+        <NavBar loggedIn={loggedIn} customerId={customerId}/>
       </header>
 
       <main className={styles.main}>
         <section className={styles.section_side}>
-          <Sidebar loggedIn={loggedIn} />
+          <Sidebar loggedIn={loggedIn} customerId={customerId}/>
         </section>
 
         <section className={styles.section_middle}>
