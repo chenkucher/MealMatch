@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/RestaurantManager/NavBar';
 import Sidebar from '../components/RestaurantManager/Sidebar';
 import styles from '../../styles/Settings.module.css';
-import { uploadFileToS3 } from "./s3bucket_control";
 import axios from 'axios';
 
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 function Settings(props) {
   const [restaurantName, setRestaurantName] = useState('');
@@ -102,8 +97,6 @@ function Settings(props) {
     }
   }
   
-  
-
 
   async function handleSave() {
     if (password !== confirmPassword) {
@@ -123,9 +116,24 @@ function Settings(props) {
         const fileName = `restaurant_logo_${restaurantId}.png`;
     
         // Upload the logo to S3 and update the logoUrl state variable
-        const imageUrl = await uploadFileToS3(fileName, logoFile);
-        // setLogoUrl(imageUrl)
-        // await delay(2000);
+        // Prepare the file for upload
+        let formData = new FormData();
+        formData.append('imageFile', logoFile);
+        formData.append('itemId', restaurantId);
+        formData.append('type', 'restaurant_logo');
+        // Upload new image to S3 via a POST request
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to upload file');
+        }
+    
+        const data = await response.json();
+        const imageUrl = data.imageUrl;  
+        setLogoUrl(imageUrl + '?timestamp=' + new Date().getTime());
 
       }
       
@@ -333,7 +341,6 @@ function Settings(props) {
                     </div>
                   </form>
                 )}
-                {/* <button onClick={handleSave}>Save</button> */}
               </div>
             </div>
           </div>

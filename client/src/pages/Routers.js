@@ -3,8 +3,6 @@ import {BrowserRouter as Router} from "react-router-dom";
 import { Routes,Route} from "react-router-dom";
 import MenuManager from './RestaurantManagerPages/MenuManager';
 import RestaurantManage from '../pages/RestaurantManagerPages/RestaurantManage';
-import Statistic from './RestaurantManagerPages/Statistic';
-import Storage from './RestaurantManagerPages/Storage';
 import Orders from './RestaurantManagerPages/Orders';
 import Settings from './RestaurantManagerPages/Settings';
 import Login from './RestaurantManagerPages/Login';
@@ -36,16 +34,17 @@ function Routers(props) {
     return (
         <Router>
              <Routes >
+                {/* -- general pages --  */}
                  <Route path="/" element={<Home/>} />
                  <Route path="/PrivacyPolicy" element={<PrivacyPolicy/>} />
                  <Route path="/TermsOfUse" element={<TermsOfUse/>} />
                  <Route path="/ContactUs" element={<ContactUs/>} />
+                
 
+                {/* -- restaurant managment pages --  */}
                  <Route path="/RestaurantManage/:restaurantId" element={<RestaurantManage />} />
                  <Route path="/confirmEmail/:tokenId" element={<ConfirmEmailPage/>} />
                  <Route path="/MenuManager/:restaurantId" element={<MenuManager/>} />
-                 <Route path="/Statistic/:restaurantId" element={<Statistic/>} />
-                 <Route path="/Storage/:restaurantId" element={<Storage/>} />
                  <Route path="/Orders/:restaurantId" element={<Orders/>} />
                  <Route path="/Settings/:restaurantId" element={<Settings/>} />
                  <Route path="/Login" element={<Login/>} />
@@ -53,7 +52,7 @@ function Routers(props) {
                  <Route path="/InvalidTokenPage" element={<InvalidTokenPage/>} />
                  <Route path="/RestaurantResetPasswordPage/:token" element={<ResetPasswordPage/>} />
 
-
+                {/* -- customers pages --  */}
                  <Route path="/CustomerSignUp" element={<CustomerSignUp/>} />
                  <Route path="/CustomerLogin" element={<CustomerLogin/>} />
                  <Route path="/CustomerPreferences/:customerId" element={<CustomerPreferences/>} />

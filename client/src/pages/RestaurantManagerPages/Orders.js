@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate,useParams } from 'react-router-dom';
 import axios from 'axios';
 import styles from '../../styles/Orders.module.css'
-import NavBar from '../components/NavBar';
+import NavBar from '../components/RestaurantManager/NavBar';
 import Sidebar from '../components/RestaurantManager/Sidebar';
 import OrderTable from '../components/RestaurantManager/OrderTable';
 

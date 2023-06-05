@@ -28,7 +28,8 @@ header{
 }
 .section_side{
   position: flex;
-  width: 30%;
+  width: 20%;
+
 }
 .section_middle{
   height: 70%;

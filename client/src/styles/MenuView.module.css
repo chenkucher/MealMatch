@@ -14,28 +14,28 @@
 }
 
 
+
 header{
   height: 15%;
 }
 
+
 .main{
-  padding: 2%;
+  width: 100%;
   margin-top: 2%;
-  height: 70%;
+  height: 100%;
   display: flex;
-  gap:5%
+  gap:5%;
 }
 .section_side{
-  margin-left:5%;
   position: flex;
-
-
+  width: 20%;
 }
 .section_middle{
-  width: 70%;
   height: 70%;
-  display: flex;
+  width: auto;
   flex-direction: column;
+
 }
 @media screen and (max-width: 600px) {
   .main {
@@ -224,9 +224,20 @@ header{
     justify-content: space-around;
     align-self: flex-end;
   }
-  .head_btn{
-    display: flex;
-    gap: 2%;
+  .head_btn {
+    /* text-align: center; */
+    color: #444;
+  }
+  
+  .head_btn h1 {
+    font-size: 2em;
+    margin-bottom: 0.5em;
+  }
+  
+  .head_btn h2 {
+
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
   }
   .head_btn button {
     background-color: #12bc5e;

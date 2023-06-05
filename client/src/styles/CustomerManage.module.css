@@ -47,9 +47,6 @@ header{
   }
 }
   .container .main .section_middle .notice_popup {
-    /* position: abosulute;  */
-    /* top: 0;
-    left: 0;  */
     width: 100%;
     padding: 20px;
     background-color: #f9ed69;

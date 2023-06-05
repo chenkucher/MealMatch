@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import '../../styles/LoginPage.css';
-import NavBar from '../components/NavBar';
+import NavBar from '../components/RestaurantManager/NavBar';
 import Modal from '../components/RestaurantManager/ResetPasswordModal.js';
 
 function Login() {

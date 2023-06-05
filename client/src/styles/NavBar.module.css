@@ -1,9 +1,18 @@
 .navbar {
-  width: auto;
   display: flex;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   background-color: #f9f8f8;
   z-index: 10;
+  width:100%;
+}
+
+
+
+.ms-auto {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 
 .logoToggleContainer {
@@ -30,6 +39,7 @@
   color: white; 
   border-radius: 5px;
   margin-right: 10px;
+  /* margin-left: 100px; */
 }
 
 

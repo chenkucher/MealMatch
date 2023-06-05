@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import styles from '../../../styles/Sidebar.module.css';
 import { BiFoodMenu } from "react-icons/bi";
 import { AiFillDashboard } from "react-icons/ai";
-import { FaWarehouse, FaHome } from "react-icons/fa";
 import { FiSettings } from "react-icons/fi";
 import { MdFoodBank } from "react-icons/md";
 import { CgLogOut } from "react-icons/cg";

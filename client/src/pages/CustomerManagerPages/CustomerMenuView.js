@@ -116,6 +116,21 @@ function CustomerMenuView(props) {
   const navigate = useNavigate();
   const [selectedItem, setSelectedItem] = useState(null);
   const [showAddToOrderCard, setShowAddToOrderCard] = useState(false);
+  const [restaurantDetails, setRestaurantDetails] = useState({});
+
+
+  useEffect(() => {
+    axios
+      .get(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/RestaurantDetails/${restaurantId}`)
+      .then((response) => {
+        console.log(response);
+        setRestaurantDetails(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
 
   useEffect(() => {
     axios
@@ -195,9 +210,12 @@ function CustomerMenuView(props) {
 
         <section className={styles.section_middle}>
           <div className={styles.menu_page}>
-            <div className={styles.head_btn}>
-              {/* <h1>Menu Management</h1> */}
-            </div>
+          <div className={styles.head_btn}>
+              {/* <h1>We Are {restaurantDetails.restaurant_name}-</h1> */}
+              <h2>Opening Time: {restaurantDetails.start_opening_time}</h2>
+              <h2>Closing Time: {restaurantDetails.close_opening_time}</h2>
+          </div>
+
             {types.map((category) => (
               <div key={category}>
                 <h3>{category}</h3>

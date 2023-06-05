@@ -14,7 +14,6 @@
 }
 
 
-
 header{
   height: 15%;
 }
@@ -29,7 +28,6 @@ header{
 .section_side{
   position: flex;
   width: 20%;
-  /* margin-left:5% */
 
 }
 .section_middle{
@@ -61,7 +59,6 @@ header{
   
   
   .itemImage {
-    /* max-height: 200px; */
     width: 250px;
     height: 200px;
     object-fit: cover;
