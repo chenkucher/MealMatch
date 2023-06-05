@@ -25,7 +25,7 @@ function FutureOrdersChart() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [restaurantId]);
 
   return (
     <div className={styles.future_orders_chart}>

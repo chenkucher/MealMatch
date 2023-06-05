@@ -3,7 +3,7 @@ import axios from "axios";
 import CustomerSidebar from "../pages/components/CustomerManager/CustomerSidebar";
 import CustomerNavBar from "./components/CustomerManager/CustomerNavBar";
 import RestaurantSidebar from "../pages/components/RestaurantManager/Sidebar";
-import RestaurantNavBar from "./components/NavBar";
+import RestaurantNavBar from "./components/RestaurantManager/NavBar";
 import styles from "../styles/TermsOfUse.module.css";
 
 function TermsOfUse(props) {

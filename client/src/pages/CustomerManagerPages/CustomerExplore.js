@@ -125,7 +125,7 @@ function CustomerExplore(props) {
           <Sidebar loggedIn={loggedIn} />
         </section>
         <section className={styles.section_middle}>
-          <h1>Categories:</h1>
+          <h1>Categories</h1>
           <div className={styles.categories_wrapper}>
             <button
               className={styles.arrowLeft}

@@ -25,6 +25,7 @@ function CustomerEmailCheckout() {
   const currentTimes = moment().tz('Asia/Jerusalem');
   const isAfterOrderDelivery = currentTimes.isAfter(orderDeliveryDatetime);
   const dateInputRef = React.createRef();  
+  
   useEffect(() => {
     if (isAfterOrderDelivery) {
       Swal.fire(
@@ -143,7 +144,7 @@ function CustomerEmailCheckout() {
     }
 
     let now = new Date();
-    let nowPlusOneHour = new Date(now.getTime() + 30 * 60 * 1000);
+    let nowPlusOneHour = new Date(now.getTime() + 29 * 60 * 1000);
 
     if (selectedDateTime < now) {
       Swal.fire({
@@ -207,7 +208,7 @@ function CustomerEmailCheckout() {
     }
     // Check if selectedDateTime is less than current datetime + 1 hour
     let now = new Date();
-    let nowPlusOneHour = new Date(now.getTime() + 30 * 60 * 1000);
+    let nowPlusOneHour = new Date(now.getTime() + 29 * 60 * 1000);
     let formattedNowPlusOneHour = moment(nowPlusOneHour)
       .tz("Asia/Jerusalem")
       .format("YYYY-MM-DD HH:mm:ss");

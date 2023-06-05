@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {useParams } from 'react-router-dom';
 import socketIOClient from 'socket.io-client';
 import styles from '../../../styles/CustomerOrderTable.module.css';
 

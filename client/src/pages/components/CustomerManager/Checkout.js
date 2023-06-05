@@ -17,7 +17,7 @@ function Checkout({ customerId }) {
   const [isInNextHour, setIsInNextHour] = useState({});
   const [deliveryAddresses, setDeliveryAddresses] = useState({});
   const [restaurantSettings, setRestaurantSettings] = useState({});
-  const [showPaypalButton, setShowPaypalButton] = useState(false);
+  const [showPaypalButton, setShowPaypalButton] = useState({});
   const dateInputRef = React.createRef();
 
   useEffect(() => {
@@ -164,7 +164,7 @@ function Checkout({ customerId }) {
     }
 
     let now = new Date();
-    let nowPlusOneHour = new Date(now.getTime() + 30 * 60 * 1000);
+    let nowPlusOneHour = new Date(now.getTime() + 29 * 60 * 1000);
 
     if (selectedDateTime < now) {
       Swal.fire({
@@ -215,15 +215,15 @@ function Checkout({ customerId }) {
     deliveryAddress
   ) => {
     try {
-      const dateTimeCheck = checkDateTime(
-        order,
-        restaurantId,
-        selectedDeliveryDate,
-        deliveryAddress
-      );
-      if (!dateTimeCheck) {
-        return;
-      }
+      // const dateTimeCheck = checkDateTime(
+      //   order,
+      //   restaurantId,
+      //   selectedDeliveryDate,
+      //   deliveryAddress
+      // );
+      // if (!dateTimeCheck) {
+      //   return;
+      // }
       const group = cartItems.filter(
         (item) => parseInt(item.restaurantId, 10) === parseInt(restaurantId, 10)
       );
@@ -383,6 +383,11 @@ function Checkout({ customerId }) {
       };
       return newIsInNextHour;
     });
+
+    setShowPaypalButton((prevButton) => ({
+      ...prevButton,
+      [restaurantId]: false,
+    }));
   };
 
   const handleAddressChange = (value, restaurantId) => {
@@ -475,63 +480,66 @@ function Checkout({ customerId }) {
           </table>
           <p>Total: ${totals[restaurantId].toFixed(2)}</p>
           <div className={styles.buttons}>
-            {showPaypalButton ? (
-              isInNextHour[restaurantId] && deliveryAddresses[restaurantId] ? (
-                <div ref={paypalRefs[restaurantId]}></div>
-              ) : (
-                <p>
-                  Please select a delivery time at least an hour from now and
-                  provide a delivery address.
-                </p>
-              )
-            ) : (
-              <button
-                onClick={() => {
-                  if (
-                    isInNextHour[restaurantId] &&
-                    deliveryAddresses[restaurantId]
-                  ) {
-                    const dateTimeCheck = checkDateTime(
-                      null,
-                      restaurantId,
-                      deliveryDates[restaurantId],
-                      deliveryAddresses[restaurantId]
-                    );
-                    if (!dateTimeCheck) {
-                      return;
-                    } else {
-                      setShowPaypalButton(true);
-                    }
-                  } else {
-                    Swal.fire({
-                      icon: "error",
-                      title: "Oops...",
-                      text: "Please select a delivery time at least an hour from now and provide a delivery address.",
-                    });
-                  }
-                }}
-              >
-                Pay Now
-              </button>
-            )}
-
-            {isInNextHour[restaurantId] && showPaypalButton ? (
-              <div ref={paypalRefs[restaurantId]}></div>
-            ) : (
-              <button
-                onClick={() =>
-                  handleCheckout(
-                    null,
-                    restaurantId,
-                    deliveryDates[restaurantId],
-                    deliveryAddresses[restaurantId]
-                  )
-                }
-              >
-                Save Order
-              </button>
-            )}
-          </div>
+  {showPaypalButton[restaurantId] && isInNextHour[restaurantId] && deliveryAddresses[restaurantId] && (
+    <div ref={paypalRefs[restaurantId]}></div>
+  )}
+  
+  <button
+    onClick={() => {
+      if (
+        isInNextHour[restaurantId] &&
+        deliveryAddresses[restaurantId]
+      ) {
+        const dateTimeCheck = checkDateTime(
+          null,
+          restaurantId,
+          deliveryDates[restaurantId],
+          deliveryAddresses[restaurantId]
+        );
+        if (!dateTimeCheck) {
+          return;
+        } else {
+          setShowPaypalButton((prevButton) => ({
+            ...prevButton,
+            [restaurantId]: true,
+          }));
+        }
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Paying can only be done 12 hours before the order delivery time. You can save your order and a reminder email will be sent to you!",
+        });
+      }
+    }}
+  >
+    Pay Now
+  </button>
+    
+  <button
+    onClick={() => {
+      const dateTimeCheck = checkDateTime(
+        null,
+        restaurantId,
+        deliveryDates[restaurantId],
+        deliveryAddresses[restaurantId]
+      );
+      if (!dateTimeCheck) {
+        return;
+      }
+      else {
+        handleCheckout(
+          null,
+          restaurantId,
+          deliveryDates[restaurantId],
+          deliveryAddresses[restaurantId]
+        )
+      }
+    }}
+  >
+    Save Order
+  </button>
+</div>
         </div>
       ))}
     </div>

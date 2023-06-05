@@ -3,7 +3,7 @@ import axios from 'axios';
 import '../../styles/LoginPage.css';
 import Modal from '../components/RestaurantManager/ResetPasswordModal.js';
 
-import NavBar from '../components/NavBar';
+import NavBar from '../components/RestaurantManager/NavBar';
 
 function CustomerLogin(props) {
   const [email, setEmail] = useState('');

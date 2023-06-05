@@ -137,7 +137,7 @@ const OrderSummary = ({ order, onClose }) => {
     }
 
     let now = new Date();
-    let nowPlusOneHour = new Date(now.getTime() + 30 * 60 * 1000);
+    let nowPlusOneHour = new Date(now.getTime() + 29 * 60 * 1000);
 
     if (selectedDateTime < now) {
       Swal.fire({
@@ -202,7 +202,7 @@ const OrderSummary = ({ order, onClose }) => {
 
     // Check if selectedDateTime is less than current datetime + 1 hour
     let now = new Date();
-    let nowPlusOneHour = new Date(now.getTime() + 30 * 60 * 1000);
+    let nowPlusOneHour = new Date(now.getTime() + 29 * 60 * 1000);//30 min
     let formattedNowPlusOneHour = moment(nowPlusOneHour)
       .tz("Asia/Jerusalem")
       .format("YYYY-MM-DD HH:mm:ss");
@@ -409,16 +409,21 @@ const OrderSummary = ({ order, onClose }) => {
       showCancelButton: true,
       confirmButtonText: "Yes, cancel it!",
       cancelButtonText: "No, keep it",
+      willClose: () => {
+        onClose();
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         axios
           .delete(`/api/OrderDetails/${orderId}`)
           .then((response) => {
-            // navigate('/CustomerLogin');
+            window.location.reload();
           })
           .catch((error) => {
             console.error(error);
           });
+
+
       }
     });
   };
@@ -608,7 +613,7 @@ const CustomerCalender = ({ customerId }) => {
 
   return (
     <div style={{ height: "500px" }}>
-      <h1>Calendar:</h1>
+      <h1>Calendar</h1>
 
       <Calendar
         localizer={localizer}

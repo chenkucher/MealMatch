@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../../styles/SignupPage.css";
 import Swal from "sweetalert2";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/RestaurantManager/NavBar";
 
 function CustomerSignUp() {
   const [first_name, setFname] = useState("");

@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import NavBar from "../components/NavBar";
+import NavBar from "../components/RestaurantManager/NavBar";
 import Sidebar from "../components/RestaurantManager/Sidebar";
 import styles from "../../styles/MenuManager.module.css";
 import axios from "axios";
-import {
-  uploadFileToS3,
-  deleteFileFromS3,
-  getImageUrl,
-} from "./s3bucket_control";
-
-
-// categories=["Italian","Mexican","Dessert", "Street-food","Kosher","Vegan","Hamburger", "Sandwich", "Asian","Sushi"]
+import Swal from 'sweetalert2';
 
 import { MdOutlineRemoveCircle } from "react-icons/md";
+
+
 function MenuManager(props) {
   const [menuItems, setMenuItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -42,12 +37,7 @@ function MenuManager(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
   const [cacheBustingKey, setCacheBustingKey] = useState(Date.now()); //to update image after edit
-  const [newAdditionalProperties, setNewAdditionalProperties] = useState([
-    { name: "", price: "" },
-  ]);
-  const [editedAdditionalProperties, setEditedAdditionalProperties] = useState([
-    { name: "", price: "" },
-  ]);
+
 
   useEffect(() => {
     axios
@@ -73,21 +63,34 @@ function MenuManager(props) {
 
     const handleImageUpdate = async () => {
       let imageUrl = editedItem.item_image;
-
+    
       if (editedItem.imageFile) {
         // Delete current file
-        await deleteFileFromS3(`${editedItem.item_id}.png`);
+        await fetch(`/api/delete/item_${editedItem.item_id}.png`, { method: 'DELETE' });
+    
+        // Prepare the file for upload
+        let formData = new FormData();
+        formData.append('imageFile', editedItem.imageFile);
+        formData.append('itemId', editedItem.item_id);
+        formData.append('type', 'item');
+        // Upload new image to S3 via a POST request
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData
+        });
+    
+        if (!response.ok) {
+          throw new Error('Failed to upload file');
+        }
+    
+        const data = await response.json();
+        imageUrl = data.imageUrl + '?timestamp=' + new Date().getTime();
 
-        // Upload new image to S3
-        imageUrl = await uploadFileToS3(
-          `${editedItem.item_id}.png`,
-          editedItem.imageFile
-        );
 
         // Update the cache-busting key
         setCacheBustingKey(Date.now());
       }
-
+    
       return imageUrl;
     };
 
@@ -169,8 +172,22 @@ function MenuManager(props) {
         additionalProperties: [],
       });
       setSelectedItem(null);
+      Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: 'Menu item updated successfully!',
+        timer: 3000,
+        showConfirmButton: false
+      });
     } catch (error) {
       console.error("Error updating menu item:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Error updating menu item: ' + error.message,
+        timer: 3000,
+        showConfirmButton: false
+      });
     }
   }
 
@@ -337,11 +354,31 @@ function MenuManager(props) {
 
       const newItemId = data.insertId;
 
-      // Upload the image to S3
-      const imageUrl = await uploadFileToS3(
-        `${newItemId}.png`,
-        newItem.imageFile
-      );
+      // // Upload the image to S3
+      // const imageUrl = await uploadFileToS3(
+      //   `${newItemId}.png`,
+      //   newItem.imageFile
+      // );
+
+
+
+      // Prepare the file for upload
+      let formData = new FormData();
+      formData.append('imageFile', newItem.imageFile);
+      formData.append('itemId', newItemId);
+      formData.append('type', 'item');
+      // Upload new image to S3 via a POST request
+      const upload_response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to upload file');
+      }
+  
+      const upload_data = await upload_response.json();
+      const imageUrl = upload_data.imageUrl;  
 
       // Update the menu item in the database with the image URL
       const putResponse = await fetch(
@@ -352,7 +389,7 @@ function MenuManager(props) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            item_image: `https://mealmatch.s3.amazonaws.com/${newItemId}.png`,
+            item_image: `https://mealmatch.s3.amazonaws.com/item_${newItemId}.png`,
           }),
         }
       );
@@ -374,11 +411,12 @@ function MenuManager(props) {
           item_status: newItem.item_status,
           item_category: newItem.item_category,
           item_type: newItem.item_type,
-          item_image: `https://mealmatch.s3.amazonaws.com/${newItemId}.png`,
+          item_image: `https://mealmatch.s3.amazonaws.com/item_${newItemId}.png?v=${cacheBustingKey}`,
           item_additional: newItem.additionalProperties,
         },
       ]);
-
+    
+      setCacheBustingKey(Date.now());
       // Reset form fields and show success message
       setNewItem({
         name: "",
@@ -466,7 +504,7 @@ function MenuManager(props) {
   async function handleRemove() {
     try {
       // Delete the image file from S3
-      await deleteFileFromS3(`${selectedItem.item_id}.png`);
+      await fetch(`/api/delete/item_${selectedItem.item_id}.png`, { method: 'DELETE' });
 
       const response = await fetch(
         `http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/MenuItemDelete/${selectedItem.item_id}`,
@@ -491,7 +529,7 @@ function MenuManager(props) {
         }
       });
 
-      // ... rest of the function remains unchanged
+
     } catch (error) {
       console.error("Error removing menu item:", error);
     }

@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import styles from '../styles/Home.module.css';
-import NavBar from './components/NavBar';
-import makeFoodImage from './helpers/makefood.jpg';
-import planFoodImage from './helpers/planfood.jpg';
+import NavBar from './components/RestaurantManager/NavBar';
 import { useNavigate } from 'react-router-dom';
 
 function Home(props) {
@@ -23,7 +21,6 @@ function Home(props) {
   const getBoxStyle = (boxType) => {
     if (boxHoverStates[boxType]) {
       return {
-        backgroundImage: `url(${boxType === 'customers' ? planFoodImage : makeFoodImage})`,
         backgroundColor: '#ddd',
         backgroundSize: 'cover' 
       };

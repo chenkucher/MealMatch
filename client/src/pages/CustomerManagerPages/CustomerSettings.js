@@ -250,7 +250,7 @@ function CustomerSettings() {
                 ) : (
                   <form>
                     <div>
-                      <label htmlFor="password">Password:</label>
+                      <label htmlFor="password">Password:</label><br/>
                       <input
                         type="password"
                         id="password"

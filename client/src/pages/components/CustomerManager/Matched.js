@@ -16,7 +16,12 @@ function Matched({ matchedItems = [], onClose }) {
         <h1>Matched!</h1>
         {console.log(items)}
         {items.length === 0 ? (
-          <p>You Have No Matched Items!</p>
+          <div>
+            <p>You Have No Matched Items!</p>
+            <p>Visit Matcher to find the best meal for you!</p>
+          </div>
+
+          
         ) : (
           items.map((item, index) => (
             <AddToOrderCard
