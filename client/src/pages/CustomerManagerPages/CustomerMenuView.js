@@ -12,13 +12,7 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
   const { addToCart } = useContext(ShoppingCartContext);
   const [selectedAdditionalItems, setSelectedAdditionalItems] = useState([]);
 
-  const handleIngredientChange = (ingredient, price, checked) => {
-    setSelectedIngredients((prevSelected) =>
-      checked
-        ? [...prevSelected, { name: ingredient, price }]
-        : prevSelected.filter((ing) => ing.name !== ingredient)
-    );
-  };
+
   const handleAdditionalItemChange = (additionalItem, price, checked) => {
     setSelectedAdditionalItems((prevSelected) =>
       checked
@@ -191,9 +185,7 @@ function CustomerMenuView(props) {
     setShowAddToOrderCard(true);
   };
 
-  const handleCloseAddToOrderCard = () => {
-    setSelectedItem(null);
-  };
+
 
   return (
     <div>
@@ -212,7 +204,7 @@ function CustomerMenuView(props) {
           <div className={styles.menu_page}>
           <div className={styles.head_btn}>
               {/* <h1>We Are {restaurantDetails.restaurant_name}-</h1> */}
-              <h2>Opening Time: {restaurantDetails.start_opening_time}</h2>
+              <h2>Opening Time: {restaurantDetails.start_opening_time}</h2> 
               <h2>Closing Time: {restaurantDetails.close_opening_time}</h2>
           </div>
 

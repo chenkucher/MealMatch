@@ -33,7 +33,7 @@ header{
 }
 .section_middle{
   height: 70%;
-  width: auto;
+  width: 70%;
   flex-direction: column;
 
 }
@@ -82,9 +82,12 @@ header{
     gap: 4%;
     margin-top: 1%;
     width: 100%;
+    justify-content: flex-start;
+    align-items: flex-start;
   }
   
   .menu_item_box {
+
     border: 1px solid #ddd;
     border-radius: 0.5rem;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -225,7 +228,8 @@ header{
     align-self: flex-end;
   }
   .head_btn {
-    /* text-align: center; */
+    display: flex;
+    gap:15px;
     color: #444;
   }
   
