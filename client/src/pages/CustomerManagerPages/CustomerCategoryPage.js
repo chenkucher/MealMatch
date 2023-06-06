@@ -5,7 +5,9 @@ import styles from '../../styles/CustomerCategoryPage.module.css';
 import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
 
-function CustomerCategoryPage(props) {
+
+//showing restaurant that sells items of a category
+function CustomerCategoryPage() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [customerId, setCustomerId] = useState('');
   const [restaurants, setRestaurants] = useState([]);

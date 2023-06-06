@@ -8,7 +8,10 @@ import MostOrderedItemsChart from "../../pages/components/RestaurantManager/Most
 import LastOrdersTable from "../../pages/components/RestaurantManager/LastOrdersTable";
 import FutureOrdersChart from "../../pages/components/RestaurantManager/FutureOrdersChart";
 
-function RestaurantManage(props) {
+
+
+//dashboard page, showing future order table, last events and chart of most ordered items
+function RestaurantManage() {
   const [loggedIn, setLoggedIn] = useState(false);
   const { restaurantId } = useParams();
   const navigate = useNavigate();

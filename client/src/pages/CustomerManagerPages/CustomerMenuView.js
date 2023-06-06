@@ -10,6 +10,7 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [itemQuantity, setItemQuantity] = useState(1);
   const { addToCart } = useContext(ShoppingCartContext);
+  const [notes, setNotes] = useState("");
   const [selectedAdditionalItems, setSelectedAdditionalItems] = useState([]);
 
 
@@ -30,6 +31,7 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
       selectedAdditionalItems,
       itemQuantity,
       restaurantId: item.restaurantId,
+      notes,
     });
     onAddToOrder({
       ...item,
@@ -37,6 +39,7 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
       selectedAdditionalItems,
       itemQuantity,
       restaurantId: item.restaurantId,
+      notes,
     });
     onClose();
   };
@@ -92,6 +95,16 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
                 </ul>
               </div>
             )}
+          <div>
+          <p>
+            Notes:
+            <input
+              type="text"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </p>
+        </div>
         </div>
         <p>Total Price: ${totalPrice.toFixed(2)}</p>
         <div>
@@ -103,7 +116,10 @@ function AddToOrderCard({ item, onAddToOrder, onClose }) {
   );
 }
 
-function CustomerMenuView(props) {
+
+
+//viewing the menu of restaurant
+function CustomerMenuView() {
   const [menuItems, setMenuItems] = useState([]);
   const { customerId, restaurantId } = useParams();
   const [loggedIn, setLoggedIn] = useState(false);

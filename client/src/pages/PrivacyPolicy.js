@@ -6,7 +6,9 @@ import RestaurantSidebar from "../pages/components/RestaurantManager/Sidebar";
 import RestaurantNavBar from "./components/RestaurantManager/NavBar";
 import styles from "../styles/PrivacyPolicy.module.css";
 
-function PrivacyPolicy(props) {
+
+//showing policies of the site
+function PrivacyPolicy() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [restaurantId, setRestaurantId] = useState(null);

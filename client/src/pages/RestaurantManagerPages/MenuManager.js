@@ -8,8 +8,8 @@ import Swal from 'sweetalert2';
 
 import { MdOutlineRemoveCircle } from "react-icons/md";
 
-
-function MenuManager(props) {
+//managing menu of restaurant page
+function MenuManager() {
   const [menuItems, setMenuItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
   const [editedItem, setEditedItem] = useState({

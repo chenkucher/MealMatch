@@ -6,6 +6,9 @@ import moment from 'moment-timezone';
 import Swal from "sweetalert2";
 import Table from 'react-bootstrap/Table';
 
+
+
+//modification page afer reminder mail sent
 function CustomerEmailCheckout() {
   const { orderId } = useParams();
   const [paypalRef, setPaypalRef] = useState(React.createRef());

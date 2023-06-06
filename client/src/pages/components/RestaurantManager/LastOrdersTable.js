@@ -4,6 +4,8 @@ import socketIOClient from 'socket.io-client';
 import styles from '../../../styles/StatisticsComponents.module.css';
 import Table from 'react-bootstrap/Table';
 
+
+//showing table of all order of restaruant
 function LastOrdersTable() {
   const [orders, setOrders] = useState([]);
   const { restaurantId } = useParams();

@@ -3,6 +3,9 @@ import styles from '../../styles/CustomerPreferences.module.css';
 import { useNavigate, useParams } from 'react-router-dom';
 const categories = ['Italian', 'Mexican', 'Dessert', 'Street-food', 'Kosher', 'Vegan', 'Hamburger', 'Sandwich','Asian','Sushi'];
 
+
+
+//in sign up process, asking for loved categories
 const CustomerPreferences = () => {
     const { customerId } = useParams();
     const [selectedCategories, setSelectedCategories] = useState([]);

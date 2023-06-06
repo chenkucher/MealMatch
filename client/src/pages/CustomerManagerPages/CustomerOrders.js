@@ -7,7 +7,9 @@ import NavBar from '../components/CustomerManager/CustomerNavBar';
 import CustomerOrderTable from '../components/CustomerManager/CustomerOrderTable'
 
 
-function CustomerOrders(props) {
+
+//showing orders of customer
+function CustomerOrders() {
   const [loggedIn, setLoggedIn] = useState(false);
   const { customerId } = useParams();
   const navigate = useNavigate();

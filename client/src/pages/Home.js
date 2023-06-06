@@ -3,7 +3,9 @@ import styles from '../styles/Home.module.css';
 import NavBar from './components/RestaurantManager/NavBar';
 import { useNavigate } from 'react-router-dom';
 
-function Home(props) {
+
+//home page
+function Home() {
   const navigate = useNavigate();
   const [boxHoverStates, setBoxHoverStates] = useState({
     customers: false,

@@ -8,7 +8,9 @@ import styles from '../styles/ContactUs.module.css';
 import Swal from 'sweetalert2';
 
 
-function ContactUs(props) {
+
+//contact up page
+function ContactUs() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [text, setText] = useState('');
   const [subject, setSubject] = useState('');

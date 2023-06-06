@@ -215,15 +215,7 @@ function Checkout({ customerId }) {
     deliveryAddress
   ) => {
     try {
-      // const dateTimeCheck = checkDateTime(
-      //   order,
-      //   restaurantId,
-      //   selectedDeliveryDate,
-      //   deliveryAddress
-      // );
-      // if (!dateTimeCheck) {
-      //   return;
-      // }
+
       const group = cartItems.filter(
         (item) => parseInt(item.restaurantId, 10) === parseInt(restaurantId, 10)
       );
@@ -254,7 +246,7 @@ function Checkout({ customerId }) {
         item_description: item.item_description,
         restaurant_id: item.restaurantId,
         selectedAdditionalItems: item.selectedAdditionalItems,
-        restaurant_id: item.restaurantId,
+        notes: item.notes
       }));
       // console.log("orderItems", orderItems);
       // Function to calculate the total price for a single item (including additional items)
@@ -294,12 +286,11 @@ function Checkout({ customerId }) {
       setCheckedOutItems([...checkedOutItems, ...group]);
 
       // Remove items from cart
-
       group.forEach(
         (item) => removeFromCart(item.item_id) && console.log(item.item_id)
       );
 
-      // Format orderDetails as an HTML table
+      // format orderDetails as an HTML table
       let orderDetailsHTML = `
         <table>
           <thead>
@@ -326,7 +317,7 @@ function Checkout({ customerId }) {
 
       orderDetailsHTML += "</tbody></table>";
 
-      // Prepare additional order details
+      // prepare additional order details
       let additionalOrderDetails = "";
       if (order) {
         additionalOrderDetails =
@@ -336,7 +327,7 @@ function Checkout({ customerId }) {
           "NOTICE! You did not pay for the order. You must pay for it at least half an hour before the delivery time<br></br> If you want to pay now, you can do it from your dashboard in your account, or you can wait for a reminder email 2 hours before the delivery time and pay there!<br></br>";
       }
 
-      // Send order confirmation email
+      // send order confirmation email
       const emailResponse = await axios.post("/api/SendOrderConfirmation", {
         customerId: customerId,
         orderDetails: orderDetailsHTML,
@@ -344,11 +335,10 @@ function Checkout({ customerId }) {
         additionalOrderDetails: additionalOrderDetails,
       });
 
-      // Show the Swal.fire popup instead of the custom one
       Swal.fire({
         icon: "success",
         title: "Order Confirmation",
-        text: "Your order has been placed successfully! Order details will be sent to your email.",
+        text: "Your order has been placed successfully! Order details will be sent to your email. If you did not get an email, check your spam!",
       }).then(() => {
         window.location.reload();
       });
@@ -367,7 +357,7 @@ function Checkout({ customerId }) {
       }));
     };
 
-    // Extract the restaurant IDs from the cart items
+    //extract the restaurant IDs from the cart items
     const restaurantIds = cartItems.map((item) => item.restaurantId);
 
     // Fetch the working hours for each restaurant

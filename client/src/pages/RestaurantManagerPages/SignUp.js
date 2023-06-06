@@ -5,7 +5,7 @@ import "../../styles/SignupPage.css";
 import NavBar from "../components/RestaurantManager/NavBar";
 import Swal from "sweetalert2";
 
-
+//sign up page
 function SellerSignupPage() {
   const [name, setName] = useState("");
   const [restaurantDetails, setRestaurantDetails] = useState("");

@@ -5,7 +5,9 @@ import Modal from '../components/RestaurantManager/ResetPasswordModal.js';
 
 import NavBar from '../components/RestaurantManager/NavBar';
 
-function CustomerLogin(props) {
+
+//login page
+function CustomerLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);

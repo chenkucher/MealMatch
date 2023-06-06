@@ -293,7 +293,6 @@ const OrderSummary = ({ order, onClose }) => {
           const onApprove = async function (data, actions) {
             const order = await actions.order.capture();
 
-            // handle checkout here
             axios
               .post("/api/Checkout", { orderId })
               .then((response) => {
@@ -371,11 +370,11 @@ const OrderSummary = ({ order, onClose }) => {
     );
 
     if (itemIndex !== -1) {
-      // Item exists, update isSelected status
+      // item exists, update isSelected status
       newOrderDetails[index].selectedAdditionalItems[itemIndex].isSelected =
         isChecked;
     } else if (isChecked) {
-      // Item doesn't exist, and the checkbox is being checked, so we add the item
+      // item doesn't exist, and the checkbox is being checked, so adding the item
       newOrderDetails[index].selectedAdditionalItems.push({
         ...selectedItem,
         isSelected: true,
@@ -384,7 +383,7 @@ const OrderSummary = ({ order, onClose }) => {
 
     setOrderDetails(newOrderDetails);
 
-    // Update order amount
+    // update order amount
     const orderTotal = newOrderDetails.reduce(
       (sum, item) =>
         sum +

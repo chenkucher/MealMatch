@@ -6,6 +6,8 @@ import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
 import Checkout from '../components/CustomerManager/Checkout.js';
 
+
+//checkout page
 function CustomerCheckout(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const { customerId } = useParams();

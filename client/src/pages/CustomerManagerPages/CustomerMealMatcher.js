@@ -5,7 +5,11 @@ import styles from "../../styles/CustomerMealMatcher.module.css";
 import Sidebar from "../../pages/components/CustomerManager/CustomerSidebar";
 import NavBar from "../components/CustomerManager/CustomerNavBar";
 
-function CustomerMealMatcher(props) {
+
+
+
+//showing loved meal by catrgoty, swiping right to add to shopping cart
+function CustomerMealMatcher() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [restaurantItems, setRestaurantItems] = useState([]);
   const [swipedLeftItems, setSwipedLeftItems] = useState([]);

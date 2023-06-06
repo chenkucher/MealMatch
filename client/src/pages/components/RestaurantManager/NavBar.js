@@ -5,6 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 
+
+//navbar of restaurnt side, chanign links f logged in or not
 function NavBar(props) {
   const isLoggedIn = props.loggedIn;
   const restaurantId=props.restaurantId;

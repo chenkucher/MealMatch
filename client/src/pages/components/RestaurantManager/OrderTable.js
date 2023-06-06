@@ -4,6 +4,8 @@ import socketIOClient from 'socket.io-client';
 import Table from 'react-bootstrap/Table';
 import styles from '../../../styles/OrderTable.module.css';
 
+
+//table of orders
 function OrderTable() {
   const [items, setItems] = useState([]);
   const { restaurantId } = useParams();
