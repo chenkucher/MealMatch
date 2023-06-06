@@ -9,7 +9,7 @@ import { TbListSearch,TbArrowsDiff } from "react-icons/tb";
 import { useMediaQuery } from 'react-responsive';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-function capitalizeString(str) {
+function capitalizeString(str) { //capitalizing first letter
   return str.toLowerCase().replace(/(^|\s)\S/g, (letter) => letter.toUpperCase());
 }
 

@@ -1,6 +1,9 @@
 import React from 'react';
 import '../../../styles/Modal.css';
 
+
+
+//when reseting password
 const Modal = ({ show, children, onClose }) => {
   return (
     <div className={`modal ${show ? 'show' : ''}`}>

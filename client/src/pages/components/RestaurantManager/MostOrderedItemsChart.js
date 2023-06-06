@@ -6,6 +6,8 @@ import socketIOClient from 'socket.io-client';
 
 Chart.register(CategoryScale, LinearScale, BarElement);
 
+
+// showing bar chart of counted items
 function MostOrderedItemsChart() {
   const { restaurantId } = useParams();
   const [items, setItems] = useState([]);

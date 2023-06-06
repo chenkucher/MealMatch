@@ -5,7 +5,10 @@ import styles from "../../styles/CustomerExplore.module.css";
 import Sidebar from "../../pages/components/CustomerManager/CustomerSidebar";
 import NavBar from "../components/CustomerManager/CustomerNavBar";
 
-function CustomerExplore(props) {
+
+
+//classic explore page
+function CustomerExplore() {
   const [loggedIn, setLoggedIn] = useState(false);
   const { customerId } = useParams();
   const navigate = useNavigate();

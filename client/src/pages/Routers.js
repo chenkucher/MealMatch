@@ -30,7 +30,9 @@ import PrivacyPolicy from './PrivacyPolicy';
 import TermsOfUse from './TermsOfUse';
 import ContactUs from './ContactUs';
 
-function Routers(props) {
+
+//routes af all the pages
+function Routers() {
     return (
         <Router>
              <Routes >

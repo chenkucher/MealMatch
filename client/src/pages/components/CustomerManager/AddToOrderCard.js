@@ -2,6 +2,9 @@
 import React, { useState,useContext } from 'react';
 import styles from '../../../styles/AddToCard.module.css';
 import ShoppingCartContext from '../../../pages/components/CustomerManager/ShoppingCartContext'
+
+
+//component for adding item to shoppong cart
 function AddToOrderCard({ item: initialItem, onAddToOrder}) {
   const item = {
     ...initialItem,
@@ -11,15 +14,10 @@ function AddToOrderCard({ item: initialItem, onAddToOrder}) {
   const [selectedIngredients, setSelectedIngredients] = useState([]);
   const [itemQuantity, setItemQuantity] = useState(1);
   const [selectedAdditionalItems, setSelectedAdditionalItems] = useState([]);
+  const [notes, setNotes] = useState("");
   const { addToCart } = useContext(ShoppingCartContext);
 
-  const handleIngredientChange = (ingredient, price, checked) => {
-    setSelectedIngredients((prevSelected) =>
-      checked
-        ? [...prevSelected, { name: ingredient, price }]
-        : prevSelected.filter((ing) => ing.name !== ingredient),
-    );
-  };
+
 
   const handleAdditionalItemChange = (additionalItem, price, checked) => {
     setSelectedAdditionalItems((prevSelected) =>
@@ -39,11 +37,13 @@ function AddToOrderCard({ item: initialItem, onAddToOrder}) {
       selectedAdditionalItems, 
       itemQuantity,
       restaurantId: item.restaurant_id,
+      notes,
     });
 
 
     if (onAddToOrder) {
       onAddToOrder();
+      setNotes("");
     }
   };
 
@@ -97,7 +97,19 @@ function AddToOrderCard({ item: initialItem, onAddToOrder}) {
               </ul>
             </div>
           )}
+        <div>
+          <label>
+            Notes:
+            <input
+              type="text"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </label>
         </div>
+        </div>
+
+
         <p>Total Price: ${totalPrice.toFixed(2)}</p>
         <div>
           <button onClick={handleAddToOrder}>Add To Order</button>

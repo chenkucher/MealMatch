@@ -4,6 +4,9 @@ import "../../styles/SignupPage.css";
 import Swal from "sweetalert2";
 import NavBar from "../components/RestaurantManager/NavBar";
 
+
+
+//sign up page
 function CustomerSignUp() {
   const [first_name, setFname] = useState("");
   const [last_name, setLname] = useState("");

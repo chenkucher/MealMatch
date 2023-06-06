@@ -5,6 +5,10 @@ import NavBar from "../components/CustomerManager/CustomerNavBar";
 import styles from "../../styles/CustomerSettings.module.css";
 import axios from "axios";
 
+
+
+
+//showing and managing account details
 function CustomerSettings() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../../styles/InvalidTokenPage.module.css';
 
-
+//page when the token of confirm email is used
 function InvalidTokenPage(props) {
 
   return (

@@ -6,7 +6,10 @@ import RestaurantSidebar from "../pages/components/RestaurantManager/Sidebar";
 import RestaurantNavBar from "./components/RestaurantManager/NavBar";
 import styles from "../styles/TermsOfUse.module.css";
 
-function TermsOfUse(props) {
+
+
+//terms of the site
+function TermsOfUse() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [customerId, setCustomerId] = useState(null);
   const [restaurantId, setRestaurantId] = useState(null);

@@ -4,12 +4,13 @@ import socketIOClient from 'socket.io-client';
 import styles from '../../../styles/StatisticsComponents.module.css';
 import Table from 'react-bootstrap/Table';
 
+
+//showing table of future order of restaurant
 function FutureOrdersChart() {
   const { restaurantId } = useParams();
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    // Fetch initial data from the server
     fetch(`http://ec2-35-169-139-56.compute-1.amazonaws.com/api/restaurant/Orders/futureOrders/${restaurantId}`)
       .then((response) => response.json())
       .then((data) => {

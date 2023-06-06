@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import '../../styles/ResetPasswordPage.css';
 
-
+//reset password page
 function CustomerResetPasswordPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');

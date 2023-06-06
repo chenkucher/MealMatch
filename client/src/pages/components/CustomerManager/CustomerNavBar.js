@@ -9,6 +9,9 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { FaShoppingCart } from "react-icons/fa";
 
+
+//navbar of customer side, chanign links f logged in or not
+
 function NavBar(props) {
   const isLoggedIn = props.loggedIn;
   const customerId = props.customerId;

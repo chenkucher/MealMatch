@@ -6,7 +6,10 @@ import Sidebar from '../../pages/components/CustomerManager/CustomerSidebar';
 import NavBar from '../components/CustomerManager/CustomerNavBar';
 import CustomerCalender from '../components/CustomerManager/CustomerCalender';
 
-function CustomerManage(props) {
+
+
+//dashboard page- calendar compnent is in it
+function CustomerManage() {
   const [loggedIn, setLoggedIn] = useState(false);
   const { customerId } = useParams();
   const navigate = useNavigate();

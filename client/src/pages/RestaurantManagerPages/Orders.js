@@ -6,7 +6,10 @@ import NavBar from '../components/RestaurantManager/NavBar';
 import Sidebar from '../components/RestaurantManager/Sidebar';
 import OrderTable from '../components/RestaurantManager/OrderTable';
 
-function Orders(props) {
+
+
+//showing and managing restaurant orders
+function Orders() {
     const [loggedIn, setLoggedIn] = useState(false);
     const { restaurantId } = useParams();
     const navigate = useNavigate();

@@ -787,10 +787,10 @@ app.post("/api/SellerSettings", async (req, res) => {
   if (openingHoursEnd) updateValues.close_opening_time = openingHoursEnd;
   if (paypalApiKey) updateValues.paypal_api_key = paypalApiKey;
 
-  if (req.body.logoUpdated === false) {
+  if (req.body.logoUpdated === false && Object.keys(updateValues).length === 0) {
     return res.status(400).json({ message: "No fields to update." });
   }
-
+  
   const checkDuplicateEmailPhoneQuery = `SELECT restaurant_email, restaurant_phone_number FROM restaurants WHERE restaurant_id != ?`;
   dbConnection.query(
     checkDuplicateEmailPhoneQuery,

@@ -4,6 +4,9 @@ import '../../styles/LoginPage.css';
 import NavBar from '../components/RestaurantManager/NavBar';
 import Modal from '../components/RestaurantManager/ResetPasswordModal.js';
 
+
+
+//login page
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

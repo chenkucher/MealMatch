@@ -5,8 +5,8 @@ import Sidebar from '../components/RestaurantManager/Sidebar';
 import styles from '../../styles/Settings.module.css';
 import axios from 'axios';
 
-
-function Settings(props) {
+//showing and managing account details
+function Settings() {
   const [restaurantName, setRestaurantName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
@@ -136,7 +136,6 @@ function Settings(props) {
         setLogoUrl(imageUrl + '?timestamp=' + new Date().getTime());
 
       }
-      
     // Send updated data to the server
     const data = {
       restaurantName,

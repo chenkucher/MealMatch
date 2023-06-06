@@ -5,7 +5,7 @@ import styles from "../../../styles/CustomerOrderTable.module.css";
 import ShoppingCartContext from "../../../pages/components/CustomerManager/ShoppingCartContext";
 import Swal from 'sweetalert2';
 
-function CustomerOrderTable(props) {
+function CustomerOrderTable() {
   const [items, setItems] = useState([]);
   const { customerId } = useParams();
   const [currentItem, setCurrentItem] = useState(null);
@@ -54,6 +54,7 @@ function CustomerOrderTable(props) {
             itemQuantity: detail.itemQuantity,
             itemDescription: detail.item_description,
             itemPrice: detail.itemPrice,
+            notes: detail.notes,
             restaurantId: detail.restaurant_id,
             selectedIngredients: [],
             selectedAdditionalItems: detail.selectedAdditionalItems,
@@ -74,7 +75,6 @@ function CustomerOrderTable(props) {
         });
       })
       .catch((error) => {
-        // Add error handling here if needed
         console.error(error);
       });
   };
