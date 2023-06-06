@@ -74,15 +74,14 @@ const io = require("socket.io")(server, {
   },
 });
 
-
+//for uploaading to S3
 const upload = multer({ dest: '/home/ubuntu/MealMatch/uploads/' }); // temporarily store file  directory
 app.post('/api/upload', upload.single('imageFile'), async (req, res) => {
-  console.log(fileContent)
   const fileContent = fs.readFileSync(req.file.path);
   const fileName = `${req.body.type}_${req.body.itemId}.png`;
 
   try {
-    // Upload the file to S3
+    // upload the file to S3
     const imageUrl = await uploadFileToS3(fileName, fileContent);
     res.status(200).json({ imageUrl });
   } catch (error) {
@@ -90,7 +89,7 @@ app.post('/api/upload', upload.single('imageFile'), async (req, res) => {
   }
 });
 
-// Route for deleting a file
+// for deleting a image from S3
 app.delete('/api/delete/:key', async (req, res) => {
   try {
     const fileKey = req.params.key;
@@ -102,7 +101,7 @@ app.delete('/api/delete/:key', async (req, res) => {
   }
 });
 
-// Route for retrieving a file's URL
+// for getting a image from S3
 app.get('/api/url/:key', async (req, res) => {
   try {
     const fileKey = req.params.key;
@@ -345,19 +344,17 @@ app.get("/api/restaurant/Orders/mostOrderedItems/:restaurantId", (req, res) => {
       return res.status(500).json({ error: "Internal Server Error" });
     }
 
-    // Parse the JSON string of ordered items into an array
     const orderedItems = result.map((row) => JSON.parse(row.order_details));
 
-    // Flatten the array of ordered items arrays into a single array
     const allItems = [].concat(...orderedItems);
 
-    // Count the occurrences of each item
+    // count each item
     const itemCounts = allItems.reduce((counts, item) => {
       counts[item.item_name] = (counts[item.item_name] || 0) + 1;
       return counts;
     }, {});
 
-    // Convert the itemCounts object into an array of { name, count } objects
+    // cConvert the itemCounts into an array of { name, count } 
     const itemsArray = Object.entries(itemCounts).map(([name, count]) => ({
       name,
       count,
@@ -437,7 +434,7 @@ app.get("/api/restaurant/Orders/nextHour", (req, res) => {
   dbConnection.query(query, (err, result) => {
     if (err) throw err;
 
-    // Convert the timestamp to local timezone
+    // convert the timestamp to local timezone
     const localResult = result.map((row) => {
       const timestamp = moment(row.order_delivery_datetime).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -450,9 +447,8 @@ app.get("/api/restaurant/Orders/nextHour", (req, res) => {
       };
     });
     // console.log(localResult);
-    // Check if localResult is not empty
     if (localResult.length > 0) {
-      // Update the retrieved rows, setting reminder_sent to 1
+      // update the retrieved rows, setting reminder_sent to 1
       const updateQuery = `UPDATE restaurants_orders SET reminder_sent = 1 WHERE order_id IN (${localResult
         .map((row) => row.order_id)
         .join(",")})`;
@@ -521,91 +517,7 @@ app.post("/api/restaurant/NewOrder", (req, res) => {
   );
 });
 
-//Connection to paypal api
-app.post("/api/paypal-checkout", async (req, res) => {
-  const { total, orderData } = req.body;
-  console.log(req.body);
 
-  try {
-    // Obtain access token
-    const tokenResponse = await axios.post(
-      `https://api-m.sandbox.paypal.com/v1/oauth2/token`,
-      "grant_type=client_credentials",
-      {
-        headers: {
-          Accept: "application/json",
-          "Accept-Language": "en_US",
-          "content-type": "application/x-www-form-urlencoded",
-        },
-        auth: {
-          username:
-            "Aap6RrtnUqXmNxEPKzVRW-4AghHqRIQ2Swx9EDwOeD4a5H6kEMBFkMU2nvVhYmi2jtFsQiPy10qGWnDX",
-          password:
-            "EEwiKhDYfGnsDyhjN_mHgBO6t7KIDn-ow8W4XrGw5wVVsF8hmSRBMLyi0uSmrvvYxoiBcofylFjDL3YK",
-        },
-      }
-    );
-
-    const accessToken = tokenResponse.data.access_token;
-
-    // Create payment
-    const paymentData = {
-      intent: "CAPTURE",
-      purchase_units: [
-        {
-          amount: {
-            currency_code: "USD",
-            value: total,
-          },
-        },
-      ],
-    };
-
-    const paymentResponse = await axios.post(
-      "https://api-m.sandbox.paypal.com/v2/checkout/orders",
-      paymentData,
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    // Execute payment
-    const orderId = paymentResponse.data.id;
-
-    const executeResponse = await axios.post(
-      `https://api-m.sandbox.paypal.com/v2/checkout/orders/${orderId}/capture`,
-      {
-        orderId: orderId,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    if (executeResponse.data.status === "COMPLETED") {
-      // payment approved, insert order in db
-      const dbResponse = await axios.post(
-        "/api/restaurant/NewOrder",
-        orderData
-      );
-
-      console.log("Payment has been successfully completed!");
-      res.json({ success: true, order: dbResponse.data });
-    } else {
-      console.log("Payment was not approved");
-      res.json({ success: false });
-    }
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false });
-  }
-});
 
 //uploding image url to db
 app.post("/api/restaurant/MenuImageUpload", (req, res) => {
@@ -618,7 +530,6 @@ app.post("/api/restaurant/MenuImageUpload", (req, res) => {
       const imageUrl = req.file.filename;
       const itemId = req.body.item_id;
 
-      // Update the item_image column in the restaurant_menu_items table
       const sql =
         "UPDATE `restaurant_menu_items` SET item_image = ? WHERE item_id = ?";
       dbConnection.query(sql, [imageUrl, itemId], (error, results, fields) => {
@@ -634,6 +545,8 @@ app.post("/api/restaurant/MenuImageUpload", (req, res) => {
   });
 });
 
+
+//check if user confirmed his mail
 app.get("/api/check-email-confirmation", (req, res) => {
   const restaurantId = req.session.restaurantId;
   console.log(restaurantId);
@@ -662,12 +575,12 @@ app.get("/api/check-email-confirmation", (req, res) => {
 });
 
 
-
+//updating that the user confirmed his mail
 app.get("/api/confirm-email/:token", async (req, res) => {
   try {
     const token = req.params.token;
 
-    // Check if the token is valid
+    // check if the token is valid
     const checkTokenQuery =
       "SELECT * FROM restaurants WHERE confirmation_token = ?";
     dbConnection.query(checkTokenQuery, [token], (tokenErr, tokenResult) => {
@@ -685,7 +598,7 @@ app.get("/api/confirm-email/:token", async (req, res) => {
         return res.redirect(`/InvalidTokenPage`);
       }
 
-      // Update the user record in the database to mark their email as confirmed
+      // update the user record in the database to mark their email as confirmed
       const userId = tokenResult[0].restaurant_id;
 
       const updateQuery =
@@ -700,7 +613,7 @@ app.get("/api/confirm-email/:token", async (req, res) => {
             });
         }
 
-        // Redirect the user to the home page and start a user session
+        // redirect the user to the home page and start a user session
         req.session.restaurantId = userId;
         return res.redirect(`/RestaurantManage/${userId}`);
       });
@@ -771,7 +684,7 @@ app.post("/api/ContactUsRestaurant", (req, res) => {
 });
 
 
-
+//reseding confiramtion mail
 app.post("/api/RestaurantResendConfirmation", async (req, res) => {
   const email = req.body.email;
 
@@ -826,7 +739,7 @@ app.post("/api/RestaurantResendConfirmation", async (req, res) => {
   });
 });
 
-// Update restaurant settings
+// update restaurant settings
 app.post("/api/SellerSettings", async (req, res) => {
   const restaurantId = req.session.restaurantId;
 
@@ -897,7 +810,7 @@ app.post("/api/SellerSettings", async (req, res) => {
         (row) => row.restaurant_phone_number
       );
 
-      // Check for duplicates
+      // check for duplicates
       if (email && existingEmails.includes(email)) {
         return res.status(400).json({ message: "Email already exists." });
       }
@@ -908,7 +821,7 @@ app.post("/api/SellerSettings", async (req, res) => {
           .json({ message: "Phone number already exists." });
       }
 
-      // Check if any fields have been updated
+      // check if any fields have been updated
       const checkIfFieldsUpdatedQuery = `SELECT * FROM restaurants WHERE restaurant_id = ?`;
       dbConnection.query(
         checkIfFieldsUpdatedQuery,
@@ -937,7 +850,7 @@ app.post("/api/SellerSettings", async (req, res) => {
             return res.json({ message: "No fields updated." });
           }
 
-          // Update the data in the database
+          // update the data in the database
           const query = "UPDATE restaurants SET ? WHERE restaurant_id = ?";
           dbConnection.query(
             query,
@@ -965,6 +878,7 @@ app.post("/api/SellerSettings", async (req, res) => {
   );
 });
 
+//getting restaurant details
 app.get("/api/RestaurantSettings", (req, res) => {
   const restaurantId = req.session.restaurantId;
   console.log(restaurantId);
@@ -1006,6 +920,7 @@ app.get("/api/RestaurantSettings", (req, res) => {
   });
 });
 
+//getting  working hours of restaurant
 app.get("/api/getWorkingHours/:restaurantId", (req, res) => {
   const { restaurantId } = req.params;
   const query = `SELECT 
@@ -1033,7 +948,7 @@ app.get("/api/getWorkingHours/:restaurantId", (req, res) => {
 
 
 
-// Create a new item in the menu
+// create a new item in the menu
 app.post("/api/restaurant/MenuAdd/:restaurantId", (req, res) => {
   const restaurantId = req.params.restaurantId;
   const {
@@ -1046,7 +961,7 @@ app.post("/api/restaurant/MenuAdd/:restaurantId", (req, res) => {
     item_additional,
     item_type,
   } = req.body;
-  // Insert the new item into the database
+  // unsert the new item into the database
   const insertItemSql =
     "INSERT INTO `restaurant_menu_items` (restaurant_id, item_name, item_description, item_price, item_status, item_category, item_image, item_type, item_additional) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
   dbConnection.query(
@@ -1080,7 +995,7 @@ app.post("/api/restaurant/MenuAdd/:restaurantId", (req, res) => {
   );
 });
 
-// Update an existing item in the menu
+// update an existing item in the menu
 app.put("/api/restaurant/MenuSet/:id", (req, res) => {
   const itemId = req.params.id;
   const {
@@ -1094,7 +1009,7 @@ app.put("/api/restaurant/MenuSet/:id", (req, res) => {
     item_type,
   } = req.body;
 
-  // Update the menu item in the database
+  // update the menu item in the database
   const sql =
     "UPDATE `restaurant_menu_items` SET item_name = ?, item_description = ?, item_price = ?, item_status = ?, item_category = ?, item_image = ?,item_type = ?, item_additional = ? WHERE item_id = ?";
   dbConnection.query(
@@ -1218,6 +1133,8 @@ app.get("/api/restaurant/Orders/futureOrders/:restaurantId", (req, res) => {
   });
 });
 
+
+//getting restaurant name
 app.get("/api/restaurant/name/:restaurantId", (req, res) => {
   const restaurantId = req.params.restaurantId;
 
@@ -1240,7 +1157,7 @@ app.get("/api/restaurant/name/:restaurantId", (req, res) => {
   });
 });
 
-// Route to get restaurant_id of restaurants with at least one item of a given category
+// get restaurant_id of restaurants with at least one item of a given category
 app.get("/api/restaurants-by-category/:category", (req, res) => {
   const category = req.params.category;
 
@@ -1264,6 +1181,8 @@ app.get("/api/restaurants-by-category/:category", (req, res) => {
   });
 });
 
+
+//handiling forget passowrd 
 app.post("/api/forgot-password-restaurant", (req, res) => {
   const email = req.body.email;
 
@@ -1322,6 +1241,8 @@ app.post("/api/forgot-password-restaurant", (req, res) => {
   });
 });
 
+
+//resending  reset password request
 app.post("/api/reset-password-restaurant/:token", async (req, res) => {
   const token = req.params.token;
   const newPassword = req.body.password;
@@ -1443,7 +1364,7 @@ app.post("/api/forgot-password-customer", (req, res) => {
   });
 });
 
-// Route to get restaurant_id of restaurants with at least one item in customer preferences
+// route to get restaurant_id of restaurants with at least one item in customer preferences
 app.get("/api/restaurants-by-preferences/:customerId", (req, res) => {
   const customerId = req.params.customerId;
 
@@ -1478,7 +1399,7 @@ app.post("/api/reset-password-customer/:token", async (req, res) => {
       return res.status(400).json({ message: "Invalid reset link." });
     }
 
-    // Hash the new password before updating it in the database
+    // hash the new password before updating it in the database
     const saltRounds = 10;
     try {
       const salt = await bcrypt.genSalt(saltRounds);
@@ -1537,7 +1458,7 @@ app.get("/api/CustomerOrders/:customerId", (req, res) => {
   });
 });
 
-// Endpoint to handle customer login
+// handle customer login
 app.post("/api/CustomerLogin", (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
@@ -1590,7 +1511,7 @@ app.post("/api/CustomerLogin", (req, res) => {
           .json({ message: "Please confirm your email to login." });
       }
 
-      // Set session variables for customer
+      // set session variables for customer
       req.session.customerId = customer_id;
       console.log(req.session.customerId);
       return res.json({
@@ -1601,7 +1522,7 @@ app.post("/api/CustomerLogin", (req, res) => {
   });
 });
 
-// Endpoint to handle customer signup
+// andle customer signup
 app.post("/api/CustomerSignup", async (req, res) => {
   const firstName = req.body.first_name;
   const lastName = req.body.last_name;
@@ -1779,7 +1700,7 @@ app.post("/api/CustomerResendConfirmation", async (req, res) => {
   });
 });
 
-// Define a route for getting a restaurant's menu
+// route for getting a restaurant's menu
 app.get("/api/customer/MenuGet/:restaurantId", (req, res) => {
   const { restaurantId } = req.params;
 
@@ -1801,7 +1722,7 @@ app.get("/api/customer/MenuGet/:restaurantId", (req, res) => {
   });
 });
 
-// Endpoint to handle MealMatcher
+//  handle MealMatcher, getting item by the preferences
 app.get("/api/MealMatcher/:customerId", (req, res) => {
   const customerId = parseInt(req.params.customerId);
 
@@ -1831,11 +1752,14 @@ app.get("/api/MealMatcher/:customerId", (req, res) => {
   });
 });
 
+
+
+//updating if user confiremed his mail
 app.get("/api/confirm-email-customer/:token", async (req, res) => {
   try {
     const token = req.params.token;
 
-    // Check if the token is valid
+    // check if the token is valid
     const checkTokenQuery =
       "SELECT * FROM customers WHERE confirmation_token = ?";
     dbConnection.query(checkTokenQuery, [token], (tokenErr, tokenResult) => {
@@ -1853,7 +1777,7 @@ app.get("/api/confirm-email-customer/:token", async (req, res) => {
         return res.redirect(`/InvalidTokenPage`);
       }
 
-      // Update the user record in the database to mark their email as confirmed
+      // update the user record in the database to mark their email as confirmed
       const userId = tokenResult[0].customer_id;
 
       const updateQuery =
@@ -1868,7 +1792,7 @@ app.get("/api/confirm-email-customer/:token", async (req, res) => {
             });
         }
 
-        // Redirect the user to the CustomerPreferences page and start a user session
+        // redirect the user to the CustomerPreferences page and start a user session
         req.session.customerId = userId;
         return res.redirect(`/CustomerPreferences/${userId}`);
       });
@@ -1881,7 +1805,7 @@ app.get("/api/confirm-email-customer/:token", async (req, res) => {
   }
 });
 
-// Endpoint to handle customer preferences
+// handle customer preferences
 app.post("/api/CustomerPreferences", (req, res) => {
   const customerId = req.body.customerId;
   const preferences = req.body.preferences;
@@ -1968,7 +1892,7 @@ app.get("/api/CustomerSettings", (req, res) => {
   });
 });
 
-// Update customer attributes
+// update customer attributes
 app.post("/api/CustomerSettings", async (req, res) => {
   const customerId = req.session.customerId;
   const saltRounds = 10;
@@ -2028,7 +1952,7 @@ app.post("/api/CustomerSettings", async (req, res) => {
       const existingEmails = rows.map((row) => row.email);
       const existingPhoneNumbers = rows.map((row) => row.phone_number);
 
-      // Check for duplicates
+      // check for duplicates
       if (email && existingEmails.includes(email)) {
         return res.status(400).json({ message: "Email already exists." });
       }
@@ -2039,7 +1963,7 @@ app.post("/api/CustomerSettings", async (req, res) => {
           .json({ message: "Phone number already exists." });
       }
 
-      // Check if any fields have been updated
+      // check if any fields have been updated
       const checkIfFieldsUpdatedQuery = `SELECT * FROM customers WHERE customer_id = ?`;
       dbConnection.query(
         checkIfFieldsUpdatedQuery,
@@ -2068,7 +1992,7 @@ app.post("/api/CustomerSettings", async (req, res) => {
             return res.json({ message: "No fields updated." });
           }
 
-          // Update the data in the database
+          // update the data in the database
           const query = "UPDATE customers SET ? WHERE customer_id = ?";
           dbConnection.query(
             query,
@@ -2152,6 +2076,8 @@ app.post("/api/ContactUsCustomer", (req, res) => {
   });
 });
 
+
+//sedning confiramtion mail of order
 app.post("/api/SendOrderConfirmation", (req, res) => {
   const { customerId, orderDetails, total, additionalOrderDetails } = req.body;
 
@@ -2217,7 +2143,7 @@ app.post("/api/SendOrderConfirmation", (req, res) => {
 
 
 
-
+//geting restaurant details
 app.get("/api/RestaurantDetails/:restaurantId", (req, res) => {
   const restaurantId = req.params.restaurantId;
   console.log(restaurantId);
@@ -2257,7 +2183,7 @@ app.get("/api/RestaurantDetails/:restaurantId", (req, res) => {
 
 //---------ROUTS FOR GENERAL-------------
 
-
+//getting orders
 app.get("/api/OrderDetails/:orderId", (req, res) => {
   const { orderId } = req.params;
 
@@ -2285,6 +2211,8 @@ app.get("/api/OrderDetails/:orderId", (req, res) => {
   });
 });
 
+
+//setting orders
 app.put("/api/OrderDetails/:orderId", (req, res) => {
   const { orderId } = req.params;
   const { orderDeliveryDatetime, orderDetails, deliveryAddress } = req.body;
@@ -2328,6 +2256,8 @@ app.put("/api/OrderDetails/:orderId", (req, res) => {
   });
 });
 
+
+//deleting orders
 app.delete("/api/OrderDetails/:orderId", (req, res) => {
   const { orderId } = req.params;
 
@@ -2343,6 +2273,9 @@ app.delete("/api/OrderDetails/:orderId", (req, res) => {
   });
 });
 
+
+
+//updating checkout of item
 app.post("/api/Checkout", (req, res) => {
   const { orderId } = req.body;
 
@@ -2350,7 +2283,7 @@ app.post("/api/Checkout", (req, res) => {
     return res.status(400).json({ message: "Please provide order id." });
   }
 
-  // Updating the 'restaurants_orders' table.
+  // updating the 'restaurants_orders' table.
   const updateOrderQuery =
     "UPDATE restaurants_orders SET order_paid = 1 WHERE order_id = ?";
   dbConnection.query(updateOrderQuery, [orderId], (error, result) => {
@@ -2412,6 +2345,8 @@ app.post("/api/Checkout", (req, res) => {
   });
 });
 
+
+//getting all orders
 app.get("/api/AllOrders", (req, res) => {
   const query = `SELECT * FROM restaurants_orders`;
 
@@ -2425,8 +2360,114 @@ app.get("/api/AllOrders", (req, res) => {
   });
 });
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_PASS,
+  },
+});
 
 
+//sedning confirmation mail (reminder)
+app.post('/api/sendConfirmationEmail', (req, res) => {
+  const { order, email, isPaid } = req.body;
+
+  let mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: email,
+    subject: 'Order Confirmation',
+    html: `<p>Order ID: ${order.order_id}</p>`
+  };
+
+  // If order is already paid, mail will be just a reminder
+  if (isPaid) {
+    mailOptions.html += `<p>Your order will arrive approximately at ${order.order_delivery_datetime}.</p>`;
+  } else {
+    mailOptions.html += `<p>See your order here:</p>
+                         <a href="http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerEmailCheckout/${order.order_id}" 
+                            style="display: inline-block; padding: 10px 20px; color: #FFF; background-color: #007BFF; text-decoration: none;">
+                            View Order
+                         </a>`;
+  }
+
+  transporter.sendMail(mailOptions, function(err, info){
+    if (err) {
+      res.status(500).send({ error: err.message });
+    } else {
+      res.send({ message: 'Email sent: ' + info.response });
+    }
+  });
+});
+
+
+//seding remnider
+app.post('/api/sendReminderEmail', (req, res) => {
+  const { order, email } = req.body;
+
+  let mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: email,
+    subject: 'Order Reminder',
+    html: 
+    `<p>You have 10 minutes to pay for your order! Pay for your order:</p>
+    <a href="http://ec2-35-169-139-56.compute-1.amazonaws.com/api/CustomerEmailCheckout/${order.order_id}" 
+      style="display: inline-block; padding: 10px 20px; color: #FFF; background-color: #007BFF; text-decoration: none;">
+      View Order
+    </a>`
+  };
+  transporter.sendMail(mailOptions, function(err, info){
+    if (err) {
+      res.status(500).send({ error: err.message });
+    } else {
+      res.send({ message: 'Email sent: ' + info.response });
+    }
+  });
+});
+
+
+//canceling order (after reminder)
+app.post('/api/sendCancellationEmail', (req, res) => {
+  const { order, email } = req.body;
+
+  let mailOptions = {
+    from: process.env.GMAIL_USER,
+    to: email,
+    subject: 'Order Cancellation Notice',
+    text: `Order ID: ${order.order_id} has been cancelled as it must be paid at least 25 minutes before the delivery time.`
+  };
+
+  transporter.sendMail(mailOptions, function(err, info){
+    if (err) {
+      res.status(500).send({ error: err.message });
+    } else {
+      res.send({ message: 'Email sent: ' + info.response });
+    }
+  });
+});
+
+
+//geting mail of customer
+app.get("/api/Customers/Email/:customerId", (req, res) => {
+  const { customerId } = req.params;
+
+  const query = `SELECT email FROM customers WHERE customer_id = ?`;
+
+  dbConnection.query(query, [customerId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Internal Server Error" });
+    }
+
+    if (!result.length) {
+      return res.status(404).json({ error: "Customer Not Found" });
+    }
+
+    const email = result[0].email;
+
+    res.json({ email: email });
+  });
+});
 
 server.listen(5000, () => {
   console.log(`Server listening at http://localhost:5000`);

@@ -28,7 +28,7 @@ function MenuManager(props) {
     description: "",
     price: "",
     item_status: "available",
-    item_category: "",
+    item_category: "Italian", //default for italian (first in list)
     item_type: "",
     item_image: "",
     additionalProperties: [],

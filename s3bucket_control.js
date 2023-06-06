@@ -8,7 +8,7 @@ AWS.config.update({
 });
 
 const s3 = new AWS.S3();
-const s3Bucket = process.env.S3_BUCKET; // S3 bucket name
+const s3Bucket ='mealmatch'; // S3 bucket name
 
 async function listObjects(imageName) {
   const params = { Bucket: s3Bucket, Prefix: imageName };

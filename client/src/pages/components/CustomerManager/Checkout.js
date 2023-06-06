@@ -247,12 +247,16 @@ function Checkout({ customerId }) {
       }
 
       const orderItems = group.map((item) => ({
+        item_id: item.item_id,
         item_name: item.item_name,
         itemQuantity: item.itemQuantity,
         itemPrice: item.itemPrice,
+        item_description: item.item_description,
+        restaurant_id: item.restaurantId,
         selectedAdditionalItems: item.selectedAdditionalItems,
         restaurant_id: item.restaurantId,
       }));
+      // console.log("orderItems", orderItems);
       // Function to calculate the total price for a single item (including additional items)
       const calculateTotalItemPrice = (item) => {
         const additionalItemsPrice = (
